@@ -1,14 +1,14 @@
-import { memo, useRef, useState } from 'react'
+import { CSSProperties, memo, ReactNode, useRef, useState } from 'react'
 import { NodeInputConfig } from '../config'
 
 type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'valueType' | 'name'> & {
   value: any
-  style?: React.CSSProperties
-  inputStyle?: React.CSSProperties
+  style?: CSSProperties
+  inputStyle?: CSSProperties
   onChange?: (value: any) => void
   onPointerDown?: (e: React.PointerEvent) => void
   onPointerLeave?: (e: React.PointerEvent) => void
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export const NodeBaseInputField = memo(

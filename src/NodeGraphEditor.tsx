@@ -8,16 +8,14 @@ import {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
-} from '@xyflow/react'
+} from 'reactflow'
 import { GraphConfigProvider } from './context/GraphConfigContext'
-import '@xyflow/react/dist/style.css'
+import 'reactflow/dist/style.css'
 import { useNodeTypes } from './hooks/config'
 import { useMemo } from 'react'
 import { defaultEdgeTypes } from './edge-types'
 import { IGraphConfig } from './config'
-
-type NodeType = Node
-type EdgeType = Edge
+import { useSocketConnect } from './hooks/connect'
 
 type NodeGraphEditorProps = Omit<ReactFlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
@@ -28,8 +26,8 @@ export function NodeGraphEditor({
   defaultEdges,
   ...props
 }: NodeGraphEditorProps) {
-  const [nodes, , onNodesChange] = useNodesState<NodeType>(defaultNodes ?? [])
-  const [edges, , onEdgesChange] = useEdgesState<EdgeType>(defaultEdges ?? [])
+  const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
+  const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
   return (
     <ReactFlowProvider>
       <Flow
@@ -44,8 +42,8 @@ export function NodeGraphEditor({
 }
 
 type ExampleNodeGraphEditorProps = {
-  nodes: NodeType[]
-  edges: EdgeType[]
+  nodes: Node[]
+  edges: Edge[]
   config: IGraphConfig
 }
 
@@ -66,16 +64,20 @@ type FlowProps = ReactFlowProps
 function Flow({ defaultNodes, defaultEdges, ...props }: FlowProps) {
   const nodeTypes = useNodeTypes()
   const edgeTypes = useMemo(() => defaultEdgeTypes, [])
+  const onConnect = useSocketConnect()
 
   return (
-    <ReactFlow
-      {...props}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      colorMode="dark"
-    >
-      {props.children}
-      <Background color="#52525b" variant={BackgroundVariant.Dots} />
-    </ReactFlow>
+    <div style={{ backgroundColor: '#1d1d1d', width: '100%', height: '100%' }}>
+      <ReactFlow
+        {...props}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        colorMode="dark"
+      >
+        {props.children}
+        <Background color="#52525b" variant={BackgroundVariant.Dots} />
+      </ReactFlow>
+    </div>
   )
 }

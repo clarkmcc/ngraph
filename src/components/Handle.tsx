@@ -6,7 +6,7 @@ import {
   Position,
   useStoreApi,
   Handle as FlowHandle,
-} from '@xyflow/react'
+} from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
 
 type HandleProps = Pick<NodeInputConfig, 'array' | 'identifier'> &
@@ -28,9 +28,9 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
   const api = useStoreApi()
 
   const isValidConnection = useCallback((connection: Connection) => {
-    const sourceNodeType = api.getState().nodeLookup.get(connection.source)
+    const sourceNodeType = api.getState().nodeInternals.get(connection.source!)
       ?.type
-    const targetNodeType = api.getState().nodeLookup.get(connection.target)
+    const targetNodeType = api.getState().nodeInternals.get(connection.target!)
       ?.type
 
     const sourceNodeConfig = config.getNodeConfig(sourceNodeType!)
@@ -73,8 +73,8 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        // left: props.position === Position.Left ? -8 : undefined,
-        // right: props.position === Position.Right ? -8 : undefined,
+        left: props.position === Position.Left ? -8 : undefined,
+        right: props.position === Position.Right ? -8 : undefined,
         zIndex: 1000000,
       }}
     >

@@ -1,9 +1,10 @@
 import { memo } from 'react'
 import { Handle } from './Handle'
 import { NodeBaseInputField } from './NodeBaseInputField'
-import { Position } from '@xyflow/react'
+import { Position } from 'reactflow'
 import { useNodeFieldValue } from '../hooks/node'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
+import './NodeInputField.css'
 
 type NodeInputFieldProps = NodeInputConfig &
   ValueTypeConfig & {

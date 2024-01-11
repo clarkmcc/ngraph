@@ -6,7 +6,7 @@ import {
   useCallback,
   useMemo,
 } from 'react'
-import { Edge, Node } from '@xyflow/react'
+import { Edge, Node } from 'reactflow'
 import { isEqual } from 'lodash'
 import { useNodeCollapsed, useNodesEdges } from './hooks/node'
 import { NodeDenseLinkedField } from './components/NodeDenseLinkedField'

@@ -1,11 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
-import {
-  Edge,
-  useNodeId,
-  useNodesData,
-  useReactFlow,
-  useStore,
-} from '@xyflow/react'
+import { Edge, useNodeId, useReactFlow, useStore } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
 export function useNodeFieldValue<T>(
@@ -13,7 +7,7 @@ export function useNodeFieldValue<T>(
   defaultValue?: T,
 ): [T, (value: T) => void] {
   const nodeId = useNodeId()
-  const { updateNodeData } = useReactFlow()
+  const { setNodes } = useReactFlow()
   const data = useNodesData<any>(nodeId!)
   const value = useMemo(
     () => (data ? data[field] : defaultValue) ?? defaultValue,
@@ -21,11 +15,27 @@ export function useNodeFieldValue<T>(
   )
   const updateValue = useCallback(
     (value: T) => {
-      updateNodeData(nodeId!, { [field]: value })
+      setNodes((nodes) =>
+        nodes.map((n) =>
+          n.id === nodeId ? { ...n, data: { ...n.data, [field]: value } } : n,
+        ),
+      )
     },
     [nodeId, field],
   )
   return [value, updateValue]
+}
+
+export function useNodesData<T>(nodeId: string): T {
+  return useStore(
+    useCallback(
+      (s) => {
+        return s.nodeInternals.get(nodeId)?.data || null
+      },
+      [nodeId],
+    ),
+    shallow,
+  )
 }
 
 export function useNodesEdges(nodeId: string): Edge[] {

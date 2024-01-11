@@ -1,11 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   EdgeProps,
   getBezierPath,
   useOnSelectionChange,
+  useStoreApi,
   useViewport,
-} from '@xyflow/react'
+} from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
+import { OnSelectionChangeParams } from '@reactflow/core/dist/esm/types/general'
 
 /**
  * Edges can be highlighted in the graph if they're connected to a node that is selected.
@@ -45,10 +47,10 @@ export function Edge({
   const [selection, setSelection] = useState(SelectionState.Nothing)
   const [config] = useGraphConfig()
   const [edgePath] = getBezierPath({
-    sourceX: sourceX - 16,
+    sourceX: sourceX - 8,
     sourceY: sourceY,
     sourcePosition,
-    targetX: targetX + 16,
+    targetX: targetX + 8,
     targetY: targetY,
     targetPosition,
   })
@@ -56,18 +58,27 @@ export function Edge({
   // Determine what is selected. This fires on every selection across the graph,
   // but it's how we determine whether this edge is implicitly selected by virtue
   // of its source or target being selected.
-  useOnSelectionChange({
-    onChange: ({ nodes }) => {
-      if (nodes.length === 0) {
-        setSelection(SelectionState.Nothing)
+  function onSelectionChange({ nodes }: OnSelectionChangeParams) {
+    if (nodes.length === 0) {
+      setSelection(SelectionState.Nothing)
+    } else {
+      if (nodes.some((n) => n.id === target || n.id === source)) {
+        setSelection(SelectionState.Related)
       } else {
-        if (nodes.some((n) => n.id === target || n.id === source)) {
-          setSelection(SelectionState.Related)
-        } else {
-          setSelection(SelectionState.Something)
-        }
+        setSelection(SelectionState.Something)
       }
-    },
+    }
+  }
+
+  // Determine selection state once initially
+  const api = useStoreApi()
+  useEffect(() => {
+    onSelectionChange({ nodes: api.getState().getNodes(), edges: [] })
+  }, [])
+
+  // Determine selection state on every selection change
+  useOnSelectionChange({
+    onChange: onSelectionChange,
   })
 
   const stroke = useMemo(() => {

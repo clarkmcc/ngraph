@@ -3,7 +3,7 @@ import { Handle } from './Handle'
 import { Label } from './Label'
 import { NodeOutputConfig } from '../config'
 import { useGraphConfig } from '../context/GraphConfigContext'
-import { Position } from '@xyflow/react'
+import { Position } from 'reactflow'
 
 type NodeOutputFieldProps = NodeOutputConfig
 

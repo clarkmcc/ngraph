@@ -1,7 +1,7 @@
 import { memo, useMemo, useRef } from 'react'
 import { NodeInputConfig, ValueTypeConfigOptions } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
-import { Position } from '@xyflow/react'
+import { Position } from 'reactflow'
 import { Handle } from './Handle'
 
 type NodeSelectFieldProps = NodeInputConfig &

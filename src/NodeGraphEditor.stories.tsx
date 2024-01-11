@@ -111,6 +111,12 @@ export const InputFields: Story = {
           inputType: 'value',
           defaultValue: '',
         },
+        boolean: {
+          name: 'Boolean',
+          color: '#a1a1a1',
+          inputType: 'checkbox',
+          defaultValue: true,
+        },
         httpMethod: {
           name: 'HTTP Method',
           color: '#06b6d4',
@@ -152,6 +158,18 @@ export const InputFields: Story = {
               valueType: 'string',
             },
             {
+              name: 'Constant',
+              identifier: 'constant',
+              valueType: 'string',
+              isConstant: true,
+            },
+            {
+              name: 'Array',
+              identifier: 'array',
+              valueType: 'string',
+              array: true,
+            },
+            {
               name: 'Options',
               identifier: 'options',
               valueType: 'httpMethod',
@@ -161,12 +179,129 @@ export const InputFields: Story = {
               identifier: 'buttonGroup',
               valueType: 'httpProtocol',
             },
+            {
+              name: 'Checkbox',
+              identifier: 'checkbox',
+              valueType: 'boolean',
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+
+export const SelectedEdgeHighlighting: Story = {
+  parameters: {
+    layout: 'fullscreen',
+  },
+  args: {
+    nodes: [
+      {
+        id: '1',
+        type: 'combineXYZ',
+        position: { x: 100, y: 100 },
+        data: { label: 'Combine XYZ' },
+        selected: true,
+      },
+      {
+        id: '2',
+        type: 'points',
+        position: { x: 400, y: 200 },
+        data: { label: 'Points' },
+      },
+    ],
+    edges: [
+      {
+        id: 'e1',
+        source: '1',
+        sourceHandle: 'vector',
+        target: '2',
+        targetHandle: 'position',
+        data: {
+          targetHandleType: 'vector',
+        },
+      },
+    ],
+    config: {
+      valueTypes: {
+        number: {
+          name: 'Number',
+          color: '#a1a1a1',
+          inputType: 'value',
+          defaultValue: '0',
+        },
+        vector: {
+          name: 'Vector',
+          color: '#8b5cf6',
+          inputType: null,
+        },
+        geometry: {
+          name: 'Geometry',
+          color: '#059669',
+          inputType: null,
+        },
+      },
+      nodeGroups: {
+        geometry: {
+          name: 'Geometry',
+          color: '#059669',
+        },
+      },
+      nodes: {
+        combineXYZ: {
+          group: 'geometry',
+          name: 'Combine XYZ',
+          inputs: [
+            {
+              name: 'X',
+              identifier: 'x',
+              valueType: 'number',
+            },
+            {
+              name: 'Y',
+              identifier: 'y',
+              valueType: 'number',
+            },
+            {
+              name: 'Z',
+              identifier: 'z',
+              valueType: 'number',
+            },
           ],
           outputs: [
             {
-              name: 'Value',
-              identifier: 'value',
-              valueType: 'string',
+              name: 'Vector',
+              identifier: 'vector',
+              valueType: 'vector',
+            },
+          ],
+        },
+        points: {
+          group: 'geometry',
+          name: 'Points',
+          inputs: [
+            {
+              name: 'Count',
+              identifier: 'count',
+              valueType: 'number',
+            },
+            {
+              name: 'Radius',
+              identifier: 'radius',
+              valueType: 'number',
+            },
+            {
+              name: 'Position',
+              identifier: 'position',
+              valueType: 'vector',
+            },
+          ],
+          outputs: [
+            {
+              name: 'Geometry',
+              identifier: 'geometry',
+              valueType: 'geometry',
             },
           ],
         },

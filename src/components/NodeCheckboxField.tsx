@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { Handle } from './Handle'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
-import { Position } from '@xyflow/react'
+import { Position } from 'reactflow'
 
 type NodeCheckboxFieldProps = NodeInputConfig & ValueTypeConfig
 
