@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
-import { Edge, useReactFlow, useStore } from '@xyflow/react'
+import { Edge, useNodesData, useReactFlow, useStore } from '@xyflow/react'
 import { shallow } from 'zustand/shallow'
 
 export function useNodeFieldValue<T>(
@@ -26,18 +26,18 @@ export function useNodeFieldValue<T>(
   return [value, updateValue]
 }
 
-export function useNodesData<T>(nodeId: string): T {
-  return useStore(
-    useCallback(
-      (s) => {
-        return s.nodeLookup.get(nodeId)?.data || null
-      },
-      [nodeId],
-    ),
-    shallow,
-  )
-}
-
+// export function useNodesData<T>(nodeId: string): T {
+//   return useStore(
+//     useCallback(
+//       (s) => {
+//         return s.nodeLookup.get(nodeId)?.data || null
+//       },
+//       [nodeId],
+//     ),
+//     shallow,
+//   )
+// }
+//
 export function useNodesEdges(nodeId: string): Edge[] {
   return useStore(
     useCallback(

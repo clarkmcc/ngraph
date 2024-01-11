@@ -1,5 +1,5 @@
 import * as React from 'react'
-export { Config } from './config'
+export { GraphConfig } from './config'
 export { Example } from './Example'
 
 export const Package: React.FC = () => {

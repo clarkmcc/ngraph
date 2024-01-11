@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { GraphConfig, IGraphConfig } from '../config'
 import {
   createContext,

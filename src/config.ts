@@ -53,7 +53,7 @@ interface ValueTypeConfigBase {
   shape?: 'diamond' | 'circle'
 }
 
-interface ValueTypeConfigOptions extends ValueTypeConfigBase {
+export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
   inputType: 'options' | 'buttonGroup'
   options: Option[]
   defaultValue: Option['value'] // Ensures defaultValue is one of the option values
@@ -261,6 +261,15 @@ export class GraphConfig {
     return {
       ...this.valueType(input.valueType),
       ...input,
+    }
+  }
+
+  getOutputConfig(
+    output: NodeOutputConfig,
+  ): NodeOutputConfig & ValueTypeConfig {
+    return {
+      ...this.valueType(output.valueType),
+      ...output,
     }
   }
 }

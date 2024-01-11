@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { memo, useMemo } from 'react'
 import { Handle } from './Handle'
 import { NodeBaseInputField } from './NodeBaseInputField'

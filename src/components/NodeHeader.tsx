@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { memo, useState } from 'react'
 import { isEqual } from 'lodash'
 import { NodeConfig } from '../config'

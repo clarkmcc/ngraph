@@ -1,6 +1,5 @@
-import * as React from 'react'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
-import { CSSProperties, useCallback } from 'react'
+import { CSSProperties, memo, useCallback, useRef } from 'react'
 import {
   Connection,
   HandleType,
@@ -20,12 +19,9 @@ type HandleProps = Pick<NodeInputConfig, 'array' | 'identifier'> &
 
 const SIZE = 8
 
-export const Handle = React.memo(function _Handle({
-  style,
-  ...props
-}: HandleProps) {
+export const Handle = memo(({ style, ...props }: HandleProps) => {
   const [config] = useGraphConfig()
-  const ref = React.useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const width = SIZE
   const height = props.array ? SIZE * 1.8 : SIZE

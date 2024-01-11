@@ -1,8 +1,8 @@
-import * as React from 'react'
+import { CSSProperties, ReactNode } from 'react'
 
 type LabelProps = {
-  style?: React.CSSProperties
-  children: React.ReactNode
+  style?: CSSProperties
+  children: ReactNode
 }
 
 export function Label({ style, children }: LabelProps) {
