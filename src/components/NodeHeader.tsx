@@ -5,7 +5,6 @@ import { useGraphConfig } from '../context/GraphConfigContext'
 import { useNodeFieldValue } from '../hooks/node'
 
 type NodeHeaderProps = {
-  nodeId: string
   nodeConfig: NodeConfig
   collapsed: boolean
   onToggleCollapse?: () => void
@@ -16,11 +15,10 @@ type NodeHeaderProps = {
  */
 const HEADER_FIELD_NAME = '__header'
 
-export const NodeHeader = memo(({ nodeConfig, nodeId }: NodeHeaderProps) => {
+export const NodeHeader = memo(({ nodeConfig }: NodeHeaderProps) => {
   const [config] = useGraphConfig()
 
   const [_name, _setName] = useNodeFieldValue(
-    nodeId,
     HEADER_FIELD_NAME,
     nodeConfig.name,
   )

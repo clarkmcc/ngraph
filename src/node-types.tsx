@@ -1,5 +1,11 @@
 import * as React from 'react'
-import { memo, ReactElement, useCallback, useMemo } from 'react'
+import {
+  FunctionComponent,
+  memo,
+  ReactElement,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Edge, Node } from '@xyflow/react'
 import { isEqual } from 'lodash'
 import { useNodeCollapsed, useNodesEdges } from './hooks/node'
@@ -30,11 +36,11 @@ import { NodeHeader } from './components/NodeHeader'
 const isComponentChanged = (a: Node, b: Node) =>
   a.selected === b.selected && isEqual(a.data, b.data)
 
-function buildNode(nodeConfig: NodeConfig) {
+export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
     const [config] = useGraphConfig()
 
-    const [collapsed, setCollapsed] = useNodeCollapsed(node.id)
+    const [collapsed, setCollapsed] = useNodeCollapsed()
     const [isFocused, onFocus, onBlur] = useFocusBlur()
     const toggleCollapse = useCallback(
       () => setCollapsed((v) => !v),
@@ -47,22 +53,14 @@ function buildNode(nodeConfig: NodeConfig) {
     const inputs = useMemo(() => {
       const targetEdges = edges.filter((edge) => edge.target === node.id)
       return (nodeConfig.inputs ?? []).map((input) =>
-        getInputElement(
-          config,
-          node,
-          targetEdges,
-          input,
-          collapsed,
-          onFocus,
-          onBlur,
-        ),
+        getInputElement(config, targetEdges, input, collapsed, onFocus, onBlur),
       )
     }, [config, collapsed, node, edgeIds])
 
     // Construct memoized output components based on the node config
     const outputs = useMemo(() => {
       return (nodeConfig.outputs ?? []).map((output) =>
-        getOutputElements(config, node, output, collapsed),
+        getOutputElements(config, output, collapsed),
       )
     }, [config, collapsed, node])
 
@@ -79,7 +77,6 @@ function buildNode(nodeConfig: NodeConfig) {
         className={isFocused ? 'nodrag' : undefined}
       >
         <NodeHeader
-          nodeId={node.id}
           nodeConfig={nodeConfig}
           collapsed={collapsed}
           onToggleCollapse={toggleCollapse}
@@ -102,7 +99,6 @@ function buildNode(nodeConfig: NodeConfig) {
 
 function getInputElement(
   graphConfig: GraphConfig,
-  node: Node,
   edges: Edge[],
   input: NodeInputConfig,
   collapsed: boolean,
@@ -113,30 +109,20 @@ function getInputElement(
 
   if (collapsed) {
     return (
-      <NodeDenseLinkedField
-        key={inputConfig.identifier}
-        nodeId={node.id}
-        {...inputConfig}
-      />
+      <NodeDenseLinkedField key={inputConfig.identifier} {...inputConfig} />
     )
   }
 
   if (edges.find((edge) => edge.targetHandle === input.identifier)) {
-    return (
-      <NodeLinkedField
-        key={inputConfig.identifier}
-        nodeId={node.id}
-        {...inputConfig}
-      />
-    )
+    return <NodeLinkedField key={inputConfig.identifier} {...inputConfig} />
   }
 
   switch (inputConfig.inputType) {
     case 'value':
+      console.log('input')
       return (
         <NodeInputField
           key={input.identifier}
-          nodeId={node.id}
           onBlur={onBlur}
           onFocus={onFocus}
           {...inputConfig}
@@ -146,7 +132,6 @@ function getInputElement(
       return (
         <NodeSelectField
           key={input.identifier}
-          nodeId={node.id}
           onFocus={onFocus}
           onBlur={onBlur}
           {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
@@ -156,50 +141,28 @@ function getInputElement(
       return (
         <NodeToggleField
           key={input.identifier}
-          nodeId={node.id}
           onFocus={onFocus}
           onBlur={onBlur}
           {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
         />
       )
     case 'checkbox':
-      return (
-        <NodeCheckboxField
-          key={input.identifier}
-          nodeId={node.id}
-          {...inputConfig}
-        />
-      )
+      return <NodeCheckboxField key={input.identifier} {...inputConfig} />
     default:
-      return (
-        <NodeLinkedField
-          key={input.identifier}
-          nodeId={node.id}
-          {...inputConfig}
-        />
-      )
+      return <NodeLinkedField key={input.identifier} {...inputConfig} />
   }
 }
 
 function getOutputElements(
   graphConfig: GraphConfig,
-  node: Node,
   output: NodeOutputConfig,
   collapsed: boolean,
 ): JSX.Element {
   const outputConfig = graphConfig.getOutputConfig(output)
   if (collapsed) {
-    return (
-      <NodeDenseOutputField
-        nodeId={node.id}
-        key={output.identifier}
-        {...outputConfig}
-      />
-    )
+    return <NodeDenseOutputField key={output.identifier} {...outputConfig} />
   } else {
-    return (
-      <NodeOutputField nodeId={node.id} key={output.identifier} {...output} />
-    )
+    return <NodeOutputField key={output.identifier} {...output} />
   }
 }
 

@@ -5,9 +5,7 @@ import { NodeOutputConfig } from '../config'
 import { useGraphConfig } from '../context/GraphConfigContext'
 import { Position } from '@xyflow/react'
 
-type NodeOutputFieldProps = NodeOutputConfig & {
-  nodeId: string
-}
+type NodeOutputFieldProps = NodeOutputConfig
 
 export const NodeOutputField = memo((props: NodeOutputFieldProps) => {
   const [config] = useGraphConfig()

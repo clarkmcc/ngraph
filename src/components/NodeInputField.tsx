@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { Handle } from './Handle'
 import { NodeBaseInputField } from './NodeBaseInputField'
 import { Position } from '@xyflow/react'
@@ -7,29 +7,15 @@ import { NodeInputConfig, ValueTypeConfig } from '../config'
 
 type NodeInputFieldProps = NodeInputConfig &
   ValueTypeConfig & {
-    nodeId: string
     onFocus: () => void
     onBlur: () => void
   }
 
 export const NodeInputField = memo(
-  ({ nodeId, onFocus, onBlur, isConstant, ...props }: NodeInputFieldProps) => {
+  ({ onFocus, onBlur, isConstant, ...props }: NodeInputFieldProps) => {
     const [value, setValue] = useNodeFieldValue(
-      nodeId,
       props.identifier,
       props.defaultValue,
-    )
-
-    const handle = useMemo(
-      () => (
-        <Handle
-          handleType="target"
-          nodeId={nodeId}
-          position={Position.Left}
-          {...props}
-        />
-      ),
-      [props, nodeId],
     )
 
     return (
@@ -40,7 +26,9 @@ export const NodeInputField = memo(
         onPointerLeave={onBlur}
         {...props}
       >
-        {isConstant ? null : handle}
+        {isConstant ? null : (
+          <Handle handleType="target" position={Position.Left} {...props} />
+        )}
       </NodeBaseInputField>
     )
   },

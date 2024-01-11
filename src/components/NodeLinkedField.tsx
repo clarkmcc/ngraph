@@ -5,9 +5,7 @@ import { memo } from 'react'
 import { Position } from '@xyflow/react'
 
 type NodeLinkedFieldProps = NodeInputConfig &
-  Pick<ValueTypeConfig, 'shape' | 'color'> & {
-    nodeId: string
-  }
+  Pick<ValueTypeConfig, 'shape' | 'color'>
 
 export const NodeLinkedField = memo((props: NodeLinkedFieldProps) => {
   return (

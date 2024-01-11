@@ -1,27 +1,35 @@
 import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
-import { Edge, useNodesData, useReactFlow, useStore } from '@xyflow/react'
+import {
+  Edge,
+  useNodeId,
+  useNodesData,
+  useReactFlow,
+  useStore,
+} from '@xyflow/react'
 import { shallow } from 'zustand/shallow'
 
 export function useNodeFieldValue<T>(
-  nodeId: string,
   field: string,
   defaultValue?: T,
 ): [T, (value: T) => void] {
-  const data = useNodesData<any>(nodeId)
+  const nodeId = useNodeId()
+  const { updateNodeData } = useReactFlow()
+  const data = useNodesData<any>(nodeId!)
   const value = useMemo(
     () => (data ? data[field] : defaultValue) ?? defaultValue,
     [data, defaultValue],
   )
-  const { setNodes } = useReactFlow()
+  console.log(value)
   const updateValue = useCallback(
-    (value: T) => {
-      setNodes((nodes) =>
-        nodes.map((n) =>
-          n.id === nodeId ? { ...n, data: { ...n.data, [field]: value } } : n,
-        ),
-      )
-    },
-    [nodeId],
+    (value: T) =>
+      updateNodeData(
+        nodeId!,
+        { [field]: value },
+        {
+          replace: true,
+        },
+      ),
+    [nodeId, field, updateNodeData],
   )
   return [value, updateValue]
 }
@@ -52,8 +60,9 @@ export function useNodesEdges(nodeId: string): Edge[] {
 
 const COLLAPSED_FIELD_NAME = '__collapsed'
 
-export function useNodeCollapsed(
-  nodeId: string,
-): [boolean, Dispatch<SetStateAction<boolean>>] {
-  return useNodeFieldValue(nodeId, COLLAPSED_FIELD_NAME, false)
+export function useNodeCollapsed(): [
+  boolean,
+  Dispatch<SetStateAction<boolean>>,
+] {
+  return useNodeFieldValue(COLLAPSED_FIELD_NAME, false)
 }

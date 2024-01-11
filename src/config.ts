@@ -1,4 +1,5 @@
-import { CSSProperties, JSXElementConstructor } from 'react'
+import { CSSProperties, FunctionComponent, JSXElementConstructor } from 'react'
+import { buildNode } from './node-types'
 
 export interface IGraphConfig {
   /**
@@ -165,7 +166,7 @@ export class GraphConfig {
     this.nodes = props.nodes
   }
 
-  validate() {
+  validate(): GraphConfig {
     const errors: string[] = []
     Object.values(this.nodes).forEach((node) => {
       if (node.inputs) {
@@ -190,7 +191,7 @@ export class GraphConfig {
     if (errors.length > 0) {
       throw new Error(errors.join('\n'))
     }
-    console.log('validated')
+    return this
   }
 
   registerCustomNode(
@@ -271,5 +272,17 @@ export class GraphConfig {
       ...this.valueType(output.valueType),
       ...output,
     }
+  }
+
+  getNodeComponents(): Record<string, FunctionComponent> {
+    return Object.entries(this.nodes)
+      .map(([type, node]): [string, FunctionComponent] => [
+        type,
+        buildNode(node),
+      ])
+      .reduce((acc: Record<string, FunctionComponent>, [type, node]) => {
+        acc[type] = node
+        return acc
+      }, {})
   }
 }

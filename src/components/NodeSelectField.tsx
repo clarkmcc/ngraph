@@ -6,15 +6,13 @@ import { Handle } from './Handle'
 
 type NodeSelectFieldProps = NodeInputConfig &
   ValueTypeConfigOptions & {
-    nodeId: string
     onFocus: () => void
     onBlur: () => void
   }
 
 export const NodeSelectField = memo(
-  ({ nodeId, options, isConstant, ...props }: NodeSelectFieldProps) => {
+  ({ options, isConstant, ...props }: NodeSelectFieldProps) => {
     const [value, setValue] = useNodeFieldValue(
-      nodeId,
       props.identifier,
       props.defaultValue,
     )
@@ -22,15 +20,8 @@ export const NodeSelectField = memo(
     const ref = useRef<HTMLSelectElement>(null)
 
     const handle = useMemo(
-      () => (
-        <Handle
-          handleType="target"
-          position={Position.Left}
-          nodeId={nodeId}
-          {...props}
-        />
-      ),
-      [props, nodeId],
+      () => <Handle handleType="target" position={Position.Left} {...props} />,
+      [props],
     )
 
     return (

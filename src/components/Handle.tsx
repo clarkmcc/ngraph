@@ -11,7 +11,6 @@ import { useGraphConfig } from '../context/GraphConfigContext'
 
 type HandleProps = Pick<NodeInputConfig, 'array' | 'identifier'> &
   Pick<ValueTypeConfig, 'shape' | 'color'> & {
-    nodeId: string
     style?: CSSProperties
     position: Position
     handleType: HandleType
@@ -74,8 +73,8 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        left: props.position === Position.Left ? -8 : undefined,
-        right: props.position === Position.Right ? -8 : undefined,
+        // left: props.position === Position.Left ? -8 : undefined,
+        // right: props.position === Position.Right ? -8 : undefined,
         zIndex: 1000000,
       }}
     >
@@ -99,8 +98,8 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
           background: 'transparent',
           width: width * 2,
           height: height * 2,
-          right: 0,
-          left: 0,
+          // right: 0,
+          // left: 0,
         }}
         type={props.handleType}
         position={props.position}

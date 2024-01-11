@@ -45,10 +45,10 @@ export function Edge({
   const [selection, setSelection] = useState(SelectionState.Nothing)
   const [config] = useGraphConfig()
   const [edgePath] = getBezierPath({
-    sourceX: sourceX - 8,
+    sourceX: sourceX - 16,
     sourceY: sourceY,
     sourcePosition,
-    targetX: targetX + 8,
+    targetX: targetX + 16,
     targetY: targetY,
     targetPosition,
   })

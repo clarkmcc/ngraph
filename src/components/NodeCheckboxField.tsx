@@ -4,32 +4,16 @@ import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
 import { Position } from '@xyflow/react'
 
-type NodeCheckboxFieldProps = NodeInputConfig &
-  ValueTypeConfig & {
-    nodeId: string
-  }
+type NodeCheckboxFieldProps = NodeInputConfig & ValueTypeConfig
 
 export const NodeCheckboxField = memo(
-  ({ nodeId, isConstant, ...props }: NodeCheckboxFieldProps) => {
+  ({ isConstant, ...props }: NodeCheckboxFieldProps) => {
     const [value, setValue] = useNodeFieldValue(
-      nodeId,
       props.identifier,
       props.defaultValue,
     )
 
     const id = useMemo(() => `${name}/${Math.random()}`, [])
-
-    const handle = useMemo(
-      () => (
-        <Handle
-          handleType="target"
-          nodeId={nodeId}
-          position={Position.Left}
-          {...props}
-        />
-      ),
-      [nodeId],
-    )
 
     const handleChange = useCallback(
       (e) => setValue(e.target.checked),
@@ -46,7 +30,9 @@ export const NodeCheckboxField = memo(
           alignItems: 'center',
         }}
       >
-        {!isConstant && handle}
+        {!isConstant && (
+          <Handle handleType="target" position={Position.Left} {...props} />
+        )}
         <input
           style={{
             appearance: value ? undefined : 'none',

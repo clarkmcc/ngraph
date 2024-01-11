@@ -1,5 +1,5 @@
 import { Edge } from './components/Edge'
 
-export const edgeTypes = {
+export const defaultEdgeTypes = {
   default: Edge,
 }

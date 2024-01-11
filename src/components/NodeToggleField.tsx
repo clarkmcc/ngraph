@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { NodeInputConfig, ValueTypeConfigOptions } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
 import { Position } from '@xyflow/react'
@@ -7,34 +7,22 @@ import { Handle } from './Handle'
 type NodeToggleFieldProps = NodeInputConfig &
   ValueTypeConfigOptions & {
     name: string
-    nodeId: string
     onFocus: () => void
     onBlur: () => void
   }
 
 export const NodeToggleField = memo(
-  ({ nodeId, options, isConstant, ...props }: NodeToggleFieldProps) => {
+  ({ options, isConstant, ...props }: NodeToggleFieldProps) => {
     const [value, setValue] = useNodeFieldValue(
-      nodeId,
       props.identifier,
       props.defaultValue,
     )
 
-    const handle = useMemo(
-      () => (
-        <Handle
-          handleType="target"
-          nodeId={nodeId}
-          position={Position.Left}
-          {...props}
-        />
-      ),
-      [props, nodeId],
-    )
-
     return (
       <div style={{ position: 'relative' }}>
-        {!isConstant && handle}
+        {!isConstant && (
+          <Handle handleType="target" position={Position.Left} {...props} />
+        )}
         <div
           style={{
             margin: '2px 0',
