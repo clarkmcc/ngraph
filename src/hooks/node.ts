@@ -19,33 +19,15 @@ export function useNodeFieldValue<T>(
     () => (data ? data[field] : defaultValue) ?? defaultValue,
     [data, defaultValue],
   )
-  console.log(value)
   const updateValue = useCallback(
-    (value: T) =>
-      updateNodeData(
-        nodeId!,
-        { [field]: value },
-        {
-          replace: true,
-        },
-      ),
-    [nodeId, field, updateNodeData],
+    (value: T) => {
+      updateNodeData(nodeId!, { [field]: value })
+    },
+    [nodeId, field],
   )
   return [value, updateValue]
 }
 
-// export function useNodesData<T>(nodeId: string): T {
-//   return useStore(
-//     useCallback(
-//       (s) => {
-//         return s.nodeLookup.get(nodeId)?.data || null
-//       },
-//       [nodeId],
-//     ),
-//     shallow,
-//   )
-// }
-//
 export function useNodesEdges(nodeId: string): Edge[] {
   return useStore(
     useCallback(

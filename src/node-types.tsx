@@ -119,7 +119,6 @@ function getInputElement(
 
   switch (inputConfig.inputType) {
     case 'value':
-      console.log('input')
       return (
         <NodeInputField
           key={input.identifier}

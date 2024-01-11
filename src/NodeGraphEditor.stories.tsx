@@ -138,10 +138,6 @@ export const InputFields: Story = {
       nodeGroups: {
         default: {
           name: 'Default',
-          color: '#a1a1a1',
-        },
-        http: {
-          name: 'HTTP',
           color: '#0284c7',
         },
       },
