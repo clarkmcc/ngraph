@@ -10,50 +10,73 @@ import {
 } from '../config'
 import { Handle } from './Handle'
 import { useGraphConfig } from '../context/GraphConfigContext'
+import { useNodeCollapsed } from '../hooks/node'
 
 type NodeContainerProps = {
   node: Node
-  isFocused?: boolean
+  draggable?: boolean
   styles?: CSSProperties
   children?: ReactElement | ReactElement[]
 }
 
 export function NodeContainer({
-  isFocused,
+  draggable,
   node,
   styles,
   children,
 }: NodeContainerProps) {
-  return (
-    <div
-      style={{
-        borderRadius: 6,
-        fontFamily: 'sans-serif',
-        boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)',
-        background: '#303030',
-        border: `1px solid ${node.selected ? '#fff' : '#0f1010'}`,
-        ...styles,
-      }}
-      className={isFocused ? 'nodrag' : undefined}
-    >
-      {children}
-    </div>
-  )
+  const [config] = useGraphConfig()
+  const nodeConfig = config.getNodeConfig(node.type!)
+  const nodeGroupConfig = config.getNodeGroupConfig(nodeConfig.group)
+  const [collapsed, toggleCollapsed] = useNodeCollapsed()
+
+  if (collapsed) {
+    return (
+      <CollapsedNodeContainer
+        node={node}
+        nodeConfig={nodeConfig}
+        nodeGroupConfig={nodeGroupConfig}
+        toggleCollapsed={toggleCollapsed}
+      />
+    )
+  } else {
+    return (
+      <div
+        style={{
+          borderRadius: 6,
+          fontFamily: 'sans-serif',
+          boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)',
+          background: '#303030',
+          border: `1px solid ${node.selected ? '#fff' : '#0f1010'}`,
+          ...styles,
+        }}
+        className={draggable ? undefined : 'nodrag'}
+      >
+        <NodeHeader
+          defaultTitle={nodeConfig.name}
+          color={nodeGroupConfig.color}
+          collapsed={false}
+          toggleCollapsed={toggleCollapsed}
+        />
+        {children}
+      </div>
+    )
+  }
 }
 
-type NodeCollapsedContainerProps = {
+type CollapsedNodeContainerProps = {
   node: Node
   nodeConfig: NodeConfig
   nodeGroupConfig: NodeGroupConfig
   toggleCollapsed?: () => void
 }
 
-export function NodeCollapsedContainer({
+function CollapsedNodeContainer({
   node,
   nodeConfig,
   nodeGroupConfig,
   toggleCollapsed,
-}: NodeCollapsedContainerProps) {
+}: CollapsedNodeContainerProps) {
   const [config] = useGraphConfig()
   const inputHandles = useMemo(
     () =>
@@ -87,6 +110,12 @@ export function NodeCollapsedContainer({
   )
 }
 
+/**
+ * Returns an invisible input <Handle/> element for the given input config. This
+ * is used when the node is collapsed
+ * @param graphConfig
+ * @param input
+ */
 function getInputHandles(
   graphConfig: GraphConfig,
   input: NodeInputConfig,
@@ -103,6 +132,12 @@ function getInputHandles(
   )
 }
 
+/**
+ * Returns an invisible output <Handle/> element for the given output config. This
+ * is used when the node is collapsed
+ * @param graphConfig
+ * @param output
+ */
 function getOutputHandles(
   graphConfig: GraphConfig,
   output: NodeOutputConfig,

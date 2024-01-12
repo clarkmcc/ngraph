@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Edge, useNodeId, useReactFlow, useStore } from 'reactflow'
 import { shallow } from 'zustand/shallow'
 
@@ -52,9 +52,14 @@ export function useNodesEdges(nodeId: string): Edge[] {
 
 const COLLAPSED_FIELD_NAME = '__collapsed'
 
-export function useNodeCollapsed(): [
-  boolean,
-  Dispatch<SetStateAction<boolean>>,
-] {
-  return useNodeFieldValue(COLLAPSED_FIELD_NAME, false)
+export function useNodeCollapsed(): [boolean, () => void] {
+  const [collapsed, setCollapsed] = useNodeFieldValue(
+    COLLAPSED_FIELD_NAME,
+    false,
+  )
+  const toggle = useCallback(
+    () => setCollapsed(!collapsed),
+    [collapsed, setCollapsed],
+  )
+  return [collapsed, toggle]
 }

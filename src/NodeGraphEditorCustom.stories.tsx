@@ -5,7 +5,6 @@ import { GraphConfig } from './config'
 import { useMemo } from 'react'
 import { Edge, Node, Position } from 'reactflow'
 import { NodeContainer } from './components/NodeContainer'
-import { NodeHeader } from './components/NodeHeader'
 import { useFocusBlur } from './hooks/focus'
 import { Handle } from './components/Handle'
 
@@ -15,8 +14,7 @@ const meta = {
     function CustomNode(node: Node) {
       const [isFocused, onFocus, onBlur] = useFocusBlur()
       return (
-        <NodeContainer node={node} isFocused={isFocused}>
-          <NodeHeader defaultTitle="My Custom Node" color="#f43f5e" />
+        <NodeContainer node={node} draggable={isFocused}>
           <div>
             <textarea
               defaultValue="This is a text area"
@@ -50,7 +48,7 @@ const meta = {
         nodeGroups: {
           custom: {
             name: 'Custom',
-            color: '#3b3b3b',
+            color: '#f43f5e',
           },
         },
       })

@@ -245,7 +245,7 @@ export class GraphConfig {
     }))
   }
 
-  nodeGroupConfig<T extends keyof this['nodeGroups']>(
+  getNodeGroupConfig<T extends keyof this['nodeGroups']>(
     nodeType: T,
   ): NodeGroupConfig {
     return this.nodeGroups[nodeType as keyof NodeGroupTypes]
