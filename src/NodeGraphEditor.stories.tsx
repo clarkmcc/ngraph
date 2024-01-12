@@ -167,7 +167,7 @@ export const InputFields: Story = {
               name: 'Array',
               identifier: 'array',
               valueType: 'string',
-              array: true,
+              isArray: true,
             },
             {
               name: 'Options',
@@ -462,7 +462,76 @@ export const ArrayInputs: Story = {
               name: 'Vectors',
               identifier: 'vectors',
               valueType: 'vector',
-              array: true,
+              isArray: true,
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+
+export const HandleSymbols: Story = {
+  parameters: {
+    layout: 'fullscreen',
+  },
+  args: {
+    nodes: [
+      {
+        id: '1',
+        type: 'shapes',
+        position: { x: 100, y: 100 },
+        data: { label: 'Shapes' },
+      },
+    ],
+    edges: [],
+    config: {
+      valueTypes: {
+        circle: {
+          name: 'Circle',
+          color: '#38bdf8',
+          inputType: 'value',
+          defaultValue: '0',
+          shape: 'circle',
+        },
+        diamondDot: {
+          name: 'Diamond Dot',
+          color: '#38bdf8',
+          inputType: null,
+          shape: 'diamondDot',
+        },
+        diamond: {
+          name: 'Diamond',
+          color: '#38bdf8',
+          inputType: null,
+          shape: 'diamond',
+        },
+      },
+      nodeGroups: {
+        geometry: {
+          name: 'Geometry',
+          color: '#0284c7',
+        },
+      },
+      nodes: {
+        shapes: {
+          group: 'geometry',
+          name: 'Shapes',
+          outputs: [
+            {
+              name: 'Circle',
+              identifier: 'circle',
+              valueType: 'circle',
+            },
+            {
+              name: 'Diamond',
+              identifier: 'diamond',
+              valueType: 'diamond',
+            },
+            {
+              name: 'Diamond Dot',
+              identifier: 'diamondDot',
+              valueType: 'diamondDot',
             },
           ],
         },

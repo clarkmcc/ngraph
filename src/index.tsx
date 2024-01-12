@@ -1,2 +1,2 @@
 export * from './config'
-export * from './NodeGraphEditor'
+export { NodeGraphEditor } from './NodeGraphEditor'

@@ -1,4 +1,3 @@
-import * as React from 'react'
 import {
   FunctionComponent,
   memo,
@@ -26,6 +25,8 @@ import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeDenseOutputField } from './components/NodeDenseOutputField'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeHeader } from './components/NodeHeader'
+import { NodeContainer } from './components/NodeContainer'
+import { useFocusBlur } from './hooks/focus'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -39,9 +40,14 @@ const isComponentChanged = (a: Node, b: Node) =>
 export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
     const [config] = useGraphConfig()
+    const group = useMemo(
+      () => config.nodeGroupConfig(nodeConfig.group),
+      [config],
+    )
 
     const [collapsed, setCollapsed] = useNodeCollapsed()
     const [isFocused, onFocus, onBlur] = useFocusBlur()
+    // @ts-ignore
     const toggleCollapse = useCallback(
       () => setCollapsed((v) => !v),
       [setCollapsed],
@@ -65,22 +71,8 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     }, [config, collapsed, node])
 
     return (
-      <div
-        style={{
-          borderRadius: 6,
-          fontFamily: 'sans-serif',
-          boxShadow: '0 1px 4px rgba(0, 0, 0, 0.2)',
-          background: '#303030',
-          border: `1px solid ${node.selected ? '#fff' : '#0f1010'}`,
-          minWidth: nodeConfig.style?.minWidth,
-        }}
-        className={isFocused ? 'nodrag' : undefined}
-      >
-        <NodeHeader
-          nodeConfig={nodeConfig}
-          collapsed={collapsed}
-          onToggleCollapse={toggleCollapse}
-        />
+      <NodeContainer isFocused={isFocused} node={node}>
+        <NodeHeader defaultTitle={nodeConfig.name} color={group.color} />
         <div
           style={{
             padding: '8px 0 12px',
@@ -91,7 +83,7 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
           {outputs}
           {inputs}
         </div>
-      </div>
+      </NodeContainer>
     )
   }
   return memo(component, isComponentChanged)
@@ -163,11 +155,4 @@ function getOutputElements(
   } else {
     return <NodeOutputField key={output.identifier} {...output} />
   }
-}
-
-function useFocusBlur(): [boolean, () => void, () => void] {
-  const [isFocused, setIsFocused] = React.useState(false)
-  const onFocus = useCallback(() => setIsFocused(true), [])
-  const onBlur = useCallback(() => setIsFocused(false), [])
-  return [isFocused, onFocus, onBlur]
 }

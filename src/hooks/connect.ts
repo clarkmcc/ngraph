@@ -25,7 +25,7 @@ export function useSocketConnect() {
       // We remove all edges that have the same target and targetHandle
       // if the target handle is not an array type
       const edgesToRemove =
-        targetInput && !targetInput.array
+        targetInput && !targetInput.isArray
           ? getEdges().filter(
               (e) =>
                 e.target === params.target &&

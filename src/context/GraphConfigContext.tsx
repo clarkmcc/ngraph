@@ -52,7 +52,7 @@ export const GraphConfigContext = createContext<{
 
 type GraphConfigProviderProps = {
   children: ReactNode
-  defaultConfig?: IGraphConfig
+  defaultConfig?: GraphConfig
 }
 
 export function GraphConfigProvider({
@@ -60,7 +60,7 @@ export function GraphConfigProvider({
   defaultConfig: _defaultConfig,
 }: GraphConfigProviderProps) {
   const [config, setConfig] = useState<GraphConfig>(
-    new GraphConfig(_defaultConfig ?? defaultConfig).validate(),
+    _defaultConfig ?? new GraphConfig(defaultConfig).validate(),
   )
   return (
     <GraphConfigContext.Provider value={{ config, setConfig }}>

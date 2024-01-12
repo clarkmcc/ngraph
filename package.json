@@ -40,6 +40,7 @@
     "@storybook/react": "^7.6.7",
     "@storybook/react-vite": "^7.6.7",
     "@storybook/test": "^7.6.7",
+    "@types/dagre": "^0.7.52",
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
     "babel-core": "^6.26.3",
@@ -55,6 +56,9 @@
     "vite": "^5.0.11"
   },
   "dependencies": {
+    "dagre": "^0.8.5",
+    "nanoid": "^5.0.4",
+    "react-hotkeys-hook": "^4.4.3",
     "reactflow": "^11.10.1"
   }
 }

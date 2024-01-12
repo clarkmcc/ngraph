@@ -9,7 +9,7 @@ import {
 } from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
 
-type HandleProps = Pick<NodeInputConfig, 'array' | 'identifier'> &
+type HandleProps = Pick<NodeInputConfig, 'isArray' | 'identifier'> &
   Pick<ValueTypeConfig, 'shape' | 'color'> & {
     style?: CSSProperties
     position: Position
@@ -18,12 +18,24 @@ type HandleProps = Pick<NodeInputConfig, 'array' | 'identifier'> &
 
 const SIZE = 8
 
+const dot = (
+  <div
+    style={{
+      width: 2,
+      height: 2,
+      position: 'absolute',
+      borderRadius: 1,
+      background: '#0f1010',
+    }}
+  />
+)
+
 export const Handle = memo(({ style, ...props }: HandleProps) => {
   const [config] = useGraphConfig()
   const ref = useRef<HTMLDivElement>(null)
 
   const width = SIZE
-  const height = props.array ? SIZE * 1.8 : SIZE
+  const height = props.isArray ? SIZE * 1.8 : SIZE
 
   const api = useStoreApi()
 
@@ -59,7 +71,7 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
   }, [])
 
   const shapeStyle =
-    props.shape === 'diamond'
+    props.shape === 'diamond' || props.shape === 'diamondDot'
       ? { borderRadius: 0, transform: 'rotate(45deg)', top: 8 }
       : {}
 
@@ -89,6 +101,7 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
           background: props.color,
         }}
       />
+      {props.shape === 'diamondDot' && dot}
       <FlowHandle
         ref={ref}
         id={props.identifier}

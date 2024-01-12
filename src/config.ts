@@ -1,4 +1,4 @@
-import { CSSProperties, FunctionComponent, JSXElementConstructor } from 'react'
+import { CSSProperties, JSXElementConstructor } from 'react'
 import { buildNode } from './node-types'
 
 export interface IGraphConfig {
@@ -25,9 +25,10 @@ export interface IGraphConfig {
 }
 
 export type KeyBindings = {
-  save?: string
-  copy?: string
-  paste?: string
+  save: string[]
+  copy: string[]
+  paste: string[]
+  delete: string[]
 }
 
 export type ValueTypes = {
@@ -51,7 +52,7 @@ interface ValueTypeConfigBase {
   /**
    * The shape to use for the input/output handle attached to the node.
    */
-  shape?: 'diamond' | 'circle'
+  shape?: 'diamond' | 'diamondDot' | 'circle'
 }
 
 export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
@@ -100,14 +101,18 @@ export interface NodeConfig {
    * configure node widths, background, etc.
    */
   style?: CSSProperties
-  external?: boolean
+  /**
+   * Node is a custom node and should not be rendered using the config-based
+   * rendering system
+   */
+  custom?: boolean
 }
 
 export interface NodeInputConfig {
   name: string
   identifier: string
   valueType: keyof ValueTypes
-  array?: boolean
+  isArray?: boolean
   defaultValue?: any
   isConstant?: boolean
 }
@@ -142,28 +147,31 @@ type WithType<T, K> = T & {
 }
 
 export class GraphConfig {
-  readonly valueTypes: ValueTypes
+  readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
   readonly nodeGroups: {
     [key: string]: NodeGroupConfig
-  }
+  } = {}
   private readonly nodes: {
     [key: string]: NodeConfig
-  }
+  } = {}
   private customNodes: {
-    [key: string]: JSXElementConstructor<never>
+    [key: string]: JSXElementConstructor<any>
   } = {}
 
-  constructor(props: IGraphConfig) {
-    this.keybindings = {
-      save: 'meta+s',
-      copy: 'meta+c',
-      paste: 'meta+v',
-      ...props.keybindings,
+  constructor(props?: Partial<IGraphConfig>) {
+    if (props) {
+      this.keybindings = {
+        save: ['meta+s'],
+        copy: ['meta+c'],
+        paste: ['meta+v'],
+        delete: ['x', 'backspace'],
+        ...props.keybindings,
+      }
+      this.valueTypes = props.valueTypes ?? this.valueTypes
+      this.nodeGroups = props.nodeGroups ?? this.nodeGroups
+      this.nodes = props.nodes ?? this.nodes
     }
-    this.valueTypes = props.valueTypes
-    this.nodeGroups = props.nodeGroups
-    this.nodes = props.nodes
   }
 
   validate(): GraphConfig {
@@ -173,7 +181,7 @@ export class GraphConfig {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {
             errors.push(
-              `Node ${node.name} has an input that references non-existent value type ${input.valueType}`,
+              `Node '${node.name}' has an input that references non-existent value type '${input.valueType}'`,
             )
           }
         })
@@ -182,7 +190,7 @@ export class GraphConfig {
         node.outputs.forEach((output) => {
           if (!this.valueTypes[output.valueType]) {
             errors.push(
-              `Node ${node.name} has an output that references non-existent value type ${output.valueType}`,
+              `Node '${node.name}' has an output that references non-existent value type '${output.valueType}'`,
             )
           }
         })
@@ -194,11 +202,11 @@ export class GraphConfig {
     return this
   }
 
-  registerCustomNode(
+  registerCustomNode<T>(
     name: string,
     type: string,
     group: string,
-    node: JSXElementConstructor<any>,
+    node: JSXElementConstructor<T>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
@@ -208,12 +216,12 @@ export class GraphConfig {
       name,
       inputs: inputs,
       outputs: outputs,
-      external: true,
+      custom: true,
     }
     this.validate()
   }
 
-  customNode(type: string): JSXElementConstructor<any> {
+  customNode<T>(type: string): JSXElementConstructor<T> {
     return this.customNodes[type]
   }
 
@@ -274,15 +282,22 @@ export class GraphConfig {
     }
   }
 
-  getNodeComponents(): Record<string, FunctionComponent> {
+  getNodeComponents(): Record<string, JSXElementConstructor<any>> {
     return Object.entries(this.nodes)
-      .map(([type, node]): [string, FunctionComponent] => [
-        type,
-        buildNode(node),
-      ])
-      .reduce((acc: Record<string, FunctionComponent>, [type, node]) => {
-        acc[type] = node
-        return acc
-      }, {})
+      .map(([type, node]): [string, JSXElementConstructor<any>] => {
+        if (node.custom) {
+          console.log('returning custom node')
+          return [type, this.customNode(type)]
+        } else {
+          return [type, buildNode(node)]
+        }
+      })
+      .reduce(
+        (acc: Record<string, JSXElementConstructor<any>>, [type, node]) => {
+          acc[type] = node
+          return acc
+        },
+        {},
+      )
   }
 }

@@ -1,13 +1,10 @@
 import { memo, useState } from 'react'
 import { isEqual } from 'lodash'
-import { NodeConfig } from '../config'
-import { useGraphConfig } from '../context/GraphConfigContext'
 import { useNodeFieldValue } from '../hooks/node'
 
 type NodeHeaderProps = {
-  nodeConfig: NodeConfig
-  collapsed: boolean
-  onToggleCollapse?: () => void
+  defaultTitle: string
+  color: string
 }
 
 /**
@@ -15,13 +12,8 @@ type NodeHeaderProps = {
  */
 const HEADER_FIELD_NAME = '__header'
 
-export const NodeHeader = memo(({ nodeConfig }: NodeHeaderProps) => {
-  const [config] = useGraphConfig()
-
-  const [_name, _setName] = useNodeFieldValue(
-    HEADER_FIELD_NAME,
-    nodeConfig.name,
-  )
+export const NodeHeader = memo(({ defaultTitle, color }: NodeHeaderProps) => {
+  const [_name, _setName] = useNodeFieldValue(HEADER_FIELD_NAME, defaultTitle)
   const [name, setName] = useState(_name)
 
   function handleBlur(): void {
@@ -37,7 +29,7 @@ export const NodeHeader = memo(({ nodeConfig }: NodeHeaderProps) => {
   return (
     <div
       style={{
-        background: config.nodeGroupConfig(nodeConfig.group).color,
+        background: color,
         color: '#fff',
         padding: '4px 12px',
         fontSize: '12px',
