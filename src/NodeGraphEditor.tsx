@@ -12,7 +12,7 @@ import {
 import { GraphConfigProvider } from './context/GraphConfigContext'
 import 'reactflow/dist/style.css'
 import { useNodeTypes } from './hooks/config'
-import { useMemo } from 'react'
+import { forwardRef, useImperativeHandle, useMemo } from 'react'
 import { defaultEdgeTypes } from './edge-types'
 import { IGraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
@@ -60,23 +60,38 @@ export function ExampleNodeGraphEditor({
 }
 
 type FlowProps = ReactFlowProps
+// type FlowHandle = {
+//   layout: () => void
+// }
 
-function Flow({ defaultNodes, defaultEdges, ...props }: FlowProps) {
-  const nodeTypes = useNodeTypes()
-  const edgeTypes = useMemo(() => defaultEdgeTypes, [])
-  const onConnect = useSocketConnect()
+const Flow = forwardRef(
+  ({ defaultNodes, defaultEdges, ...props }: FlowProps, ref) => {
+    const nodeTypes = useNodeTypes()
+    const edgeTypes = useMemo(() => defaultEdgeTypes, [])
+    const onConnect = useSocketConnect()
 
-  return (
-    <div style={{ backgroundColor: '#1d1d1d', width: '100%', height: '100%' }}>
-      <ReactFlow
-        {...props}
-        onConnect={onConnect}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
+    useImperativeHandle(
+      ref,
+      () => ({
+        layout: () => {},
+      }),
+      [],
+    )
+
+    return (
+      <div
+        style={{ backgroundColor: '#1d1d1d', width: '100%', height: '100%' }}
       >
-        {props.children}
-        <Background color="#52525b" variant={BackgroundVariant.Dots} />
-      </ReactFlow>
-    </div>
-  )
-}
+        <ReactFlow
+          {...props}
+          onConnect={onConnect}
+          nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
+        >
+          {props.children}
+          <Background color="#52525b" variant={BackgroundVariant.Dots} />
+        </ReactFlow>
+      </div>
+    )
+  },
+)
