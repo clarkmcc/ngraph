@@ -25,7 +25,10 @@ import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeDenseOutputField } from './components/NodeDenseOutputField'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeHeader } from './components/NodeHeader'
-import { NodeContainer } from './components/NodeContainer'
+import {
+  NodeCollapsedContainer,
+  NodeContainer,
+} from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 
 /**
@@ -49,8 +52,8 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     const [isFocused, onFocus, onBlur] = useFocusBlur()
     // @ts-ignore
     const toggleCollapse = useCallback(
-      () => setCollapsed((v) => !v),
-      [setCollapsed],
+      () => setCollapsed(!collapsed),
+      [setCollapsed, collapsed],
     )
 
     // Construct memoized input components based on the node config
@@ -70,21 +73,37 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
       )
     }, [config, collapsed, node])
 
-    return (
-      <NodeContainer isFocused={isFocused} node={node}>
-        <NodeHeader defaultTitle={nodeConfig.name} color={group.color} />
-        <div
-          style={{
-            padding: '8px 0 12px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {outputs}
-          {inputs}
-        </div>
-      </NodeContainer>
-    )
+    if (collapsed) {
+      return (
+        <NodeCollapsedContainer
+          node={node}
+          nodeConfig={nodeConfig}
+          nodeGroupConfig={group}
+          toggleCollapsed={toggleCollapse}
+        />
+      )
+    } else {
+      return (
+        <NodeContainer isFocused={isFocused} node={node}>
+          <NodeHeader
+            defaultTitle={nodeConfig.name}
+            color={group.color}
+            collapsed={false}
+            toggleCollapsed={toggleCollapse}
+          />
+          <div
+            style={{
+              padding: '8px 0 12px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {outputs}
+            {inputs}
+          </div>
+        </NodeContainer>
+      )
+    }
   }
   return memo(component, isComponentChanged)
 }

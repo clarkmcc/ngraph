@@ -86,7 +86,7 @@ export interface Option {
   value: string
 }
 
-interface NodeGroupConfig {
+export interface NodeGroupConfig {
   name: string
   color: string
 }

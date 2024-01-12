@@ -1,5 +1,5 @@
 import { NodeInputConfig, ValueTypeConfig } from '../config'
-import { CSSProperties, memo, useCallback, useRef } from 'react'
+import { CSSProperties, memo, useCallback, useMemo, useRef } from 'react'
 import {
   Connection,
   HandleType,
@@ -17,18 +17,6 @@ type HandleProps = Pick<NodeInputConfig, 'isArray' | 'identifier'> &
   }
 
 const SIZE = 8
-
-const dot = (
-  <div
-    style={{
-      width: 2,
-      height: 2,
-      position: 'absolute',
-      borderRadius: 1,
-      background: '#0f1010',
-    }}
-  />
-)
 
 export const Handle = memo(({ style, ...props }: HandleProps) => {
   const [config] = useGraphConfig()
@@ -74,6 +62,22 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
     props.shape === 'diamond' || props.shape === 'diamondDot'
       ? { borderRadius: 0, transform: 'rotate(45deg)', top: 8 }
       : {}
+
+  const dot = useMemo(
+    () => (
+      <div
+        style={{
+          width: 2,
+          height: 2,
+          position: 'absolute',
+          borderRadius: 1,
+          background: '#0f1010',
+          ...style,
+        }}
+      />
+    ),
+    [style],
+  )
 
   return (
     <div
