@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.1
+      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.2
         with:
           install_command: yarn install
           build_command: yarn build-storybook
