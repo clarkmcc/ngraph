@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EdgeProps,
   getBezierPath,
@@ -58,22 +58,31 @@ export function Edge({
   // Determine what is selected. This fires on every selection across the graph,
   // but it's how we determine whether this edge is implicitly selected by virtue
   // of its source or target being selected.
-  function onSelectionChange({ nodes }: OnSelectionChangeParams) {
-    if (nodes.length === 0) {
-      setSelection(SelectionState.Nothing)
-    } else {
-      if (nodes.some((n) => n.id === target || n.id === source)) {
-        setSelection(SelectionState.Related)
+  const onSelectionChange = useCallback(
+    ({ nodes }: OnSelectionChangeParams) => {
+      if (nodes.length === 0) {
+        setSelection(SelectionState.Nothing)
       } else {
-        setSelection(SelectionState.Something)
+        if (nodes.some((n) => n.id === target || n.id === source)) {
+          setSelection(SelectionState.Related)
+        } else {
+          setSelection(SelectionState.Something)
+        }
       }
-    }
-  }
+    },
+    [target, source],
+  )
 
   // Determine selection state once initially
   const api = useStoreApi()
   useEffect(() => {
-    onSelectionChange({ nodes: api.getState().getNodes(), edges: [] })
+    onSelectionChange({
+      nodes: api
+        .getState()
+        .getNodes()
+        .filter((n) => n.selected),
+      edges: [],
+    })
   }, [])
 
   // Determine selection state on every selection change

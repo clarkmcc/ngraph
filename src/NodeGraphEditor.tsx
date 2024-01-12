@@ -73,7 +73,6 @@ function Flow({ defaultNodes, defaultEdges, ...props }: FlowProps) {
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        colorMode="dark"
       >
         {props.children}
         <Background color="#52525b" variant={BackgroundVariant.Dots} />

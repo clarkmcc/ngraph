@@ -4,7 +4,7 @@ import { NodeBaseInputField } from './NodeBaseInputField'
 import { Position } from 'reactflow'
 import { useNodeFieldValue } from '../hooks/node'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
-import './NodeInputField.css'
+import './NodeInputField.scss'
 
 type NodeInputFieldProps = NodeInputConfig &
   ValueTypeConfig & {

@@ -210,6 +210,18 @@ export const SelectedEdgeHighlighting: Story = {
         position: { x: 400, y: 200 },
         data: { label: 'Points' },
       },
+      {
+        id: '3',
+        type: 'viewer',
+        position: { x: 700, y: 100 },
+        data: { label: 'Viewer 1' },
+      },
+      {
+        id: '4',
+        type: 'viewer',
+        position: { x: 700, y: 300 },
+        data: { label: 'Viewer 2' },
+      },
     ],
     edges: [
       {
@@ -220,6 +232,26 @@ export const SelectedEdgeHighlighting: Story = {
         targetHandle: 'position',
         data: {
           targetHandleType: 'vector',
+        },
+      },
+      {
+        id: 'e2',
+        source: '2',
+        sourceHandle: 'geometry',
+        target: '3',
+        targetHandle: 'geometry',
+        data: {
+          targetHandleType: 'geometry',
+        },
+      },
+      {
+        id: 'e3',
+        source: '2',
+        sourceHandle: 'geometry',
+        target: '4',
+        targetHandle: 'geometry',
+        data: {
+          targetHandleType: 'geometry',
         },
       },
     ],
@@ -298,6 +330,17 @@ export const SelectedEdgeHighlighting: Story = {
             },
           ],
           outputs: [
+            {
+              name: 'Geometry',
+              identifier: 'geometry',
+              valueType: 'geometry',
+            },
+          ],
+        },
+        viewer: {
+          group: 'geometry',
+          name: 'Viewer',
+          inputs: [
             {
               name: 'Geometry',
               identifier: 'geometry',
