@@ -352,3 +352,121 @@ export const SelectedEdgeHighlighting: Story = {
     },
   },
 }
+
+export const ArrayInputs: Story = {
+  parameters: {
+    layout: 'fullscreen',
+  },
+  args: {
+    nodes: [
+      {
+        id: '1',
+        type: 'combineXYZ',
+        position: { x: 100, y: 100 },
+        data: { label: 'Combine XYZ' },
+      },
+      {
+        id: '2',
+        type: 'combineXYZ',
+        position: { x: 100, y: 300 },
+        data: { label: 'Combine XYZ' },
+      },
+      {
+        id: '3',
+        type: 'viewer',
+        position: { x: 400, y: 100 },
+        data: { label: 'Viewer' },
+      },
+    ],
+    edges: [
+      {
+        id: 'e1',
+        source: '1',
+        sourceHandle: 'vector',
+        target: '3',
+        targetHandle: 'vectors',
+        data: {
+          targetHandleType: 'vector',
+        },
+      },
+      {
+        id: 'e2',
+        source: '2',
+        sourceHandle: 'vector',
+        target: '3',
+        targetHandle: 'vectors',
+        data: {
+          targetHandleType: 'vector',
+        },
+      },
+    ],
+    config: {
+      valueTypes: {
+        number: {
+          name: 'Number',
+          color: '#a1a1a1',
+          inputType: 'value',
+          defaultValue: '0',
+        },
+        vector: {
+          name: 'Vector',
+          color: '#8b5cf6',
+          inputType: null,
+        },
+        geometry: {
+          name: 'Geometry',
+          color: '#059669',
+          inputType: null,
+        },
+      },
+      nodeGroups: {
+        geometry: {
+          name: 'Geometry',
+          color: '#059669',
+        },
+      },
+      nodes: {
+        combineXYZ: {
+          group: 'geometry',
+          name: 'Combine XYZ',
+          inputs: [
+            {
+              name: 'X',
+              identifier: 'x',
+              valueType: 'number',
+            },
+            {
+              name: 'Y',
+              identifier: 'y',
+              valueType: 'number',
+            },
+            {
+              name: 'Z',
+              identifier: 'z',
+              valueType: 'number',
+            },
+          ],
+          outputs: [
+            {
+              name: 'Vector',
+              identifier: 'vector',
+              valueType: 'vector',
+            },
+          ],
+        },
+        viewer: {
+          group: 'geometry',
+          name: 'Viewer',
+          inputs: [
+            {
+              name: 'Vectors',
+              identifier: 'vectors',
+              valueType: 'vector',
+              array: true,
+            },
+          ],
+        },
+      },
+    },
+  },
+}
