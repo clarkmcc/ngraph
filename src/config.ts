@@ -160,18 +160,16 @@ export class GraphConfig {
   } = {}
 
   constructor(props?: Partial<IGraphConfig>) {
-    if (props) {
-      this.keybindings = {
-        save: ['meta+s'],
-        copy: ['meta+c'],
-        paste: ['meta+v'],
-        delete: ['x', 'backspace'],
-        ...props.keybindings,
-      }
-      this.valueTypes = props.valueTypes ?? this.valueTypes
-      this.nodeGroups = props.nodeGroups ?? this.nodeGroups
-      this.nodes = props.nodes ?? this.nodes
+    this.keybindings = {
+      save: ['meta+s'],
+      copy: ['meta+c'],
+      paste: ['meta+v'],
+      delete: ['x', 'backspace'],
+      ...props?.keybindings,
     }
+    this.valueTypes = props?.valueTypes ?? this.valueTypes
+    this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
+    this.nodes = props?.nodes ?? this.nodes
   }
 
   validate(): GraphConfig {

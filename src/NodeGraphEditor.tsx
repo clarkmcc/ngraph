@@ -29,17 +29,17 @@ type NodeGraphEditorProps = Omit<ReactFlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
 }
 
-export function NodeGraphEditor({
-  defaultNodes,
-  defaultEdges,
-  ...props
-}: NodeGraphEditorProps) {
+export const NodeGraphEditor = forwardRef<
+  NodeGraphHandle,
+  NodeGraphEditorProps
+>(({ defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps, ref) => {
   const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
   const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
   return (
     <ReactFlowProvider>
       <Flow
         {...props}
+        ref={ref}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -47,7 +47,7 @@ export function NodeGraphEditor({
       />
     </ReactFlowProvider>
   )
-}
+})
 
 type ExampleNodeGraphEditorProps = {
   nodes: Node[]
@@ -55,25 +55,24 @@ type ExampleNodeGraphEditorProps = {
   config: IGraphConfig
 }
 
-export function ExampleNodeGraphEditor({
-  nodes,
-  edges,
-  config: _config,
-}: ExampleNodeGraphEditorProps) {
+export const ExampleNodeGraphEditor = forwardRef<
+  NodeGraphHandle,
+  ExampleNodeGraphEditorProps
+>(({ nodes, edges, config: _config }: ExampleNodeGraphEditorProps, ref) => {
   const config = useMemo(() => new GraphConfig(_config).validate(), [])
   return (
     <GraphConfigProvider defaultConfig={config}>
-      <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} />
+      <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges} />
     </GraphConfigProvider>
   )
-}
+})
 
 type FlowProps = ReactFlowProps
-// type FlowHandle = {
-//   layout: () => void
-// }
+export type NodeGraphHandle = {
+  layout: () => void
+}
 
-const Flow = forwardRef(
+const Flow = forwardRef<NodeGraphHandle, FlowProps>(
   ({ defaultNodes, defaultEdges, ...props }: FlowProps, ref) => {
     const nodeTypes = useNodeTypes()
     const edgeTypes = useMemo(() => defaultEdgeTypes, [])
