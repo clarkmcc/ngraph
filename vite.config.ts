@@ -10,6 +10,7 @@ import { glob } from 'glob'
 export default defineConfig({
   plugins: [react(), libInjectCss(), dts({ include: ['lib'] })],
   build: {
+    ssr: false,
     copyPublicDir: false,
     lib: {
       entry: resolve(__dirname, 'lib/index.ts'),

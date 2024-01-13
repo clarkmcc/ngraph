@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
-import { isEqual } from 'lodash'
 import { useNodeFieldValue } from '../hooks/node'
 import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
+import { isEqual } from 'lodash-es'
 
 type NodeHeaderProps = {
   defaultTitle: string
@@ -13,7 +13,7 @@ type NodeHeaderProps = {
 /**
  * Location in the node's `data` object where the header value is stored.
  */
-const HEADER_FIELD_NAME = '__header'
+export const HEADER_FIELD_NAME = '__header'
 
 export const NodeHeader = memo(
   ({ defaultTitle, color, collapsed, toggleCollapsed }: NodeHeaderProps) => {

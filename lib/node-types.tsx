@@ -1,6 +1,5 @@
 import { FunctionComponent, memo, ReactElement, useMemo } from 'react'
 import { Edge, Node } from 'reactflow'
-import { isEqual } from 'lodash'
 import { useNodesEdges } from './hooks/node'
 import {
   GraphConfig,
@@ -18,6 +17,7 @@ import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
+import { isEqual } from 'lodash-es'
 
 /**
  * Determines whether a node component should be re-rendered based
