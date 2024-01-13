@@ -32,7 +32,7 @@ export const NodeSelectField = memo(
             background: '#282828',
             border: '1px solid #3d3d3d',
             borderRadius: 3,
-            padding: '3px 8px',
+            padding: '4px 8px',
             color: '#fff',
             textShadow: '0 1px rgba(0,0,0,0.4)',
             fontSize: '12px',

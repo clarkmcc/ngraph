@@ -64,13 +64,13 @@ export const Simple: Story = {
         id: '1',
         type: 'string',
         position: { x: 100, y: 100 },
-        data: { label: 'Input Node' },
+        data: {},
       },
       {
         id: '2',
         type: 'string',
         position: { x: 400, y: 200 },
-        data: { label: 'Output Node' },
+        data: {},
       },
     ],
     edges: [

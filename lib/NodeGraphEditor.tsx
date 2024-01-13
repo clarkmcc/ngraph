@@ -16,7 +16,7 @@ import {
   useGraphConfig,
 } from './context/GraphConfigContext'
 import 'reactflow/dist/style.css'
-import { useNodeTypes } from './hooks/config'
+import { useBuildGraphConfig, useNodeTypes } from './hooks/config'
 import {
   forwardRef,
   useImperativeHandle,
@@ -25,7 +25,7 @@ import {
   CSSProperties,
 } from 'react'
 import { defaultEdgeTypes } from './edge-types'
-import { GraphConfig, IGraphConfig } from './config'
+import { IGraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
@@ -46,14 +46,16 @@ export const NodeGraphEditor = forwardRef<
     const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
     const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
     return (
-      <Flow
-        {...props}
-        ref={ref}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-      />
+      <ReactFlowProvider>
+        <Flow
+          {...props}
+          ref={ref}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+        />
+      </ReactFlowProvider>
     )
   },
 )
@@ -68,7 +70,7 @@ export const ExampleNodeGraphEditor = forwardRef<
   NodeGraphHandle,
   ExampleNodeGraphEditorProps
 >(({ nodes, edges, config: _config }: ExampleNodeGraphEditorProps, ref) => {
-  const config = useMemo(() => new GraphConfig(_config).validate(), [])
+  const config = useBuildGraphConfig(_config)
   return (
     <GraphConfigProvider defaultConfig={config}>
       <ReactFlowProvider>
