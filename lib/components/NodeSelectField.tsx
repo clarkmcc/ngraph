@@ -10,10 +10,7 @@ type NodeSelectFieldProps = BaseInputProps &
 export const NodeSelectField = memo(
   ({ options, isConstant, slots, ...props }: NodeSelectFieldProps) => {
     const Handle = slots?.Handle
-    const [value, setValue] = useNodeFieldValue(
-      props.identifier,
-      props.defaultValue,
-    )
+    const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
 
     const ref = useRef<HTMLSelectElement>(null)
 

@@ -1,7 +1,8 @@
-dist
 .babelrc
 .storybook
 .gitignore
 .prettierrc
 rollup.config.mjs
 tsconfig.json
+src
+lib

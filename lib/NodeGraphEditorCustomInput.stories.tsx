@@ -26,9 +26,9 @@ const meta = {
           }}
         >
           {Handle && <Handle />}
-          <NodeInputField {...config} name="X" identifier="x" />
-          <NodeInputField {...config} name="Y" identifier="y" />
-          <NodeInputField {...config} name="Z" identifier="z" />
+          <NodeInputField {...config} name="X" id="x" />
+          <NodeInputField {...config} name="Y" id="y" />
+          <NodeInputField {...config} name="Z" id="z" />
         </div>
       )
     }
@@ -49,14 +49,14 @@ const meta = {
             inputs: [
               {
                 name: 'Value',
-                identifier: 'value',
+                id: 'value',
                 valueType: 'vector',
               },
             ],
             outputs: [
               {
                 name: 'Value',
-                identifier: 'value',
+                id: 'value',
                 valueType: 'vector',
               },
             ],

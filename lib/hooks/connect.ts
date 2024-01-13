@@ -19,7 +19,7 @@ export function useSocketConnect() {
       const targetNode = nodes.find((node) => node.id === params.target)
       const targetNodeType = config.getNodeConfig(targetNode!.type!)
       const targetInput = targetNodeType.inputs!.find(
-        (input) => input.identifier === params.targetHandle,
+        (input) => input.id === params.targetHandle,
       )
 
       // We remove all edges that have the same target and targetHandle
@@ -40,9 +40,6 @@ export function useSocketConnect() {
             targetHandle: params.targetHandle,
             source: params.source!,
             sourceHandle: params.sourceHandle,
-            data: {
-              targetHandleType: targetInput?.valueType,
-            },
             type: 'default',
           },
           edges,

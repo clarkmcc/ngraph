@@ -73,15 +73,15 @@ function getInputElement(
 ): JSX.Element {
   const inputConfig = graphConfig.getInputConfig(input)
 
-  if (edges.find((edge) => edge.targetHandle === input.identifier)) {
-    return <NodeLinkedField key={inputConfig.identifier} {...inputConfig} />
+  if (edges.find((edge) => edge.targetHandle === input.id)) {
+    return <NodeLinkedField key={inputConfig.id} {...inputConfig} />
   }
 
   const Element = graphConfig.getInputComponent(input.valueType as string)
   if (Element) {
     return (
       <Element
-        key={input.identifier}
+        key={input.id}
         onFocus={onFocus}
         onBlur={onBlur}
         slots={{
@@ -97,7 +97,7 @@ function getInputElement(
       ></Element>
     )
   } else {
-    return <NodeLinkedField key={input.identifier} {...inputConfig} />
+    return <NodeLinkedField key={input.id} {...inputConfig} />
   }
 }
 
@@ -106,5 +106,5 @@ function getOutputElements(
   output: NodeOutputConfig,
 ): JSX.Element {
   const outputConfig = graphConfig.getOutputConfig(output)
-  return <NodeOutputField key={output.identifier} {...outputConfig} />
+  return <NodeOutputField key={output.id} {...outputConfig} />
 }

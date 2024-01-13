@@ -8,10 +8,7 @@ type NodeCheckboxFieldProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export const NodeCheckboxField = memo(
   ({ isConstant, slots, ...props }: NodeCheckboxFieldProps) => {
     const Handle = slots?.Handle
-    const [value, setValue] = useNodeFieldValue(
-      props.identifier,
-      props.defaultValue,
-    )
+    const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
 
     const handleChange = useCallback(
       (e) => setValue(e.target.checked),

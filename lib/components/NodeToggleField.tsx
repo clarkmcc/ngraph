@@ -13,10 +13,7 @@ export const NodeToggleField = memo(
   ({ options, isConstant, slots, ...props }: NodeToggleFieldProps) => {
     const Handle = slots?.Handle
 
-    const [value, setValue] = useNodeFieldValue(
-      props.identifier,
-      props.defaultValue,
-    )
+    const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
 
     return (
       <div style={{ position: 'relative' }}>
