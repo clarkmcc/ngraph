@@ -4,3 +4,5 @@
 .prettierrc
 rollup.config.mjs
 tsconfig.json
+src
+lib
