@@ -40,9 +40,6 @@ export function useSocketConnect() {
             targetHandle: params.targetHandle,
             source: params.source!,
             sourceHandle: params.sourceHandle,
-            data: {
-              targetHandleType: targetInput?.valueType,
-            },
             type: 'default',
           },
           edges,

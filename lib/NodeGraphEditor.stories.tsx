@@ -80,9 +80,6 @@ export const Simple: Story = {
         sourceHandle: 'value',
         target: '2',
         targetHandle: 'value',
-        data: {
-          targetHandleType: 'string',
-        },
       },
     ],
     config: simpleConfig,
@@ -230,9 +227,6 @@ export const SelectedEdgeHighlighting: Story = {
         sourceHandle: 'vector',
         target: '2',
         targetHandle: 'position',
-        data: {
-          targetHandleType: 'vector',
-        },
       },
       {
         id: 'e2',
@@ -240,9 +234,6 @@ export const SelectedEdgeHighlighting: Story = {
         sourceHandle: 'geometry',
         target: '3',
         targetHandle: 'geometry',
-        data: {
-          targetHandleType: 'geometry',
-        },
       },
       {
         id: 'e3',
@@ -250,9 +241,6 @@ export const SelectedEdgeHighlighting: Story = {
         sourceHandle: 'geometry',
         target: '4',
         targetHandle: 'geometry',
-        data: {
-          targetHandleType: 'geometry',
-        },
       },
     ],
     config: {
@@ -385,9 +373,6 @@ export const ArrayInputs: Story = {
         sourceHandle: 'vector',
         target: '3',
         targetHandle: 'vectors',
-        data: {
-          targetHandleType: 'vector',
-        },
       },
       {
         id: 'e2',
@@ -395,9 +380,6 @@ export const ArrayInputs: Story = {
         sourceHandle: 'vector',
         target: '3',
         targetHandle: 'vectors',
-        data: {
-          targetHandleType: 'vector',
-        },
       },
     ],
     config: {

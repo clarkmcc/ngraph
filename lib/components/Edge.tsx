@@ -2,12 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EdgeProps,
   getBezierPath,
+  Node,
   OnSelectionChangeParams,
   useOnSelectionChange,
   useStoreApi,
   useViewport,
 } from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
+import { GraphConfig } from '../config.ts'
 
 /**
  * Edges can be highlighted in the graph if they're connected to a node that is selected.
@@ -37,8 +39,8 @@ export function Edge({
   targetY,
   sourcePosition,
   targetPosition,
+  targetHandleId,
   style = {},
-  data,
   markerEnd,
   selected,
   target,
@@ -46,6 +48,7 @@ export function Edge({
 }: EdgeProps) {
   const [selection, setSelection] = useState(SelectionState.Nothing)
   const [config] = useGraphConfig()
+  const api = useStoreApi()
   const [edgePath] = getBezierPath({
     sourceX: sourceX - 8,
     sourceY: sourceY,
@@ -74,7 +77,6 @@ export function Edge({
   )
 
   // Determine selection state once initially
-  const api = useStoreApi()
   useEffect(() => {
     onSelectionChange({
       nodes: api
@@ -99,7 +101,17 @@ export function Edge({
     // If something is selected, show the default color if this edge is not connected to the something
     switch (selection) {
       case SelectionState.Related:
-        return config.valueType(data.targetHandleType).color
+        // todo:(performance) may need to revisit this if performance becomes a concern
+        const valueType = getTargetHandleValueType(
+          config,
+          api.getState().getNodes(),
+          target,
+          targetHandleId,
+        )
+        if (valueType) {
+          return config.valueType(valueType).color
+        }
+        return '#3c3c3c'
       case SelectionState.Nothing:
       case SelectionState.Something:
         return '#3c3c3c'
@@ -135,4 +147,29 @@ export function Edge({
       ></path>
     </>
   )
+}
+
+/**
+ * Get the value type of the target handle. This function finds the node that the edge
+ * is connected to (the target node), the target handle on that node (using the handle's
+ * ID) and uses the config to resolve the value type of that handle.
+ * @param config
+ * @param nodes
+ * @param targetNodeId
+ * @param targetHandleId
+ */
+function getTargetHandleValueType(
+  config: GraphConfig,
+  nodes: Node[],
+  targetNodeId: string,
+  targetHandleId: string | null | undefined,
+): string | null {
+  const node = nodes.find((n) => n.id === targetNodeId)
+  if (node) {
+    return config
+      .getNodeConfig(node.type!)
+      .inputs?.find((input) => input.identifier === targetHandleId)
+      ?.valueType as string | null
+  }
+  return null
 }

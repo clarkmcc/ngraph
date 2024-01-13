@@ -85,7 +85,6 @@ export const DagreLayout: Story = {
         target: '2',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
       {
         id: '2',
@@ -93,7 +92,6 @@ export const DagreLayout: Story = {
         target: '3',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
       {
         id: '3',
@@ -101,7 +99,6 @@ export const DagreLayout: Story = {
         target: '4',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
       {
         id: '4',
@@ -109,7 +106,6 @@ export const DagreLayout: Story = {
         target: '4',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
       {
         id: '5',
@@ -117,7 +113,6 @@ export const DagreLayout: Story = {
         target: '5',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
       {
         id: '6',
@@ -125,7 +120,6 @@ export const DagreLayout: Story = {
         target: '6',
         sourceHandle: 'value',
         targetHandle: 'value',
-        data: { targetHandleType: 'string' },
       },
     ],
     config: {
