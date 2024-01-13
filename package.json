@@ -1,15 +1,22 @@
 {
   "name": "ngraph",
-  "type": "module",
   "version": "0.1.0",
   "description": "A blender-style node editor built on xyflow",
-  "main": "dist/index.js",
   "repository": "git@github.com:clarkmcc/ngraph.git",
   "author": "Clark McCauley <clarkmccauley@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "files": [
     "dist"
   ],
+  "main": "./dist/ngraph.umd.cjs",
+  "module": "./dist/ngraph.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ngraph.js",
+      "require": "./dist/ngraph.umd.cjs"
+    }
+  },
   "keywords": [
     "react",
     "typescript",
@@ -25,13 +32,16 @@
     "build-storybook": "storybook build"
   },
   "peerDependencies": {
-    "react": ">= 16.8.0 < 2",
-    "react-dom": ">= 16.8.0 < 2"
+    "react": ">= 16.8.0 < 2"
   },
   "resolutions": {
     "jackspeak": "2.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@storybook/addon-essentials": "^7.6.7",
     "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-links": "^7.6.7",
@@ -48,18 +58,25 @@
     "prettier": "^3.1.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "rollup": "^1.29.0",
+    "rollup": "^4.9.5",
+    "rollup-plugin-css-only": "^4.5.2",
+    "rollup-plugin-dts": "^6.1.0",
+    "rollup-plugin-import-map": "^3.0.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-typescript2": "^0.25.3",
     "storybook": "^7.6.7",
+    "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11"
+    "vite": "^5.0.11",
+    "vite-plugin-dts": "^3.7.0"
   },
   "dependencies": {
     "dagre": "^0.8.5",
     "nanoid": "^5.0.4",
     "react-hotkeys-hook": "^4.4.3",
     "react-icons": "^5.0.1",
-    "reactflow": "^11.10.1"
+    "reactflow": "^11.10.1",
+    "rollup-plugin-postcss": "^4.0.2"
   }
 }
