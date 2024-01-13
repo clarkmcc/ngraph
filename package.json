@@ -9,14 +9,11 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/ngraph.umd.cjs",
-  "module": "./dist/ngraph.js",
-  "exports": {
-    ".": {
-      "import": "./dist/ngraph.js",
-      "require": "./dist/ngraph.umd.cjs"
-    }
-  },
+  "main": "dist/main.js",
+  "types": "dist/main.d.ts",
+  "sideEffects": [
+       "**/*.css"
+  ],
   "keywords": [
     "react",
     "typescript",
@@ -26,7 +23,7 @@
     "npm": ">=5"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsc --p ./tsconfig-build.json && vite build",
     "start": "rollup -c -w",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -55,6 +52,7 @@
     "@types/react-dom": "^16.0.5",
     "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
+    "glob": "^10.3.10",
     "prettier": "^3.1.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -69,7 +67,8 @@
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
-    "vite-plugin-dts": "^3.7.0"
+    "vite-plugin-dts": "^3.7.0",
+    "vite-plugin-lib-inject-css": "^1.3.0"
   },
   "dependencies": {
     "dagre": "^0.8.5",
