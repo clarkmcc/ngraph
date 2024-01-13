@@ -6,18 +6,14 @@ import {
   NodeConfig,
   NodeInputConfig,
   NodeOutputConfig,
-  ValueTypeConfigOptions,
 } from './config'
 import { NodeLinkedField } from './components/NodeLinkedField'
-import { NodeInputField } from './components/NodeInputField'
-import { NodeSelectField } from './components/NodeSelectField'
-import { NodeToggleField } from './components/NodeToggleField'
-import { NodeCheckboxField } from './components/NodeCheckboxField'
 import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { isEqual } from 'lodash-es'
+import { JSX } from 'react'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -81,38 +77,18 @@ function getInputElement(
     return <NodeLinkedField key={inputConfig.identifier} {...inputConfig} />
   }
 
-  switch (inputConfig.inputType) {
-    case 'value':
-      return (
-        <NodeInputField
-          key={input.identifier}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          {...inputConfig}
-        />
-      )
-    case 'options':
-      return (
-        <NodeSelectField
-          key={input.identifier}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
-        />
-      )
-    case 'buttonGroup':
-      return (
-        <NodeToggleField
-          key={input.identifier}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
-        />
-      )
-    case 'checkbox':
-      return <NodeCheckboxField key={input.identifier} {...inputConfig} />
-    default:
-      return <NodeLinkedField key={input.identifier} {...inputConfig} />
+  const Element = graphConfig.getInputComponent(input.valueType as string)
+  if (Element) {
+    return (
+      <Element
+        key={input.identifier}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        {...inputConfig}
+      />
+    )
+  } else {
+    return <NodeLinkedField key={input.identifier} {...inputConfig} />
   }
 }
 

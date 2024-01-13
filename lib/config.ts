@@ -1,5 +1,6 @@
 import { CSSProperties, JSXElementConstructor } from 'react'
 import { buildNode } from './node-types'
+import { getBuiltinInputs } from './components/inputs.ts'
 
 export interface IGraphConfig {
   /**
@@ -53,6 +54,11 @@ interface ValueTypeConfigBase {
    * The shape to use for the input/output handle attached to the node.
    */
   shape?: 'diamond' | 'diamondDot' | 'circle'
+  /**
+   * Indicates that this is a custom input element and should not be rendered using
+   * the config-based rendering system
+   */
+  custom?: boolean
 }
 
 export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
@@ -71,6 +77,10 @@ interface ValueTypeConfigCheckbox extends ValueTypeConfigBase {
   defaultValue: boolean // Ensures defaultValue is a boolean
 }
 
+interface ValueTypeConfigCustom extends ValueTypeConfigBase {
+  inputType: string
+}
+
 interface ValueTypeConfigNoInput extends ValueTypeConfigBase {
   inputType: null | undefined
 }
@@ -80,6 +90,7 @@ export type ValueTypeConfig =
   | ValueTypeConfigValue
   | ValueTypeConfigCheckbox
   | ValueTypeConfigNoInput
+  | ValueTypeConfigCustom
 
 export interface Option {
   name: string
@@ -146,6 +157,12 @@ type WithType<T, K> = T & {
   type: K
 }
 
+export type InputElementConfig = NodeInputConfig &
+  ValueTypeConfig & {
+    onFocus: () => void
+    onBlur: () => void
+  }
+
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
@@ -156,6 +173,9 @@ export class GraphConfig {
     [key: string]: NodeConfig
   } = {}
   private customNodes: {
+    [key: string]: JSXElementConstructor<any>
+  } = {}
+  private inputs: {
     [key: string]: JSXElementConstructor<any>
   } = {}
 
@@ -170,6 +190,9 @@ export class GraphConfig {
     this.valueTypes = props?.valueTypes ?? this.valueTypes
     this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
     this.nodes = props?.nodes ?? this.nodes
+    for (const [key, value] of Object.entries(getBuiltinInputs())) {
+      this.inputs[key] = value
+    }
   }
 
   validate(): GraphConfig {
@@ -219,8 +242,34 @@ export class GraphConfig {
     this.validate()
   }
 
+  registerInput(
+    type: string,
+    input: JSXElementConstructor<InputElementConfig>,
+    valueType: Omit<ValueTypeConfig, 'inputType'>,
+  ) {
+    this.inputs[type] = input
+    this.valueTypes[type] = {
+      ...valueType,
+      inputType: type,
+    }
+    this.validate()
+  }
+
   customNode<T>(type: string): JSXElementConstructor<T> {
     return this.customNodes[type]
+  }
+
+  /**
+   * Accepts a value type and returns the input component that should be used to
+   * render the input for that value type.
+   * @param valueType
+   */
+  getInputComponent(
+    valueType: string,
+  ): JSXElementConstructor<InputElementConfig> | null {
+    const inputType = this.valueTypes[valueType]?.inputType
+    if (inputType == null) return null
+    return this.inputs[inputType]
   }
 
   nodeConfigs(): WithType<NodeConfig, string>[] {
