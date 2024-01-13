@@ -1,5 +1,5 @@
-import { FunctionComponent, memo, ReactElement, useMemo } from 'react'
-import { Edge, Node } from 'reactflow'
+import { FunctionComponent, JSX, memo, ReactElement, useMemo } from 'react'
+import { Edge, Node, Position } from 'reactflow'
 import { useNodesEdges } from './hooks/node'
 import {
   GraphConfig,
@@ -13,7 +13,7 @@ import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { isEqual } from 'lodash-es'
-import { JSX } from 'react'
+import { Handle } from './components/Handle.tsx'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -84,8 +84,17 @@ function getInputElement(
         key={input.identifier}
         onFocus={onFocus}
         onBlur={onBlur}
+        slots={{
+          Handle: () => (
+            <Handle
+              handleType="target"
+              position={Position.Left}
+              {...inputConfig}
+            />
+          ),
+        }}
         {...inputConfig}
-      />
+      ></Element>
     )
   } else {
     return <NodeLinkedField key={input.identifier} {...inputConfig} />

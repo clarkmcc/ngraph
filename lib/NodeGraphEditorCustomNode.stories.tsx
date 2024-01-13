@@ -3,7 +3,14 @@ import { Meta, StoryObj } from '@storybook/react'
 import { GraphConfigProvider } from './context/GraphConfigContext'
 import { GraphConfig } from './config'
 import { useMemo } from 'react'
-import { Edge, Node, Position } from 'reactflow'
+import {
+  Background,
+  BackgroundVariant,
+  Edge,
+  Node,
+  Position,
+  ReactFlowProvider,
+} from 'reactflow'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { Handle } from './components/Handle'
@@ -64,7 +71,11 @@ const meta = {
     }, [])
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} />
+        <ReactFlowProvider>
+          <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+            <Background color="#52525b" variant={BackgroundVariant.Dots} />
+          </NodeGraphEditor>
+        </ReactFlowProvider>
       </GraphConfigProvider>
     )
   },

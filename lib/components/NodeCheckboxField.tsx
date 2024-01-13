@@ -1,19 +1,17 @@
-import { memo, useCallback, useMemo } from 'react'
-import { Handle } from './Handle'
+import { memo, useCallback } from 'react'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
-import { Position } from 'reactflow'
+import { BaseInputProps } from './inputs.ts'
 
-type NodeCheckboxFieldProps = NodeInputConfig & ValueTypeConfig
+type NodeCheckboxFieldProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 
 export const NodeCheckboxField = memo(
-  ({ isConstant, ...props }: NodeCheckboxFieldProps) => {
+  ({ isConstant, slots, ...props }: NodeCheckboxFieldProps) => {
+    const Handle = slots?.Handle
     const [value, setValue] = useNodeFieldValue(
       props.identifier,
       props.defaultValue,
     )
-
-    const id = useMemo(() => `${name}/${Math.random()}`, [])
 
     const handleChange = useCallback(
       (e) => setValue(e.target.checked),
@@ -30,9 +28,7 @@ export const NodeCheckboxField = memo(
           alignItems: 'center',
         }}
       >
-        {!isConstant && (
-          <Handle handleType="target" position={Position.Left} {...props} />
-        )}
+        {isConstant || !Handle ? null : <Handle />}
         <input
           style={{
             appearance: value ? undefined : 'none',
@@ -43,7 +39,6 @@ export const NodeCheckboxField = memo(
             height: 14,
             margin: '0 4px 0 0',
           }}
-          id={id}
           type="checkbox"
           onChange={handleChange}
           checked={value}
@@ -54,7 +49,6 @@ export const NodeCheckboxField = memo(
             fontSize: '12px',
             textShadow: '0 1px rgba(0,0,0,0.4)',
           }}
-          htmlFor={id}
         >
           {props.name}
         </label>

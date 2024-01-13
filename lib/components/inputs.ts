@@ -12,3 +12,13 @@ export function getBuiltinInputs(): Record<string, JSXElementConstructor<any>> {
     buttonGroup: NodeToggleField,
   }
 }
+
+export type InputSlots = {
+  Handle?: JSXElementConstructor<any>
+}
+
+export type BaseInputProps = {
+  onFocus: () => void
+  onBlur: () => void
+  slots?: InputSlots
+}

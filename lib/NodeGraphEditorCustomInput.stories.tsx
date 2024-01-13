@@ -1,21 +1,35 @@
 import { NodeGraphEditor } from './NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { GraphConfigProvider } from './context/GraphConfigContext'
-import { Edge, Node } from 'reactflow'
+import {
+  Background,
+  BackgroundVariant,
+  Edge,
+  Node,
+  ReactFlowProvider,
+} from 'reactflow'
 import { useBuildGraphConfig } from './hooks/config.ts'
 import { NodeInputField } from './components/NodeInputField.tsx'
-import { InputElementConfig } from './config.ts'
+import { InputProps } from './config.ts'
 
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
-    function CustomInput(config: InputElementConfig) {
+    function CustomInput({ slots, ...config }: InputProps) {
+      const Handle = slots?.Handle
       return (
-        <>
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {Handle && <Handle />}
           <NodeInputField {...config} name="X" identifier="x" />
           <NodeInputField {...config} name="Y" identifier="y" />
           <NodeInputField {...config} name="Z" identifier="z" />
-        </>
+        </div>
       )
     }
 
@@ -37,7 +51,6 @@ const meta = {
                 name: 'Value',
                 identifier: 'value',
                 valueType: 'vector',
-                isConstant: true,
               },
             ],
             outputs: [
@@ -60,7 +73,11 @@ const meta = {
     )
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} />
+        <ReactFlowProvider>
+          <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+            <Background color="#52525b" variant={BackgroundVariant.Dots} />
+          </NodeGraphEditor>
+        </ReactFlowProvider>
       </GraphConfigProvider>
     )
   },

@@ -46,18 +46,14 @@ export const NodeGraphEditor = forwardRef<
     const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
     const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
     return (
-      <>
-        <ReactFlowProvider>
-          <Flow
-            {...props}
-            ref={ref}
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-          />
-        </ReactFlowProvider>
-      </>
+      <Flow
+        {...props}
+        ref={ref}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+      />
     )
   },
 )
@@ -75,7 +71,11 @@ export const ExampleNodeGraphEditor = forwardRef<
   const config = useMemo(() => new GraphConfig(_config).validate(), [])
   return (
     <GraphConfigProvider defaultConfig={config}>
-      <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges} />
+      <ReactFlowProvider>
+        <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges}>
+          <Background color="#52525b" variant={BackgroundVariant.Dots} />
+        </NodeGraphEditor>
+      </ReactFlowProvider>
     </GraphConfigProvider>
   )
 })
@@ -136,7 +136,6 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
           deleteKeyCode={config.keybindings.delete}
         >
           {props.children}
-          <Background color="#52525b" variant={BackgroundVariant.Dots} />
         </ReactFlow>
       </div>
     )

@@ -28,10 +28,12 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
   const api = useStoreApi()
 
   const isValidConnection = useCallback((connection: Connection) => {
-    const sourceNodeType = api.getState().nodeInternals.get(connection.source!)
-      ?.type
-    const targetNodeType = api.getState().nodeInternals.get(connection.target!)
-      ?.type
+    const sourceNodeType = api
+      .getState()
+      .nodeInternals.get(connection.source!)?.type
+    const targetNodeType = api
+      .getState()
+      .nodeInternals.get(connection.target!)?.type
 
     const sourceNodeConfig = config.getNodeConfig(sourceNodeType!)
     const targetNodeConfig = config.getNodeConfig(targetNodeType!)

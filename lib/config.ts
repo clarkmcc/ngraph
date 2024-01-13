@@ -1,6 +1,10 @@
 import { CSSProperties, JSXElementConstructor } from 'react'
 import { buildNode } from './node-types'
-import { getBuiltinInputs } from './components/inputs.ts'
+import {
+  BaseInputProps,
+  getBuiltinInputs,
+  InputSlots,
+} from './components/inputs.ts'
 
 export interface IGraphConfig {
   /**
@@ -157,11 +161,7 @@ type WithType<T, K> = T & {
   type: K
 }
 
-export type InputElementConfig = NodeInputConfig &
-  ValueTypeConfig & {
-    onFocus: () => void
-    onBlur: () => void
-  }
+export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
@@ -184,7 +184,7 @@ export class GraphConfig {
       save: ['meta+s'],
       copy: ['meta+c'],
       paste: ['meta+v'],
-      delete: ['x', 'backspace'],
+      delete: ['x', 'Backspace', 'Delete'],
       ...props?.keybindings,
     }
     this.valueTypes = props?.valueTypes ?? this.valueTypes
@@ -244,7 +244,7 @@ export class GraphConfig {
 
   registerInput(
     type: string,
-    input: JSXElementConstructor<InputElementConfig>,
+    input: JSXElementConstructor<InputProps>,
     valueType: Omit<ValueTypeConfig, 'inputType'>,
   ) {
     this.inputs[type] = input
@@ -266,7 +266,7 @@ export class GraphConfig {
    */
   getInputComponent(
     valueType: string,
-  ): JSXElementConstructor<InputElementConfig> | null {
+  ): JSXElementConstructor<InputProps & { slots?: InputSlots }> | null {
     const inputType = this.valueTypes[valueType]?.inputType
     if (inputType == null) return null
     return this.inputs[inputType]

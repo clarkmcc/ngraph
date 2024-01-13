@@ -1,4 +1,4 @@
-export { GraphConfig } from './config'
+export { GraphConfig, type InputProps } from './config'
 export { NodeGraphEditor } from './NodeGraphEditor'
 export { GraphConfigProvider } from './context/GraphConfigContext'
 export { useBuildGraphConfig } from './hooks/config.ts'
@@ -8,6 +8,7 @@ export {
   useNodesData,
   useNodeFieldValue,
 } from './hooks/node.ts'
+export { Handle } from './components/Handle.tsx'
 export { NodeHeader, HEADER_FIELD_NAME } from './components/NodeHeader.tsx'
 export { NodeContainer } from './components/NodeContainer.tsx'
 export { NodeInputField } from './components/NodeInputField.tsx'
