@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   EdgeProps,
   getBezierPath,
+  OnSelectionChangeParams,
   useOnSelectionChange,
   useStoreApi,
   useViewport,
 } from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
-import { OnSelectionChangeParams } from '@reactflow/core/dist/esm/types/general'
 
 /**
  * Edges can be highlighted in the graph if they're connected to a node that is selected.

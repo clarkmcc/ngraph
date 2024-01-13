@@ -17,7 +17,13 @@ import {
 } from './context/GraphConfigContext'
 import 'reactflow/dist/style.css'
 import { useNodeTypes } from './hooks/config'
-import { forwardRef, useImperativeHandle, useMemo } from 'react'
+import {
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  JSX,
+  CSSProperties,
+} from 'react'
 import { defaultEdgeTypes } from './edge-types'
 import { GraphConfig, IGraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
@@ -25,29 +31,36 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
 
-type NodeGraphEditorProps = Omit<ReactFlowProps, 'edges' | 'nodes'> & {
+type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
 }
 
 export const NodeGraphEditor = forwardRef<
   NodeGraphHandle,
   NodeGraphEditorProps
->(({ defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps, ref) => {
-  const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
-  const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
-  return (
-    <ReactFlowProvider>
-      <Flow
-        {...props}
-        ref={ref}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-      />
-    </ReactFlowProvider>
-  )
-})
+>(
+  (
+    { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
+    ref,
+  ): JSX.Element => {
+    const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
+    const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
+    return (
+      <>
+        <ReactFlowProvider>
+          <Flow
+            {...props}
+            ref={ref}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+          />
+        </ReactFlowProvider>
+      </>
+    )
+  },
+)
 
 type ExampleNodeGraphEditorProps = {
   nodes: Node[]
@@ -67,13 +80,18 @@ export const ExampleNodeGraphEditor = forwardRef<
   )
 })
 
-type FlowProps = ReactFlowProps
+type FlowProps = ReactFlowProps & {
+  backgroundStyles?: CSSProperties
+}
 export type NodeGraphHandle = {
   layout: () => void
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
-  ({ defaultNodes, defaultEdges, ...props }: FlowProps, ref) => {
+  (
+    { defaultNodes, defaultEdges, backgroundStyles, ...props }: FlowProps,
+    ref,
+  ) => {
     const nodeTypes = useNodeTypes()
     const edgeTypes = useMemo(() => defaultEdgeTypes, [])
     const onConnect = useSocketConnect()
@@ -103,7 +121,12 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
 
     return (
       <div
-        style={{ backgroundColor: '#1d1d1d', width: '100%', height: '100%' }}
+        style={{
+          backgroundColor: '#1d1d1d',
+          width: '100%',
+          height: '100%',
+          ...backgroundStyles,
+        }}
       >
         <ReactFlow
           {...props}
