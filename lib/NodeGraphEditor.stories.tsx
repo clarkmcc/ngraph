@@ -24,14 +24,14 @@ const simpleConfig: IGraphConfig = {
       inputs: [
         {
           name: 'Value',
-          identifier: 'value',
+          id: 'value',
           valueType: 'string',
         },
       ],
       outputs: [
         {
           name: 'Value',
-          identifier: 'value',
+          id: 'value',
           valueType: 'string',
         },
       ],
@@ -151,34 +151,34 @@ export const InputFields: Story = {
           inputs: [
             {
               name: 'Value',
-              identifier: 'value',
+              id: 'value',
               valueType: 'string',
             },
             {
               name: 'Constant',
-              identifier: 'constant',
+              id: 'constant',
               valueType: 'string',
               isConstant: true,
             },
             {
               name: 'Array',
-              identifier: 'array',
+              id: 'array',
               valueType: 'string',
               isArray: true,
             },
             {
               name: 'Options',
-              identifier: 'options',
+              id: 'options',
               valueType: 'httpMethod',
             },
             {
               name: 'Button Group',
-              identifier: 'buttonGroup',
+              id: 'buttonGroup',
               valueType: 'httpProtocol',
             },
             {
               name: 'Checkbox',
-              identifier: 'checkbox',
+              id: 'checkbox',
               valueType: 'boolean',
             },
           ],
@@ -275,24 +275,24 @@ export const SelectedEdgeHighlighting: Story = {
           inputs: [
             {
               name: 'X',
-              identifier: 'x',
+              id: 'x',
               valueType: 'number',
             },
             {
               name: 'Y',
-              identifier: 'y',
+              id: 'y',
               valueType: 'number',
             },
             {
               name: 'Z',
-              identifier: 'z',
+              id: 'z',
               valueType: 'number',
             },
           ],
           outputs: [
             {
               name: 'Vector',
-              identifier: 'vector',
+              id: 'vector',
               valueType: 'vector',
             },
           ],
@@ -303,24 +303,24 @@ export const SelectedEdgeHighlighting: Story = {
           inputs: [
             {
               name: 'Count',
-              identifier: 'count',
+              id: 'count',
               valueType: 'number',
             },
             {
               name: 'Radius',
-              identifier: 'radius',
+              id: 'radius',
               valueType: 'number',
             },
             {
               name: 'Position',
-              identifier: 'position',
+              id: 'position',
               valueType: 'vector',
             },
           ],
           outputs: [
             {
               name: 'Geometry',
-              identifier: 'geometry',
+              id: 'geometry',
               valueType: 'geometry',
             },
           ],
@@ -331,7 +331,7 @@ export const SelectedEdgeHighlighting: Story = {
           inputs: [
             {
               name: 'Geometry',
-              identifier: 'geometry',
+              id: 'geometry',
               valueType: 'geometry',
             },
           ],
@@ -414,24 +414,24 @@ export const ArrayInputs: Story = {
           inputs: [
             {
               name: 'X',
-              identifier: 'x',
+              id: 'x',
               valueType: 'number',
             },
             {
               name: 'Y',
-              identifier: 'y',
+              id: 'y',
               valueType: 'number',
             },
             {
               name: 'Z',
-              identifier: 'z',
+              id: 'z',
               valueType: 'number',
             },
           ],
           outputs: [
             {
               name: 'Vector',
-              identifier: 'vector',
+              id: 'vector',
               valueType: 'vector',
             },
           ],
@@ -442,7 +442,7 @@ export const ArrayInputs: Story = {
           inputs: [
             {
               name: 'Vectors',
-              identifier: 'vectors',
+              id: 'vectors',
               valueType: 'vector',
               isArray: true,
             },
@@ -502,17 +502,17 @@ export const HandleSymbols: Story = {
           outputs: [
             {
               name: 'Circle',
-              identifier: 'circle',
+              id: 'circle',
               valueType: 'circle',
             },
             {
               name: 'Diamond',
-              identifier: 'diamond',
+              id: 'diamond',
               valueType: 'diamond',
             },
             {
               name: 'Diamond Dot',
-              identifier: 'diamondDot',
+              id: 'diamondDot',
               valueType: 'diamondDot',
             },
           ],

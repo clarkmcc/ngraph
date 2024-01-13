@@ -125,7 +125,7 @@ export interface NodeConfig {
 
 export interface NodeInputConfig {
   name: string
-  identifier: string
+  id: string
   valueType: keyof ValueTypes
   isArray?: boolean
   defaultValue?: any
@@ -134,7 +134,7 @@ export interface NodeInputConfig {
 
 export interface NodeOutputConfig {
   name: string
-  identifier: string
+  id: string
   valueType: string
   array?: boolean
 }

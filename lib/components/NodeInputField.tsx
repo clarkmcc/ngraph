@@ -10,10 +10,7 @@ type NodeInputFieldProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export const NodeInputField = memo(
   ({ onFocus, onBlur, isConstant, slots, ...props }: NodeInputFieldProps) => {
     const Handle = slots?.Handle
-    const [value, setValue] = useNodeFieldValue(
-      props.identifier,
-      props.defaultValue,
-    )
+    const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
 
     return (
       <NodeBaseInputField

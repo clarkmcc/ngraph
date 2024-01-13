@@ -168,8 +168,9 @@ function getTargetHandleValueType(
   if (node) {
     return config
       .getNodeConfig(node.type!)
-      .inputs?.find((input) => input.identifier === targetHandleId)
-      ?.valueType as string | null
+      .inputs?.find((input) => input.id === targetHandleId)?.valueType as
+      | string
+      | null
   }
   return null
 }

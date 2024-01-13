@@ -30,7 +30,7 @@ const meta = {
               onBlur={onBlur}
             />
             <Handle
-              identifier="value"
+              id="value"
               position={Position.Right}
               handleType="source"
               shape="circle"
@@ -65,7 +65,7 @@ const meta = {
         'custom',
         CustomNode,
         [],
-        [{ name: 'Value', identifier: 'value', valueType: 'string' }],
+        [{ name: 'Value', id: 'value', valueType: 'string' }],
       )
       return config.validate()
     }, [])

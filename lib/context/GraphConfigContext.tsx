@@ -30,14 +30,14 @@ const defaultConfig: IGraphConfig = {
       inputs: [
         {
           name: 'Value',
-          identifier: 'value',
+          id: 'value',
           valueType: 'string',
         },
       ],
       outputs: [
         {
           name: 'Value',
-          identifier: 'value',
+          id: 'value',
           valueType: 'string',
         },
       ],

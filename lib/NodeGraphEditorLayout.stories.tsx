@@ -144,14 +144,14 @@ export const DagreLayout: Story = {
           inputs: [
             {
               name: 'Value',
-              identifier: 'value',
+              id: 'value',
               valueType: 'string',
             },
           ],
           outputs: [
             {
               name: 'Value',
-              identifier: 'value',
+              id: 'value',
               valueType: 'string',
             },
           ],

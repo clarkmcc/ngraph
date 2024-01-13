@@ -123,7 +123,7 @@ function getInputHandles(
   const inputConfig = graphConfig.getInputConfig(input)
   return (
     <Handle
-      key={inputConfig.identifier}
+      key={inputConfig.id}
       style={{ display: 'none' }}
       position={Position.Left}
       handleType="target"
@@ -145,7 +145,7 @@ function getOutputHandles(
   const outputConfig = graphConfig.getOutputConfig(output)
   return (
     <Handle
-      key={outputConfig.identifier}
+      key={outputConfig.id}
       style={{ display: 'none' }}
       position={Position.Right}
       handleType="source"

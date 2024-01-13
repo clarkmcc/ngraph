@@ -9,7 +9,7 @@ import {
 } from 'reactflow'
 import { useGraphConfig } from '../context/GraphConfigContext'
 
-type HandleProps = Pick<NodeInputConfig, 'isArray' | 'identifier'> &
+type HandleProps = Pick<NodeInputConfig, 'isArray' | 'id'> &
   Pick<ValueTypeConfig, 'shape' | 'color'> & {
     style?: CSSProperties
     position: Position
@@ -40,11 +40,11 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
 
     // safety: should always have an output if there's a source node
     const sourceOutputConfig = sourceNodeConfig.outputs!.find(
-      (v) => v.identifier === connection.sourceHandle,
+      (v) => v.id === connection.sourceHandle,
     )
     // safety: should always have an input if there's this function is firing
     const targetInputConfig = targetNodeConfig.inputs!.find(
-      (v) => v.identifier === connection.targetHandle,
+      (v) => v.id === connection.targetHandle,
     )
     if (!sourceOutputConfig || !targetInputConfig) {
       return true // allow connections where we can't verify the types
@@ -110,7 +110,7 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
       {props.shape === 'diamondDot' && dot}
       <FlowHandle
         ref={ref}
-        id={props.identifier}
+        id={props.id}
         isValidConnection={isValidConnection}
         style={{
           border: 'none',
