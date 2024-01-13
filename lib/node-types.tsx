@@ -1,23 +1,19 @@
-import { FunctionComponent, memo, ReactElement, useMemo } from 'react'
-import { Edge, Node } from 'reactflow'
+import { FunctionComponent, JSX, memo, ReactElement, useMemo } from 'react'
+import { Edge, Node, Position } from 'reactflow'
 import { useNodesEdges } from './hooks/node'
 import {
   GraphConfig,
   NodeConfig,
   NodeInputConfig,
   NodeOutputConfig,
-  ValueTypeConfigOptions,
 } from './config'
 import { NodeLinkedField } from './components/NodeLinkedField'
-import { NodeInputField } from './components/NodeInputField'
-import { NodeSelectField } from './components/NodeSelectField'
-import { NodeToggleField } from './components/NodeToggleField'
-import { NodeCheckboxField } from './components/NodeCheckboxField'
 import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { isEqual } from 'lodash-es'
+import { Handle } from './components/Handle.tsx'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -81,38 +77,27 @@ function getInputElement(
     return <NodeLinkedField key={inputConfig.identifier} {...inputConfig} />
   }
 
-  switch (inputConfig.inputType) {
-    case 'value':
-      return (
-        <NodeInputField
-          key={input.identifier}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          {...inputConfig}
-        />
-      )
-    case 'options':
-      return (
-        <NodeSelectField
-          key={input.identifier}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
-        />
-      )
-    case 'buttonGroup':
-      return (
-        <NodeToggleField
-          key={input.identifier}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          {...(inputConfig as ValueTypeConfigOptions & NodeInputConfig)}
-        />
-      )
-    case 'checkbox':
-      return <NodeCheckboxField key={input.identifier} {...inputConfig} />
-    default:
-      return <NodeLinkedField key={input.identifier} {...inputConfig} />
+  const Element = graphConfig.getInputComponent(input.valueType as string)
+  if (Element) {
+    return (
+      <Element
+        key={input.identifier}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        slots={{
+          Handle: () => (
+            <Handle
+              handleType="target"
+              position={Position.Left}
+              {...inputConfig}
+            />
+          ),
+        }}
+        {...inputConfig}
+      ></Element>
+    )
+  } else {
+    return <NodeLinkedField key={input.identifier} {...inputConfig} />
   }
 }
 

@@ -1,10 +1,10 @@
 import { Edge, Node, Position } from 'reactflow'
-import dagre from 'dagre'
+import { layout, graphlib } from 'dagre'
 
 type LayoutResult = { nodes: Node[]; edges: Edge[] }
 
 export function computeDagreLayout(nodes: Node[], edges: Edge[]): LayoutResult {
-  const g = new dagre.graphlib.Graph()
+  const g = new graphlib.Graph()
   g.setDefaultEdgeLabel(() => ({}))
   g.setGraph({ rankdir: 'LR' })
 
@@ -16,7 +16,7 @@ export function computeDagreLayout(nodes: Node[], edges: Edge[]): LayoutResult {
     g.setEdge(edge.source, edge.target)
   })
 
-  dagre.layout(g)
+  layout(g)
 
   nodes.forEach((node) => {
     const nodeWithPosition = g.node(node.id)

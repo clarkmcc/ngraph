@@ -1,18 +1,18 @@
 import { memo } from 'react'
 import { NodeInputConfig, ValueTypeConfigOptions } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
-import { Position } from 'reactflow'
-import { Handle } from './Handle'
+import { BaseInputProps } from './inputs.ts'
 
-type NodeToggleFieldProps = NodeInputConfig &
+type NodeToggleFieldProps = BaseInputProps &
+  NodeInputConfig &
   ValueTypeConfigOptions & {
     name: string
-    onFocus: () => void
-    onBlur: () => void
   }
 
 export const NodeToggleField = memo(
-  ({ options, isConstant, ...props }: NodeToggleFieldProps) => {
+  ({ options, isConstant, slots, ...props }: NodeToggleFieldProps) => {
+    const Handle = slots?.Handle
+
     const [value, setValue] = useNodeFieldValue(
       props.identifier,
       props.defaultValue,
@@ -20,9 +20,7 @@ export const NodeToggleField = memo(
 
     return (
       <div style={{ position: 'relative' }}>
-        {!isConstant && (
-          <Handle handleType="target" position={Position.Left} {...props} />
-        )}
+        {isConstant || !Handle ? null : <Handle />}
         <div
           style={{
             margin: '2px 0',

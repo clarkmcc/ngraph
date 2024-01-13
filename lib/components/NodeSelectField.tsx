@@ -1,28 +1,21 @@
-import { memo, useMemo, useRef } from 'react'
+import { memo, useRef } from 'react'
 import { NodeInputConfig, ValueTypeConfigOptions } from '../config'
 import { useNodeFieldValue } from '../hooks/node'
-import { Position } from 'reactflow'
-import { Handle } from './Handle'
+import { BaseInputProps } from './inputs.ts'
 
-type NodeSelectFieldProps = NodeInputConfig &
-  ValueTypeConfigOptions & {
-    onFocus: () => void
-    onBlur: () => void
-  }
+type NodeSelectFieldProps = BaseInputProps &
+  NodeInputConfig &
+  ValueTypeConfigOptions
 
 export const NodeSelectField = memo(
-  ({ options, isConstant, ...props }: NodeSelectFieldProps) => {
+  ({ options, isConstant, slots, ...props }: NodeSelectFieldProps) => {
+    const Handle = slots?.Handle
     const [value, setValue] = useNodeFieldValue(
       props.identifier,
       props.defaultValue,
     )
 
     const ref = useRef<HTMLSelectElement>(null)
-
-    const handle = useMemo(
-      () => <Handle handleType="target" position={Position.Left} {...props} />,
-      [props],
-    )
 
     return (
       <div
@@ -33,7 +26,7 @@ export const NodeSelectField = memo(
           display: 'flex',
         }}
       >
-        {!isConstant && handle}
+        {isConstant || !Handle ? null : <Handle />}
         <select
           style={{
             background: '#282828',
