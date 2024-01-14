@@ -1,6 +1,6 @@
 {
   "name": "@clarkmcc/ngraph",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A blender-style node editor built on xyflow",
   "repository": "git@github.com:clarkmcc/ngraph.git",
   "author": "Clark McCauley <clarkmccauley@gmail.com>",
@@ -9,7 +9,7 @@
   "files": [
     "dist"
   ],
-  "main": "dist/main.js",
+  "main": "dist/main.jsx",
   "exports": {
     ".": {
       "import": "./dist/index.js"
