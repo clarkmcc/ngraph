@@ -1,0 +1,19 @@
+.header-input {
+  width: auto;
+  background-color: transparent;
+  border: none;
+  color: #ffffff;
+  outline: none;
+  font-size: 12px;
+  text-shadow: 0 1px rgba(0,0,0,0.4);
+  border-radius: 3px;
+}
+
+.header-input:hover {
+  background-color: rgba(0,0,0,0.2);
+  color: inherit;
+}
+
+.header-input:focus {
+  background-color: rgba(0,0,0,0.3);
+}
