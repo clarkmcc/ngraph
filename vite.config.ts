@@ -8,13 +8,17 @@ import { glob } from 'glob'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), libInjectCss(), dts({ include: ['lib'] })],
+  plugins: [
+    react(),
+    libInjectCss(),
+    dts({ include: ['lib'], outDir: ['dist/types'] }),
+  ],
   build: {
     ssr: false,
     copyPublicDir: false,
     lib: {
       entry: resolve(__dirname, 'lib/index.ts'),
-      formats: ['es'],
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: ['react', 'react/jsx-runtime'],
@@ -28,10 +32,20 @@ export default defineConfig({
           fileURLToPath(new URL(file, import.meta.url)),
         ]),
       ),
-      output: {
-        assetFileNames: 'assets/[name][extname]',
-        entryFileNames: '[name].js',
-      },
+      output: [
+        {
+          format: 'es',
+          entryFileNames: '[name].js',
+          assetFileNames: 'assets/[name][extname]',
+          dir: 'dist/es',
+        },
+        {
+          format: 'cjs',
+          entryFileNames: '[name].js',
+          assetFileNames: 'assets/[name][extname]',
+          dir: 'dist/cjs',
+        },
+      ],
     },
   },
 })

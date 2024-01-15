@@ -9,13 +9,16 @@
   "files": [
     "dist"
   ],
-  "main": "dist/main.jsx",
+  "main": "dist/cjs/main.jsx",
   "exports": {
     ".": {
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/es/index.js",
+      "require": "./dist/cjs/index.js",
+      "default": "./dist/es/index.js"
     }
   },
-  "types": "dist/index.d.ts",
+  "types": "dist/es/index.d.ts",
   "sideEffects": [
     "**/*.css"
   ],
