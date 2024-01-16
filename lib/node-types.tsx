@@ -143,13 +143,15 @@ function getInputElement(
         onFocus={onFocus}
         onBlur={onBlur}
         slots={{
-          Handle: () => (
-            <Handle
-              handleType="target"
-              position={Position.Left}
-              {...inputConfig}
-            />
-          ),
+          Handle: !inputConfig.isConstant
+            ? () => (
+                <Handle
+                  handleType="target"
+                  position={Position.Left}
+                  {...inputConfig}
+                />
+              )
+            : undefined,
         }}
         {...inputConfig}
       ></Element>
