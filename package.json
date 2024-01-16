@@ -1,6 +1,6 @@
 {
   "name": "@clarkmcc/ngraph",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A blender-style node editor built on xyflow",
   "repository": "git@github.com:clarkmcc/ngraph.git",
   "author": "Clark McCauley <clarkmccauley@gmail.com>",
