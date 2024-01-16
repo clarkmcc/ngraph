@@ -130,6 +130,12 @@ export interface NodeInputConfig {
   isArray?: boolean
   defaultValue?: any
   isConstant?: boolean
+  /**
+   * The group that this input belongs to. When specified, this input and
+   * any other inputs with this group name will be rendered under a collapsable
+   * accordion.
+   */
+  group?: string
 }
 
 export interface NodeOutputConfig {
@@ -333,7 +339,6 @@ export class GraphConfig {
     return Object.entries(this.nodes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
-          console.log('returning custom node')
           return [type, this.customNode(type)]
         } else {
           return [type, buildNode(node)]

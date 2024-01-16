@@ -1,6 +1,6 @@
 {
   "name": "@clarkmcc/ngraph",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A blender-style node editor built on xyflow",
   "repository": "git@github.com:clarkmcc/ngraph.git",
   "author": "Clark McCauley <clarkmccauley@gmail.com>",
@@ -83,6 +83,7 @@
     "vite-plugin-lib-inject-css": "^1.3.0"
   },
   "dependencies": {
+    "@uiw/react-color": "^2.0.6",
     "dagre": "^0.8.5",
     "lodash-es": "^4.17.21",
     "nanoid": "^5.0.4",

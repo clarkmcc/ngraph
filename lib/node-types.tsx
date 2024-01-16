@@ -1,4 +1,12 @@
-import { FunctionComponent, JSX, memo, ReactElement, useMemo } from 'react'
+import {
+  FunctionComponent,
+  JSX,
+  memo,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Edge, Node, Position } from 'reactflow'
 import { useNodesEdges } from './hooks/node'
 import {
@@ -14,6 +22,7 @@ import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { isEqual } from 'lodash-es'
 import { Handle } from './components/Handle.tsx'
+import { InputGroup } from './components/InputGroup.tsx'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -29,22 +38,70 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     const [config] = useGraphConfig()
     const [isFocused, onFocus, onBlur] = useFocusBlur()
 
+    function getInputElements(
+      inputs: NodeInputConfig[],
+      edges: Edge[],
+    ): JSX.Element[] {
+      const targetEdges = edges.filter((edge) => edge.target === node.id)
+      return inputs.map((input) =>
+        getInputElement(config, targetEdges, input, onFocus, onBlur),
+      )
+    }
+
+    const getHandlesForInputs = useCallback(
+      (configs: NodeInputConfig[]): ReactNode => {
+        return configs.map((inputConfig) => (
+          <Handle
+            key={inputConfig.id}
+            handleType="target"
+            position={Position.Left}
+            {...config.getInputConfig(inputConfig)}
+          />
+        ))
+      },
+      [config],
+    )
+
     // Construct memoized input components based on the node config
     const edges = useNodesEdges(node.id)
     const edgeIds = edges.map((e) => e.id).join()
-    const inputs = useMemo(() => {
-      const targetEdges = edges.filter((edge) => edge.target === node.id)
-      return (nodeConfig.inputs ?? []).map((input) =>
-        getInputElement(config, targetEdges, input, onFocus, onBlur),
-      )
-    }, [config, node, edgeIds])
+    const inputConfigs = nodeConfig.inputs ?? []
 
-    // Construct memoized output components based on the node config
+    // Construct memoized input and output components based on the node config
+    const inputs = useMemo(() => {
+      return getInputElements(
+        inputConfigs.filter((input) => !input.group),
+        edges,
+      )
+    }, [inputConfigs, config, node, edgeIds])
+
     const outputs = useMemo(() => {
       return (nodeConfig.outputs ?? []).map((output) =>
         getOutputElements(config, output),
       )
     }, [config, node])
+
+    // Input groups are those inputs that should be rendered under a collapsable accordion
+    const inputGroups = useMemo(() => {
+      const grouped: Record<string, NodeInputConfig[]> = inputConfigs
+        .filter((input) => input.group)
+        .reduce((acc: Record<string, NodeInputConfig[]>, input) => {
+          const group = input.group!
+          if (!acc[group]) acc[group] = []
+          acc[group].push(input)
+          return acc
+        }, {})
+
+      return Object.entries(grouped).map(([group, inputs]) => (
+        <InputGroup
+          label={group}
+          key={group}
+          handles={getHandlesForInputs(inputs)}
+        >
+          {getInputElements(inputs, edges)}
+        </InputGroup>
+      ))
+    }, [edgeIds])
 
     return (
       <NodeContainer draggable={!isFocused} node={node}>
@@ -57,6 +114,7 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
         >
           {outputs}
           {inputs}
+          {inputGroups}
         </div>
       </NodeContainer>
     )
@@ -85,13 +143,15 @@ function getInputElement(
         onFocus={onFocus}
         onBlur={onBlur}
         slots={{
-          Handle: () => (
-            <Handle
-              handleType="target"
-              position={Position.Left}
-              {...inputConfig}
-            />
-          ),
+          Handle: !inputConfig.isConstant
+            ? () => (
+                <Handle
+                  handleType="target"
+                  position={Position.Left}
+                  {...inputConfig}
+                />
+              )
+            : undefined,
         }}
         {...inputConfig}
       ></Element>
