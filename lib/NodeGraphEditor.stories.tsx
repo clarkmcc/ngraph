@@ -196,12 +196,48 @@ export const InputGroups: Story = {
     nodes: [
       {
         id: '1',
-        type: 'string',
+        type: 'bsdf',
+        position: { x: 350, y: 100 },
+        data: {
+          __inputGroupsExpanded: ['Specular'],
+        },
+      },
+      {
+        id: '2',
+        type: 'number',
         position: { x: 100, y: 100 },
         data: {},
       },
+      {
+        id: '3',
+        type: 'number',
+        position: { x: 100, y: 200 },
+        data: {},
+      },
     ],
-    edges: [],
+    edges: [
+      {
+        id: 'e1',
+        source: '3',
+        sourceHandle: 'value',
+        target: '1',
+        targetHandle: 'strength',
+      },
+      {
+        id: 'e2',
+        source: '2',
+        sourceHandle: 'value',
+        target: '1',
+        targetHandle: 'anisotropicRotation',
+      },
+      {
+        id: 'e3',
+        source: '3',
+        sourceHandle: 'value',
+        target: '1',
+        targetHandle: 'anisotropic',
+      },
+    ],
     config: {
       valueTypes: {
         string: {
@@ -210,63 +246,112 @@ export const InputGroups: Story = {
           inputType: 'value',
           defaultValue: '',
         },
+        number: {
+          name: 'Number',
+          color: '#a1a1a1',
+          inputType: 'value',
+          defaultValue: '0.000',
+        },
         boolean: {
           name: 'Boolean',
           color: '#a1a1a1',
           inputType: 'checkbox',
           defaultValue: true,
         },
-        httpMethod: {
-          name: 'HTTP Method',
+        specularDistribution: {
+          name: 'Specular Distribution',
           color: '#06b6d4',
           inputType: 'options',
           options: [
-            { name: 'GET', value: 'GET' },
-            { name: 'POST', value: 'POST' },
-            { name: 'PUT', value: 'PUT' },
-            { name: 'DELETE', value: 'DELETE' },
+            { name: 'GGX', value: 'ggx' },
+            { name: 'Beckmann', value: 'beckmann' },
+            { name: 'Phong', value: 'phong' },
           ],
           defaultValue: 'GET',
-        },
-
-        httpProtocol: {
-          name: 'HTTP Method',
-          color: '#0284c7',
-          inputType: 'buttonGroup',
-          options: [
-            { name: 'HTTP', value: 'HTTP' },
-            { name: 'HTTPS', value: 'HTTPS' },
-          ],
-          defaultValue: 'HTTP',
         },
       },
       nodeGroups: {
         default: {
           name: 'Default',
-          color: '#a1a1a1',
+          color: '#2A652B',
         },
       },
       nodes: {
-        string: {
+        number: {
           group: 'default',
-          name: 'String',
+          name: 'Number',
           inputs: [
             {
-              name: 'Method',
-              id: 'method',
-              valueType: 'httpMethod',
-              group: 'HTTP',
+              name: 'Value',
+              id: 'value',
+              valueType: 'number',
+              isConstant: true,
+            },
+          ],
+          outputs: [
+            {
+              name: 'Value',
+              id: 'value',
+              valueType: 'number',
+            },
+          ],
+        },
+        bsdf: {
+          group: 'default',
+          name: 'Principled BSDF',
+          inputs: [
+            {
+              name: 'Metallic',
+              id: 'metallic',
+              valueType: 'number',
             },
             {
-              name: 'Value 2',
-              id: 'value2',
-              valueType: 'string',
-              group: 'Modifiers',
+              name: 'Roughness',
+              id: 'roughness',
+              valueType: 'number',
+              defaultValue: '0.550',
             },
             {
-              name: 'Path',
-              id: 'path',
-              valueType: 'string',
+              name: 'IOR',
+              id: 'ior',
+              valueType: 'number',
+              defaultValue: '1.450',
+            },
+            {
+              name: 'Alpha',
+              id: 'alpha',
+              valueType: 'number',
+              defaultValue: '1.000',
+            },
+            {
+              name: 'Distribution',
+              id: 'distribution',
+              group: 'Specular',
+              valueType: 'specularDistribution',
+            },
+            {
+              name: 'IOR Level',
+              id: 'iorLevel',
+              group: 'Specular',
+              valueType: 'number',
+            },
+            {
+              name: 'Anisotropic',
+              id: 'anisotropic',
+              group: 'Specular',
+              valueType: 'number',
+            },
+            {
+              name: 'Anisotropic Rotation',
+              id: 'anisotropicRotation',
+              group: 'Specular',
+              valueType: 'number',
+            },
+            {
+              name: 'Strength',
+              id: 'strength',
+              group: 'Emission',
+              valueType: 'number',
             },
           ],
         },

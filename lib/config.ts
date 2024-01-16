@@ -339,7 +339,6 @@ export class GraphConfig {
     return Object.entries(this.nodes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
-          console.log('returning custom node')
           return [type, this.customNode(type)]
         } else {
           return [type, buildNode(node)]

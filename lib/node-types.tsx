@@ -1,4 +1,12 @@
-import { FunctionComponent, JSX, memo, ReactElement, useMemo } from 'react'
+import {
+  FunctionComponent,
+  JSX,
+  memo,
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Edge, Node, Position } from 'reactflow'
 import { useNodesEdges } from './hooks/node'
 import {
@@ -40,11 +48,26 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
       )
     }
 
+    const getHandlesForInputs = useCallback(
+      (configs: NodeInputConfig[]): ReactNode => {
+        return configs.map((inputConfig) => (
+          <Handle
+            key={inputConfig.id}
+            handleType="target"
+            position={Position.Left}
+            {...config.getInputConfig(inputConfig)}
+          />
+        ))
+      },
+      [config],
+    )
+
     // Construct memoized input components based on the node config
     const edges = useNodesEdges(node.id)
     const edgeIds = edges.map((e) => e.id).join()
     const inputConfigs = nodeConfig.inputs ?? []
 
+    // Construct memoized input and output components based on the node config
     const inputs = useMemo(() => {
       return getInputElements(
         inputConfigs.filter((input) => !input.group),
@@ -52,6 +75,13 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
       )
     }, [inputConfigs, config, node, edgeIds])
 
+    const outputs = useMemo(() => {
+      return (nodeConfig.outputs ?? []).map((output) =>
+        getOutputElements(config, output),
+      )
+    }, [config, node])
+
+    // Input groups are those inputs that should be rendered under a collapsable accordion
     const inputGroups = useMemo(() => {
       const grouped: Record<string, NodeInputConfig[]> = inputConfigs
         .filter((input) => input.group)
@@ -61,18 +91,17 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
           acc[group].push(input)
           return acc
         }, {})
-      return Object.keys(grouped).map((group) => ({
-        group,
-        elements: getInputElements(grouped[group], edges),
-      }))
-    }, [inputConfigs, config, node, edgeIds])
 
-    // Construct memoized output components based on the node config
-    const outputs = useMemo(() => {
-      return (nodeConfig.outputs ?? []).map((output) =>
-        getOutputElements(config, output),
-      )
-    }, [config, node])
+      return Object.entries(grouped).map(([group, inputs]) => (
+        <InputGroup
+          label={group}
+          key={group}
+          handles={getHandlesForInputs(inputs)}
+        >
+          {getInputElements(inputs, edges)}
+        </InputGroup>
+      ))
+    }, [edgeIds])
 
     return (
       <NodeContainer draggable={!isFocused} node={node}>
@@ -85,11 +114,7 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
         >
           {outputs}
           {inputs}
-          {Object.values(inputGroups).map(({ group, elements }) => (
-            <InputGroup label={group} key={group}>
-              {elements}
-            </InputGroup>
-          ))}
+          {inputGroups}
         </div>
       </NodeContainer>
     )

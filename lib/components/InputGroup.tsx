@@ -1,20 +1,22 @@
-import { CSSProperties, ReactNode, useMemo, useState } from 'react'
+import { CSSProperties, ReactNode, useMemo } from 'react'
 import { GoTriangleDown } from 'react-icons/go'
+import { useNodeInputGroupState } from '../hooks/node.ts'
 
 type InputGroupProps = {
   label: string
   children: ReactNode
   style?: CSSProperties
   labelStyle?: CSSProperties
+  handles: ReactNode
 }
 
 export const InputGroup = ({
   label,
   children,
-  style,
   labelStyle,
+  handles,
 }: InputGroupProps) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useNodeInputGroupState(label)
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen)
@@ -25,7 +27,7 @@ export const InputGroup = ({
       label: {
         fontSize: '12px',
         cursor: 'pointer',
-        padding: '5px 8px',
+        padding: '3px 8px',
         display: 'flex',
         color: 'white',
         textShadow: '0 1px rgba(0,0,0,0.4)',
@@ -50,15 +52,28 @@ export const InputGroup = ({
   )
 
   return (
-    <div style={style}>
+    <div style={{ position: 'relative' }}>
       <div
-        onClick={toggleAccordion}
-        style={{ ...defaultStyles.label, ...labelStyle }}
+        style={{
+          margin: '2px 0',
+          padding: '0 12px',
+          opacity: 0 /* using display:none makes edges go crazy*/,
+        }}
       >
-        <GoTriangleDown style={defaultStyles.icon} />
-        <span style={{ marginLeft: 2, paddingTop: 2 }}>{label}</span>
+        {!isOpen && handles}
       </div>
-      {isOpen && <div style={defaultStyles.content}>{children}</div>}
+      <div style={{ position: 'relative' }}>
+        <div
+          onClick={toggleAccordion}
+          style={{ ...defaultStyles.label, ...labelStyle }}
+        >
+          <div style={{ position: 'relative', display: 'flex' }}>
+            <GoTriangleDown style={defaultStyles.icon} />
+            <span style={{ marginLeft: 2, paddingTop: 2 }}>{label}</span>
+          </div>
+        </div>
+        {isOpen && <div style={defaultStyles.content}>{children}</div>}
+      </div>
     </div>
   )
 }
