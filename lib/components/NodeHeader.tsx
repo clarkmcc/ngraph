@@ -79,6 +79,7 @@ export const NodeHeader = memo(
         }}
       >
         {collapsedElement}
+
         <input
           className="header-input"
           value={name}
@@ -88,5 +89,5 @@ export const NodeHeader = memo(
       </div>
     )
   },
-  isEqual,
+  (a, b) => a.collapsed == b.collapsed,
 )

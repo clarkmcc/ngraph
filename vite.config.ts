@@ -21,7 +21,7 @@ export default defineConfig({
       formats: ['es', 'cjs'],
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime'],
+      external: ['react', 'react/jsx-runtime', 'reactflow'],
       input: Object.fromEntries(
         glob.sync('lib/**/!(*.stories).{ts,tsx}').map((file) => [
           // The name of the entry point
