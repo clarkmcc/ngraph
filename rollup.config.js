@@ -2,13 +2,14 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import external from 'rollup-plugin-peer-deps-external'
 import babel from '@rollup/plugin-babel'
-import css from 'rollup-plugin-import-css'
 import dts from 'rollup-plugin-dts'
 import typescript from '@rollup/plugin-typescript'
 import { glob } from 'glob'
 import { fileURLToPath, URL } from 'url'
 import { extname, relative } from 'path'
 import { visualizer } from 'rollup-plugin-visualizer'
+import postcss from 'rollup-plugin-postcss'
+import css from 'rollup-plugin-css-only'
 
 export default [
   {
@@ -40,21 +41,22 @@ export default [
       external(),
       resolve({
         browser: true,
-        // preferBuiltins: false,
       }),
-      css(),
+      postcss({
+        plugins: [],
+      }),
       commonjs(),
       babel({
         exclude: 'node_modules/**',
       }),
-      typescript({ tsconfig: './tsconfig.json' }), // Make sure to point to your tsconfig file
+      typescript({ tsconfig: './tsconfig.json' }),
       visualizer(),
     ],
     external: ['react', 'react-dom', 'reactflow'],
   },
   // Separate configuration for generating type definitions
   {
-    input: 'lib/index.ts', // Point to your main TypeScript file
+    input: 'lib/index.ts',
     output: [{ file: 'dist/types/index.d.ts', format: 'es' }],
     plugins: [dts(), css()],
   },
