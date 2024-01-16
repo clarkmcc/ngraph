@@ -14,6 +14,7 @@ import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { isEqual } from 'lodash-es'
 import { Handle } from './components/Handle.tsx'
+import { InputGroup } from './components/InputGroup.tsx'
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -29,15 +30,42 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     const [config] = useGraphConfig()
     const [isFocused, onFocus, onBlur] = useFocusBlur()
 
+    function getInputElements(
+      inputs: NodeInputConfig[],
+      edges: Edge[],
+    ): JSX.Element[] {
+      const targetEdges = edges.filter((edge) => edge.target === node.id)
+      return inputs.map((input) =>
+        getInputElement(config, targetEdges, input, onFocus, onBlur),
+      )
+    }
+
     // Construct memoized input components based on the node config
     const edges = useNodesEdges(node.id)
     const edgeIds = edges.map((e) => e.id).join()
+    const inputConfigs = nodeConfig.inputs ?? []
+
     const inputs = useMemo(() => {
-      const targetEdges = edges.filter((edge) => edge.target === node.id)
-      return (nodeConfig.inputs ?? []).map((input) =>
-        getInputElement(config, targetEdges, input, onFocus, onBlur),
+      return getInputElements(
+        inputConfigs.filter((input) => !input.group),
+        edges,
       )
-    }, [config, node, edgeIds])
+    }, [inputConfigs, config, node, edgeIds])
+
+    const inputGroups = useMemo(() => {
+      const grouped: Record<string, NodeInputConfig[]> = inputConfigs
+        .filter((input) => input.group)
+        .reduce((acc: Record<string, NodeInputConfig[]>, input) => {
+          const group = input.group!
+          if (!acc[group]) acc[group] = []
+          acc[group].push(input)
+          return acc
+        }, {})
+      return Object.keys(grouped).map((group) => ({
+        group,
+        elements: getInputElements(grouped[group], edges),
+      }))
+    }, [inputConfigs, config, node, edgeIds])
 
     // Construct memoized output components based on the node config
     const outputs = useMemo(() => {
@@ -57,6 +85,11 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
         >
           {outputs}
           {inputs}
+          {Object.values(inputGroups).map(({ group, elements }) => (
+            <InputGroup label={group} key={group}>
+              {elements}
+            </InputGroup>
+          ))}
         </div>
       </NodeContainer>
     )

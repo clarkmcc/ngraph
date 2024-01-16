@@ -188,6 +188,93 @@ export const InputFields: Story = {
   },
 }
 
+export const InputGroups: Story = {
+  parameters: {
+    layout: 'fullscreen',
+  },
+  args: {
+    nodes: [
+      {
+        id: '1',
+        type: 'string',
+        position: { x: 100, y: 100 },
+        data: {},
+      },
+    ],
+    edges: [],
+    config: {
+      valueTypes: {
+        string: {
+          name: 'String',
+          color: '#a1a1a1',
+          inputType: 'value',
+          defaultValue: '',
+        },
+        boolean: {
+          name: 'Boolean',
+          color: '#a1a1a1',
+          inputType: 'checkbox',
+          defaultValue: true,
+        },
+        httpMethod: {
+          name: 'HTTP Method',
+          color: '#06b6d4',
+          inputType: 'options',
+          options: [
+            { name: 'GET', value: 'GET' },
+            { name: 'POST', value: 'POST' },
+            { name: 'PUT', value: 'PUT' },
+            { name: 'DELETE', value: 'DELETE' },
+          ],
+          defaultValue: 'GET',
+        },
+
+        httpProtocol: {
+          name: 'HTTP Method',
+          color: '#0284c7',
+          inputType: 'buttonGroup',
+          options: [
+            { name: 'HTTP', value: 'HTTP' },
+            { name: 'HTTPS', value: 'HTTPS' },
+          ],
+          defaultValue: 'HTTP',
+        },
+      },
+      nodeGroups: {
+        default: {
+          name: 'Default',
+          color: '#a1a1a1',
+        },
+      },
+      nodes: {
+        string: {
+          group: 'default',
+          name: 'String',
+          inputs: [
+            {
+              name: 'Method',
+              id: 'method',
+              valueType: 'httpMethod',
+              group: 'HTTP',
+            },
+            {
+              name: 'Value 2',
+              id: 'value2',
+              valueType: 'string',
+              group: 'Modifiers',
+            },
+            {
+              name: 'Path',
+              id: 'path',
+              valueType: 'string',
+            },
+          ],
+        },
+      },
+    },
+  },
+}
+
 export const SelectedEdgeHighlighting: Story = {
   parameters: {
     layout: 'fullscreen',
