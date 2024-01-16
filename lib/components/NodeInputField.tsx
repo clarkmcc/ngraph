@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { NodeBaseInputField } from './NodeBaseInputField'
 import { useNodeFieldValue } from '../hooks/node'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
-import './NodeInputField.scss'
 import { BaseInputProps } from './inputs.ts'
+import './NodeInputField.css'
 
 type NodeInputFieldProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 

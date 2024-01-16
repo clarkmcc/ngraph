@@ -1,5 +1,4 @@
 import { CSSProperties, JSXElementConstructor } from 'react'
-import { buildNode } from './node-types'
 import {
   BaseInputProps,
   getBuiltinInputs,
@@ -335,7 +334,9 @@ export class GraphConfig {
     }
   }
 
-  getNodeComponents(): Record<string, JSXElementConstructor<any>> {
+  getNodeComponents(
+    buildNode: (node: NodeConfig) => JSXElementConstructor<any>,
+  ): Record<string, JSXElementConstructor<any>> {
     return Object.entries(this.nodes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {

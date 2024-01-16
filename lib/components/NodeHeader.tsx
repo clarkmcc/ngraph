@@ -1,8 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useNodeFieldValue } from '../hooks/node'
+import './NodeHeader.css'
 import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
-import { isEqual } from 'lodash-es'
-import './NodeHeader.scss'
 
 type NodeHeaderProps = {
   defaultTitle: string
@@ -80,6 +79,7 @@ export const NodeHeader = memo(
         }}
       >
         {collapsedElement}
+
         <input
           className="header-input"
           value={name}
@@ -89,5 +89,5 @@ export const NodeHeader = memo(
       </div>
     )
   },
-  isEqual,
+  (a, b) => a.collapsed == b.collapsed,
 )
