@@ -20,7 +20,6 @@ import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
-import { isEqual } from 'lodash-es'
 import { Handle } from './components/Handle.tsx'
 import { InputGroup } from './components/InputGroup.tsx'
 
@@ -31,7 +30,7 @@ import { InputGroup } from './components/InputGroup.tsx'
  * @param b {Node}
  */
 const isComponentChanged = (a: Node, b: Node) =>
-  a.selected === b.selected && isEqual(a.data, b.data)
+  a.selected === b.selected && JSON.stringify(a.data) === JSON.stringify(b.data) // switched from lodash because bundle size was so large
 
 export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
   function component(node: Node): ReactElement {

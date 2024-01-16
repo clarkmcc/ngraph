@@ -1,8 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useNodeFieldValue } from '../hooks/node'
+import './NodeHeader.css'
 import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
-import { isEqual } from 'lodash-es'
-import './NodeHeader.scss'
 
 type NodeHeaderProps = {
   defaultTitle: string
