@@ -5,6 +5,8 @@ import {
   InputSlots,
 } from './components/inputs.ts'
 
+export const ANY = '__any'
+
 export interface IGraphConfig {
   /**
    * Keybindings for the graph editor
@@ -125,7 +127,7 @@ export interface NodeConfig {
 export interface NodeInputConfig {
   name: string
   id: string
-  valueType: keyof ValueTypes
+  valueType: Extract<keyof ValueTypes, string>
   isArray?: boolean
   defaultValue?: any
   isConstant?: boolean
@@ -193,6 +195,11 @@ export class GraphConfig {
       ...props?.keybindings,
     }
     this.valueTypes = props?.valueTypes ?? this.valueTypes
+    this.valueTypes[ANY] = {
+      name: 'Any',
+      color: '#a1a1a1',
+      inputType: null,
+    }
     this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
     this.nodes = props?.nodes ?? this.nodes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
@@ -306,8 +313,12 @@ export class GraphConfig {
   }
 
   valueType<T extends keyof this['valueTypes']>(type: T): ValueTypeConfig {
-    const config = this.valueTypes[type as keyof ValueTypes]
-    if (config == null) console.log(type, config)
+    const config = this.valueTypes[type as Extract<keyof ValueTypes, string>]
+    if (config == null)
+      console.error(
+        `No value type config for '${String(type)}'. Registered value types:`,
+        this.valueTypes,
+      )
     if (isValueTypeConfigOptions(config)) {
       return config as ValueTypeConfigOptions
     } else if (isValueTypeConfigValue(config)) {
@@ -335,14 +346,17 @@ export class GraphConfig {
   }
 
   getNodeComponents(
-    buildNode: (node: NodeConfig) => JSXElementConstructor<any>,
+    buildNode: (
+      config: GraphConfig,
+      node: NodeConfig,
+    ) => JSXElementConstructor<any>,
   ): Record<string, JSXElementConstructor<any>> {
     return Object.entries(this.nodes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
           return [type, this.customNode(type)]
         } else {
-          return [type, buildNode(node)]
+          return [type, buildNode(this, node)]
         }
       })
       .reduce(

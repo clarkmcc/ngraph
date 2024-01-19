@@ -9,8 +9,8 @@ import {
   NodeOutputConfig,
 } from '../config'
 import { Handle } from './Handle'
-import { useGraphConfig } from '../context/GraphConfigContext'
 import { useNodeCollapsed } from '../hooks/node'
+import { useGraphStore } from '../context/GraphContext.tsx'
 
 type NodeContainerProps = {
   node: Node
@@ -25,7 +25,7 @@ export function NodeContainer({
   styles,
   children,
 }: NodeContainerProps) {
-  const [config] = useGraphConfig()
+  const config = useGraphStore((store) => store.config)
   const nodeConfig = config.getNodeConfig(node.type!)
   const nodeGroupConfig = config.getNodeGroupConfig(nodeConfig.group)
   const [collapsed, toggleCollapsed] = useNodeCollapsed()
@@ -77,7 +77,7 @@ function CollapsedNodeContainer({
   nodeGroupConfig,
   toggleCollapsed,
 }: CollapsedNodeContainerProps) {
-  const [config] = useGraphConfig()
+  const config = useGraphStore((store) => store.config)
   const inputHandles = useMemo(
     () =>
       (nodeConfig.inputs ?? []).map((input) => getInputHandles(config, input)),

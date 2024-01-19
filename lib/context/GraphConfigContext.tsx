@@ -4,7 +4,6 @@ import {
   Dispatch,
   ReactNode,
   SetStateAction,
-  useContext,
   useState,
 } from 'react'
 
@@ -67,12 +66,4 @@ export function GraphConfigProvider({
       {children}
     </GraphConfigContext.Provider>
   )
-}
-
-export function useGraphConfig(): [
-  GraphConfig,
-  Dispatch<SetStateAction<GraphConfig>>,
-] {
-  const { config, setConfig } = useContext(GraphConfigContext)
-  return [config, setConfig]
 }

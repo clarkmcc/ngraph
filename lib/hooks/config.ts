@@ -1,11 +1,13 @@
 import { JSXElementConstructor, useMemo } from 'react'
-import { useGraphConfig } from '../context/GraphConfigContext'
 import { GraphConfig, IGraphConfig } from '../config.ts'
 import { buildNode } from '../node-types.tsx'
+import { useGraphStore } from '../context/GraphContext.tsx'
 
 export function useNodeTypes(): Record<string, JSXElementConstructor<any>> {
-  const [config] = useGraphConfig()
-  return useMemo(() => config.getNodeComponents(buildNode), [config])
+  const config = useGraphStore((store) => store.config)
+  return useMemo(() => {
+    return config.getNodeComponents(buildNode)
+  }, [config])
 }
 
 export function useBuildGraphConfig(

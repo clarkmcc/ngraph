@@ -2,13 +2,10 @@ import {
   ReactFlow,
   ReactFlowProps,
   ReactFlowProvider,
-  useEdgesState,
   useNodesInitialized,
-  useNodesState,
   useReactFlow,
   useStoreApi,
 } from '@xyflow/react'
-import { useGraphConfig } from './context/GraphConfigContext'
 import '@xyflow/react/dist/style.css'
 import { useNodeTypes } from './hooks/config'
 import {
@@ -20,13 +17,17 @@ import {
   useEffect,
 } from 'react'
 import { defaultEdgeTypes } from './edge-types'
+import { GraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
+import { GraphProvider, useGraphStore } from './context/GraphContext.tsx'
+import { DeserializeFunc, SerializeFunc } from './types/store.ts'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
-  onSave?: (data: any) => void,
+  onSave?: (data: any) => void
+  config: GraphConfig
 }
 
 export const NodeGraphEditor = forwardRef<
@@ -37,19 +38,16 @@ export const NodeGraphEditor = forwardRef<
     { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
-    const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
-    const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
     return (
-      <ReactFlowProvider>
-        <Flow
-          {...props}
-          ref={ref}
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-        />
-      </ReactFlowProvider>
+      <GraphProvider
+        config={props.config}
+        initialNodes={defaultNodes}
+        initialEdges={defaultEdges}
+      >
+        <ReactFlowProvider>
+          <Flow {...props} ref={ref} />
+        </ReactFlowProvider>
+      </GraphProvider>
     )
   },
 )
@@ -63,6 +61,8 @@ type FlowProps = ReactFlowProps & {
 }
 export type NodeGraphHandle = {
   layout: (engine?: LayoutEngine) => void
+  serialize: SerializeFunc
+  deserialize: DeserializeFunc
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
@@ -73,10 +73,10 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const nodeTypes = useNodeTypes()
     const edgeTypes = useMemo(() => defaultEdgeTypes, [])
     const onConnect = useSocketConnect()
-    const [config] = useGraphConfig()
+    const config = useGraphStore((store) => store.config)
     const { getState } = useStoreApi()
     const { setNodes, setEdges } = useReactFlow()
-    
+
 
     // Handle clipboard events
     useHotkeys(
@@ -90,13 +90,25 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
 
     // Provide methods to parent components
     const layout = useLayoutEngine()
-
+    const serialize = useGraphStore((store) => store.serialize)
+    const deserialize = useGraphStore((store) => store.deserialize)
     useImperativeHandle(
       ref,
       () => ({
         layout,
+        serialize,
+        deserialize,
       }),
-      [],
+      [serialize],
+    )
+
+    const { nodes, edges, onNodesChange, onEdgesChange } = useGraphStore(
+      (store) => ({
+        nodes: store.nodes,
+        edges: store.edges,
+        onNodesChange: store.onNodesChange,
+        onEdgesChange: store.onEdgesChange,
+      }),
     )
 
     const initialized = useNodesInitialized()
@@ -120,6 +132,10 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
       >
         <ReactFlow
           {...props}
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}

@@ -1,6 +1,5 @@
-import { NodeGraphEditor } from '../NodeGraphEditor.tsx'
+import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfigProvider } from '../context/GraphConfigContext.tsx'
 import {
   Background,
   BackgroundVariant,
@@ -204,11 +203,14 @@ const meta = {
       },
     )
     return (
-      <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} layoutEngine="dagre">
-          <Background color="#52525b" variant={BackgroundVariant.Dots}/>
-        </NodeGraphEditor>
-      </GraphConfigProvider>
+      <NodeGraphEditor
+        config={config}
+        defaultNodes={nodes}
+        defaultEdges={edges}
+        layoutEngine="dagre"
+      >
+        <Background color="#52525b" variant={BackgroundVariant.Dots} />
+      </NodeGraphEditor>
     )
   },
   decorators: (Story) => (
