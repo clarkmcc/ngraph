@@ -9,7 +9,6 @@ import {
   useStore,
 } from '@xyflow/react'
 import { shallow } from 'zustand/shallow'
-import NodeInputOutput = Graph.NodeInputOutput
 import { Draft, produce } from 'immer'
 import { Graph } from '../types'
 
@@ -205,7 +204,7 @@ export function useNodeCollapsed(): [boolean, () => void] {
 type UseNodeInternals = {
   inputs: Graph.NodeInternals['inputs']
   outputs: Graph.NodeInternals['outputs']
-  addOutput: (output: NodeInputOutput) => void
+  addOutput: (output: Graph.NodeInputOutput) => void
 }
 
 export function useNodeInternals(nodeId?: string): UseNodeInternals {
@@ -232,7 +231,7 @@ export function useNodeInternals(nodeId?: string): UseNodeInternals {
   )
 
   const addOutput = useCallback(
-    (output: NodeInputOutput) => {
+    (output: Graph.NodeInputOutput) => {
       updateInternal((draft) => {
         draft.internal.outputs.push(output)
       })

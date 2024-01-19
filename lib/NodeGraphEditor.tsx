@@ -24,6 +24,7 @@ import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
 import { GraphProvider, useGraphStore } from './context/GraphContext.tsx'
 import { DeserializeFunc, SerializeFunc } from './types/store.ts'
+import './tailwind.css'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
@@ -123,8 +124,8 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
 
     return (
       <div
+        className="bg-neutral-900"
         style={{
-          backgroundColor: '#1d1d1d',
           width: '100%',
           height: '100%',
           ...backgroundStyles,
