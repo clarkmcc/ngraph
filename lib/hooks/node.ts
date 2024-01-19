@@ -1,13 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
-import {
-  Edge,
-  isNode,
-  Node,
-  useNodeId,
-  useReactFlow,
-  useStore,
-} from 'reactflow'
-import { shallow } from 'zustand/shallow'
+import { Edge, useNodeId } from 'reactflow'
+import { useGraphStore } from '../store/store.ts'
 
 const INPUT_GROUPS_FIELD = '__inputGroupsExpanded'
 
@@ -46,10 +39,10 @@ function useToggleNodeArrayProperty(
   property: string,
   key: string,
 ): [boolean, (newState: boolean) => void] {
-  const updateNodeData = useUpdateNodeData()
+  const { updateNodeData } = useGraphStore()
   const data = useNodesData<{ [INPUT_GROUPS_FIELD]: string[] }>(nodeId)
   const [isEnabled, setIsEnabled] = useState(
-    data[INPUT_GROUPS_FIELD].includes(key),
+    (data[INPUT_GROUPS_FIELD] ?? []).includes(key),
   )
   const toggleProperty = useCallback(
     (newState) => {
@@ -83,7 +76,7 @@ export function useNodeFieldValue<T>(
   defaultValue?: T,
 ): [T, (value: T) => void] {
   const nodeId = useNodeId()
-  const { setNodes } = useReactFlow()
+  const { updateNodeData } = useGraphStore()
   const data = useNodesData<any>(nodeId!)
   const value = useMemo(
     () => (data ? data[field] : defaultValue) ?? defaultValue,
@@ -91,96 +84,27 @@ export function useNodeFieldValue<T>(
   )
   const updateValue = useCallback(
     (value: T) => {
-      setNodes((nodes) =>
-        nodes.map((n) =>
-          n.id === nodeId ? { ...n, data: { ...n.data, [field]: value } } : n,
-        ),
-      )
+      updateNodeData<any>(nodeId!, { [field]: value })
     },
     [nodeId, field],
   )
   return [value, updateValue]
 }
 
-export type UpdateNode = (
-  id: string,
-  dataUpdate: Partial<Node> | ((node: Node) => Partial<Node>),
-  options?: { replace: boolean },
-) => void
-
-export type UpdateNodeData<T extends object> = (
-  id: string,
-  dataUpdate: T | ((node: Node) => T),
-  options?: { replace: boolean },
-) => void
-
-export function useUpdateNode(): UpdateNode {
-  const { setNodes } = useReactFlow()
-  return useCallback(
-    (id, nodeUpdate, options = { replace: true }) => {
-      setNodes((prevNodes) =>
-        prevNodes.map((node) => {
-          if (node.id === id) {
-            const nextNode =
-              typeof nodeUpdate === 'function'
-                ? nodeUpdate(node as Node)
-                : nodeUpdate
-            // @ts-ignore
-            return options.replace && isNode(nextNode)
-              ? nextNode
-              : { ...node, ...nextNode }
-          }
-
-          return node
-        }),
-      )
-    },
-    [setNodes],
-  )
-}
-
-export function useUpdateNodeData<T extends object>(): UpdateNodeData<T> {
-  const updateNode = useUpdateNode()
-  return useCallback(
-    (id, dataUpdate, options = { replace: false }) => {
-      updateNode(
-        id,
-        (node) => {
-          const nextData =
-            typeof dataUpdate === 'function' ? dataUpdate(node) : dataUpdate
-          return options.replace
-            ? { ...node, data: nextData }
-            : { ...node, data: { ...node.data, ...nextData } }
-        },
-        options,
-      )
-    },
-    [updateNode],
-  )
-}
-
 export function useNodesData<T>(nodeId: string): T {
-  return useStore(
-    useCallback(
-      (s) => {
-        return s.nodeInternals.get(nodeId)?.data || null
-      },
-      [nodeId],
-    ),
-    shallow,
-  )
+  return useGraphStore((state) => {
+    return state.allNodes.get(nodeId)?.data || null
+  })
 }
 
 export function useNodesEdges(nodeId: string): Edge[] {
-  return useStore(
-    useCallback(
-      (s) => {
-        return s.edges.filter((e) => e.source === nodeId || e.target === nodeId)
-      },
-      [nodeId],
-    ),
-    shallow,
-  )
+  return useGraphStore((state) => {
+    return Array.from(
+      state.allEdges
+        .filter((edge) => edge.source === nodeId || edge.target === nodeId)
+        .values(),
+    )
+  })
 }
 
 const COLLAPSED_FIELD_NAME = '__collapsed'

@@ -33,6 +33,7 @@ export type KeyBindings = {
   copy: string[]
   paste: string[]
   delete: string[]
+  group: string[]
 }
 
 export type ValueTypes = {
@@ -190,6 +191,7 @@ export class GraphConfig {
       copy: ['meta+c'],
       paste: ['meta+v'],
       delete: ['x', 'Backspace', 'Delete'],
+      group: ['meta+g'],
       ...props?.keybindings,
     }
     this.valueTypes = props?.valueTypes ?? this.valueTypes
@@ -203,6 +205,12 @@ export class GraphConfig {
   validate(): GraphConfig {
     const errors: string[] = []
     Object.values(this.nodes).forEach((node) => {
+      const groups = Object.keys(this.nodeGroups)
+      if (!this.nodeGroups[node.group]) {
+        errors.push(
+          `Node '${node.name}' belongs to a node group that does not exist: '${node.group}'. Available groups: ${groups.join(', ')}`,
+        )
+      }
       if (node.inputs) {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {

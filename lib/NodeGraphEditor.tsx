@@ -1,13 +1,14 @@
 import {
+  applyEdgeChanges,
   Background,
   BackgroundVariant,
   Edge,
+  EdgeChange,
   Node,
+  NodeChange,
   ReactFlow,
   ReactFlowProps,
   ReactFlowProvider,
-  useEdgesState,
-  useNodesState,
   useReactFlow,
   useStoreApi,
 } from 'reactflow'
@@ -23,6 +24,7 @@ import {
   useMemo,
   JSX,
   CSSProperties,
+  useEffect,
 } from 'react'
 import { defaultEdgeTypes } from './edge-types'
 import { IGraphConfig } from './config'
@@ -30,6 +32,7 @@ import { useSocketConnect } from './hooks/connect'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
+import { useGraphStore } from './store/store.ts'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
@@ -43,8 +46,52 @@ export const NodeGraphEditor = forwardRef<
     { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
-    const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
-    const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
+    const [config] = useGraphConfig()
+    const {
+      setNodes,
+      setEdges,
+      applyNodeChanges,
+      createNodeGroup,
+      selectNodeGroup,
+    } = useGraphStore()
+    const nodes = useGraphStore((state) => state.nodes)
+    const edges = useGraphStore((state) => state.edges)
+    // const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
+    // const [edges, , onEdgesChange] = useEdgesState(defaultEdges ?? [])
+
+    useEffect(() => {
+      // console.log(nodes)
+    }, [nodes])
+
+    useEffect(() => {
+      setNodes(() => defaultNodes ?? [])
+      setEdges(() => defaultEdges ?? [])
+    }, [])
+
+    const onNodesChange = (changes: NodeChange[]) => {
+      // console.log(changes)
+      applyNodeChanges(changes)
+    }
+    const onEdgesChange = (changes: EdgeChange[]) => {
+      setEdges((edges) => applyEdgeChanges(changes, edges))
+    }
+
+    useHotkeys(
+      config.keybindings.group,
+      () => {
+        createNodeGroup(
+          useGraphStore
+            .getState()
+            .nodes.filter((n) => n.selected)
+            .map((n) => n.id),
+        )
+      },
+      {},
+      [createNodeGroup],
+    )
+
+    useHotkeys('esc', () => selectNodeGroup(null))
+
     return (
       <ReactFlowProvider>
         <Flow
