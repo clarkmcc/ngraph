@@ -36,28 +36,9 @@ type Store = {
 
   // Active viewport state
   viewport: Viewport
-
-  setNodes: StoreSetter<Node[]>
-  setEdges: StoreSetter<Edge[]>
 }
 
 type Actions = {
-  selectedNodeGroupId: string | null
-
-  // The nodes and edges that are visible in the viewport
-  nodes: Node[]
-  edges: Edge[]
-
-  // All nodes and edges in the graph, regardless of visibility
-  allNodes: Map<string, Node>
-  allEdges: Map<string, Edge>
-
-  // Group node ids mapped to child node ids
-  groupNodeIds: Map<string, Set<string>>
-
-  // Active viewport state
-  viewport: Viewport
-
   setNodes: StoreSetter<Node[]>
   setEdges: StoreSetter<Edge[]>
 
@@ -237,7 +218,7 @@ function mapApplyNodeChanges(
   changes: NodeChange[],
 ): Map<string, Node> {
   return Map(
-    applyNodeChanges(changes, [...store.allNodes.values()]).map((n) => [
+    applyNodeChanges(changes, Array.from(store.allNodes.values())).map((n) => [
       n.id,
       n,
     ]),
@@ -249,7 +230,7 @@ function mapApplyEdgeChanges(
   changes: EdgeChange[],
 ): Map<string, Edge> {
   return Map(
-    applyEdgeChanges(changes, [...store.allEdges.values()]).map((e) => [
+    applyEdgeChanges(changes, Array.from(store.allEdges.values())).map((e) => [
       e.id,
       e,
     ]),
@@ -290,18 +271,18 @@ function edgesByGroup(
 ): Edge[] {
   const nodeIds = groupNodeIds.get(groupNodeId)
   return nodeIds
-    ? [
-        ...allEdges
+    ? Array.from(
+        allEdges
           .filter(
             (edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target),
           )
           .values(),
-      ]
+      )
     : []
 }
 
 function nodeIdsInGroups(groupNodeIds: Map<string, Set<string>>): Set<string> {
-  return [...groupNodeIds.values()].reduce(
+  return Array.from(groupNodeIds.values()).reduce(
     (acc: Set<string>, set) => acc.union(set),
     Set(),
   )
@@ -334,23 +315,15 @@ function computeVisible(
     const nodeIds = nodeIdsInGroups(groupNodeIds)
     const edgeIds = edgeIdsInGroups(groupNodeIds, allEdges)
 
-    const nonGroupNodes = [
-      ...allNodes.filter((node) => !nodeIds.includes(node.id)).values(),
-    ]
-    const nonGroupEdges = [
-      ...allEdges.filter((edge) => !edgeIds.includes(edge.id)).values(),
-    ]
-    // console.log('group not selected', nodeIds, allNodes, nonGroupNodes)
+    const nonGroupNodes = Array.from(
+      allNodes.filter((node) => !nodeIds.includes(node.id)).values(),
+    )
+    const nonGroupEdges = Array.from(
+      allEdges.filter((edge) => !edgeIds.includes(edge.id)).values(),
+    )
     return [nonGroupNodes, nonGroupEdges]
   }
 }
-
-// function updateNode(node: Node, ...arrays: Node[][]) {
-//   arrays.forEach((a) => {
-//     const i = a.findIndex((n) => n.id === node.id)
-//     if (~i) a[i] = node
-//   })
-// }
 
 function createGroup(
   store: Store,
