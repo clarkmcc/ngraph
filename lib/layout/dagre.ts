@@ -26,12 +26,12 @@ export function computeDagreLayout(nodes: Node[], edges: Edge[]): Node[] {
 
     // We are shifting the dagre node position (anchor=center center) to the top left
     // so it matches the React Flow node anchor point (top left).
-    if (node.width && node.height) {
+    if (node.computed?.width && node.computed?.height) {
       node.position = {
-        x: nodeWithPosition.x - node.width / 2 + 70,
-        y: nodeWithPosition.y - node.height / 2 + 50,
+        x: nodeWithPosition.x - node.computed?.width / 2 + 70,
+        y: nodeWithPosition.y - node.computed?.height / 2 + 50,
       }
     }
-    return { ...node }
+    return node
   })
 }

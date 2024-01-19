@@ -11,8 +11,7 @@ type LayoutFunc = () => void
 export function useLayoutEngine(engine: LayoutEngine): LayoutFunc {
   const { getNodes, getEdges, setNodes } = useReactFlow()
   return useCallback(() => {
-    const nodes = computeLayout(engine, getNodes, getEdges)
-    setNodes(nodes)
+    setNodes(computeLayout(engine, getNodes, getEdges))
   }, [engine])
 }
 
