@@ -18,7 +18,7 @@ _Note: This project is still in development and the API is likely to change._
 ## Getting Started
 
 ```
-npm install reactflow @clarkmcc/ngraph 
+npm install @xyflow/react @clarkmcc/ngraph 
 ```
 
 ## Credits

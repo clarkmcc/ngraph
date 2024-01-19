@@ -1,12 +1,12 @@
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { CSSProperties, memo, useCallback, useMemo, useRef } from 'react'
 import {
-  Connection,
   HandleType,
   Position,
   useStoreApi,
   Handle as FlowHandle,
-} from 'reactflow'
+  IsValidConnection,
+} from '@xyflow/react'
 import { useGraphConfig } from '../context/GraphConfigContext'
 
 type HandleProps = Pick<NodeInputConfig, 'isArray' | 'id'> &
@@ -27,13 +27,13 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
 
   const api = useStoreApi()
 
-  const isValidConnection = useCallback((connection: Connection) => {
+  const isValidConnection: IsValidConnection = useCallback((connection) => {
     const sourceNodeType = api
       .getState()
-      .nodeInternals.get(connection.source!)?.type
+      .nodeLookup.get(connection.source!)?.type
     const targetNodeType = api
       .getState()
-      .nodeInternals.get(connection.target!)?.type
+      .nodeLookup.get(connection.target!)?.type
 
     const sourceNodeConfig = config.getNodeConfig(sourceNodeType!)
     const targetNodeConfig = config.getNodeConfig(targetNodeType!)
@@ -91,8 +91,6 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        left: props.position === Position.Left ? -8 : undefined,
-        right: props.position === Position.Right ? -8 : undefined,
         zIndex: 1000000,
       }}
     >

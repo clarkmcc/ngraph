@@ -10,12 +10,12 @@ import {
   useNodesState,
   useReactFlow,
   useStoreApi,
-} from 'reactflow'
+} from '@xyflow/react'
 import {
   GraphConfigProvider,
   useGraphConfig,
 } from './context/GraphConfigContext'
-import 'reactflow/dist/style.css'
+import '@xyflow/react/dist/style.css'
 import { useBuildGraphConfig, useNodeTypes } from './hooks/config'
 import {
   forwardRef,

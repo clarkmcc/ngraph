@@ -91,10 +91,10 @@
   },
   "dependencies": {
     "@uiw/react-color": "^2.0.6",
+    "@xyflow/react": "^12.0.0-next.7",
     "dagre": "^0.8.5",
     "nanoid": "^5.0.4",
     "react-hotkeys-hook": "^4.4.3",
-    "react-icons": "^5.0.1",
-    "reactflow": "^11.10.1"
+    "react-icons": "^5.0.1"
   }
 }

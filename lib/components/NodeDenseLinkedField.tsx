@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { Handle } from './Handle.js'
-import { Position } from 'reactflow'
+import { Position } from '@xyflow/react'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 
 type NodeDenseLinkedFieldProps = NodeInputConfig &

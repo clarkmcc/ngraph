@@ -1,5 +1,5 @@
 import { useGraphConfig } from '../context/GraphConfigContext'
-import { addEdge, Connection, useNodes, useReactFlow } from 'reactflow'
+import { addEdge, Connection, useNodes, useReactFlow } from '@xyflow/react'
 import { useCallback } from 'react'
 
 export function useSocketConnect() {
