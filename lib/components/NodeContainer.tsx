@@ -1,4 +1,4 @@
-import { Node, Position } from 'reactflow'
+import { Node, Position } from '@xyflow/react'
 import { CSSProperties, JSX, ReactElement, useMemo } from 'react'
 import { NodeHeader } from './NodeHeader'
 import {

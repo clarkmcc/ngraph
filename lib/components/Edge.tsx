@@ -7,7 +7,7 @@ import {
   useOnSelectionChange,
   useStoreApi,
   useViewport,
-} from 'reactflow'
+} from '@xyflow/react'
 import { useGraphConfig } from '../context/GraphConfigContext'
 import { GraphConfig } from '../config.ts'
 
@@ -50,10 +50,10 @@ export function Edge({
   const [config] = useGraphConfig()
   const api = useStoreApi()
   const [edgePath] = getBezierPath({
-    sourceX: sourceX - 8,
+    sourceX: sourceX - 20,
     sourceY: sourceY,
     sourcePosition,
-    targetX: targetX + 8,
+    targetX: targetX + 20,
     targetY: targetY,
     targetPosition,
   })
@@ -79,10 +79,7 @@ export function Edge({
   // Determine selection state once initially
   useEffect(() => {
     onSelectionChange({
-      nodes: api
-        .getState()
-        .getNodes()
-        .filter((n) => n.selected),
+      nodes: api.getState().nodes.filter((n) => n.selected),
       edges: [],
     })
   }, [])
@@ -104,7 +101,7 @@ export function Edge({
         // todo:(performance) may need to revisit this if performance becomes a concern
         const valueType = getTargetHandleValueType(
           config,
-          api.getState().getNodes(),
+          api.getState().nodes,
           target,
           targetHandleId,
         )

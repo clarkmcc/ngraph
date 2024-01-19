@@ -1,4 +1,4 @@
-import { Edge, Node, ReactFlowState } from 'reactflow'
+import { Edge, Node, ReactFlowState } from '@xyflow/react'
 import { Dispatch, SetStateAction } from 'react'
 import { nanoid } from 'nanoid'
 
@@ -8,7 +8,7 @@ export enum ClipboardItem {
 
 export namespace ClipboardItem {
   export async function copyNodesAndEdges(state: ReactFlowState) {
-    const nodes = state.getNodes().filter((n) => n.selected)
+    const nodes = state.nodes.filter((n) => n.selected)
     const nodeIds = nodes.map((n) => n.id)
 
     // Edges selected because both the source and target nodes are selected

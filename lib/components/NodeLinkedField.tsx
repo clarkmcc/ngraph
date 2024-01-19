@@ -2,7 +2,7 @@ import { Handle } from './Handle.js'
 import { Label } from './Label.js'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { memo } from 'react'
-import { Position } from 'reactflow'
+import { Position } from '@xyflow/react'
 
 type NodeLinkedFieldProps = NodeInputConfig &
   Pick<ValueTypeConfig, 'shape' | 'color'>

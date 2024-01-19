@@ -7,7 +7,7 @@ import {
   Edge,
   Node,
   ReactFlowProvider,
-} from 'reactflow'
+} from '@xyflow/react'
 import { useBuildGraphConfig } from './hooks/config.ts'
 import { NodeInputField } from './components/NodeInputField.tsx'
 import { InputProps } from './config.ts'

@@ -10,7 +10,7 @@ import {
   Node,
   Position,
   ReactFlowProvider,
-} from 'reactflow'
+} from '@xyflow/react'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { Handle } from './components/Handle'

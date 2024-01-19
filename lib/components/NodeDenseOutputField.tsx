@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Handle } from './Handle'
 import { NodeOutputConfig, ValueTypeConfig } from '../config'
-import { Position } from 'reactflow'
+import { Position } from '@xyflow/react'
 
 type NodeDenseOutputFieldProps = NodeOutputConfig &
   Pick<ValueTypeConfig, 'color'>

@@ -52,7 +52,7 @@ export default [
       typescript({ tsconfig: './tsconfig.json' }),
       visualizer(),
     ],
-    external: ['react', 'react-dom', 'reactflow'],
+    external: ['react', 'react-dom', '@xyflow/react'],
   },
   // Separate configuration for generating type definitions
   {

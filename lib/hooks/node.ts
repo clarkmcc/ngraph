@@ -6,7 +6,7 @@ import {
   useNodeId,
   useReactFlow,
   useStore,
-} from 'reactflow'
+} from '@xyflow/react'
 import { shallow } from 'zustand/shallow'
 
 const INPUT_GROUPS_FIELD = '__inputGroupsExpanded'
@@ -163,7 +163,7 @@ export function useNodesData<T>(nodeId: string): T {
   return useStore(
     useCallback(
       (s) => {
-        return s.nodeInternals.get(nodeId)?.data || null
+        return s.nodeLookup.get(nodeId)?.data || null
       },
       [nodeId],
     ),

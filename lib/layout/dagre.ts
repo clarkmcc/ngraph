@@ -1,15 +1,16 @@
-import { Edge, Node, Position } from 'reactflow'
+import { Edge, Node, Position } from '@xyflow/react'
 import { layout, graphlib } from 'dagre'
 
-type LayoutResult = { nodes: Node[]; edges: Edge[] }
-
-export function computeDagreLayout(nodes: Node[], edges: Edge[]): LayoutResult {
+export function computeDagreLayout(nodes: Node[], edges: Edge[]): Node[] {
   const g = new graphlib.Graph()
   g.setDefaultEdgeLabel(() => ({}))
   g.setGraph({ rankdir: 'LR' })
 
   nodes.forEach((node) => {
-    g.setNode(node.id, { width: node.width, height: node.height })
+    g.setNode(node.id, {
+      width: node.computed?.width,
+      height: node.computed?.height,
+    })
   })
 
   edges.forEach((edge) => {
@@ -18,7 +19,7 @@ export function computeDagreLayout(nodes: Node[], edges: Edge[]): LayoutResult {
 
   layout(g)
 
-  nodes.forEach((node) => {
+  return nodes.map((node) => {
     const nodeWithPosition = g.node(node.id)
     node.targetPosition = Position.Left
     node.sourcePosition = Position.Right
@@ -31,8 +32,6 @@ export function computeDagreLayout(nodes: Node[], edges: Edge[]): LayoutResult {
         y: nodeWithPosition.y - node.height / 2 + 50,
       }
     }
-    return node
+    return { ...node }
   })
-
-  return { nodes, edges }
 }

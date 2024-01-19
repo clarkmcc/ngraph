@@ -7,7 +7,7 @@ import {
   useCallback,
   useMemo,
 } from 'react'
-import { Edge, Node, Position } from 'reactflow'
+import { Edge, Node, Position } from '@xyflow/react'
 import { useNodesEdges } from './hooks/node'
 import {
   GraphConfig,
