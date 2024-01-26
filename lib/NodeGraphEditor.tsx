@@ -73,11 +73,9 @@ export const ExampleNodeGraphEditor = forwardRef<
   const config = useBuildGraphConfig(_config)
   return (
     <GraphConfigProvider defaultConfig={config}>
-      <ReactFlowProvider>
-        <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges}>
-          <Background color="#52525b" variant={BackgroundVariant.Dots} />
-        </NodeGraphEditor>
-      </ReactFlowProvider>
+      <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges}>
+        <Background color="#52525b" variant={BackgroundVariant.Dots} />
+      </NodeGraphEditor>
     </GraphConfigProvider>
   )
 })

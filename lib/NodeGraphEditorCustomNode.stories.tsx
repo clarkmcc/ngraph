@@ -9,7 +9,6 @@ import {
   Edge,
   Node,
   Position,
-  ReactFlowProvider,
 } from '@xyflow/react'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
@@ -71,11 +70,9 @@ const meta = {
     }, [])
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <ReactFlowProvider>
-          <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
-            <Background color="#52525b" variant={BackgroundVariant.Dots} />
-          </NodeGraphEditor>
-        </ReactFlowProvider>
+        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+          <Background color="#52525b" variant={BackgroundVariant.Dots} />
+        </NodeGraphEditor>
       </GraphConfigProvider>
     )
   },
