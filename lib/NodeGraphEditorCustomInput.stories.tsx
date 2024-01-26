@@ -6,7 +6,6 @@ import {
   BackgroundVariant,
   Edge,
   Node,
-  ReactFlowProvider,
 } from '@xyflow/react'
 import { useBuildGraphConfig } from './hooks/config.ts'
 import { NodeInputField } from './components/NodeInputField.tsx'
@@ -73,11 +72,9 @@ const meta = {
     )
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <ReactFlowProvider>
-          <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
-            <Background color="#52525b" variant={BackgroundVariant.Dots} />
-          </NodeGraphEditor>
-        </ReactFlowProvider>
+        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+          <Background color="#52525b" variant={BackgroundVariant.Dots} />
+        </NodeGraphEditor>
       </GraphConfigProvider>
     )
   },
