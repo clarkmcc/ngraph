@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { computeDagreLayout } from './dagre'
-import { Instance, Node, useReactFlow } from '@xyflow/react'
+import { Edge, Instance, Node, useReactFlow } from '@xyflow/react'
 
 export enum LayoutEngine {
   Dagre,
@@ -20,10 +20,16 @@ function computeLayout(
   getNodes: Instance.GetNodes<any>,
   getEdges: Instance.GetEdges<any>,
 ): Node[] {
+  const layoutFn = getLayoutFunction(engine)
+  if (!layoutFn) throw new Error(`Unknown layout engine ${engine}`)
+  return layoutFn(getNodes(), getEdges())
+}
+
+export function getLayoutFunction(
+  engine: LayoutEngine | undefined,
+): ((nodes: Node[], edges: Edge[]) => Node[]) | undefined {
   switch (engine) {
     case LayoutEngine.Dagre:
-      return computeDagreLayout(getNodes(), getEdges())
-    default:
-      throw new Error(`Unknown layout engine ${engine}`)
+      return computeDagreLayout
   }
 }
