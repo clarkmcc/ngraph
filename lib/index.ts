@@ -1,6 +1,5 @@
 export { GraphConfig, type InputProps } from './config'
 export { NodeGraphEditor } from './NodeGraphEditor'
-export { GraphConfigProvider } from './context/GraphConfigContext'
 export { useBuildGraphConfig } from './hooks/config.ts'
 export {
   useNodeCollapsed,
@@ -16,5 +15,10 @@ export { NodeSelectField } from './components/NodeSelectField.tsx'
 export { NodeDenseLinkedField } from './components/NodeDenseLinkedField.tsx'
 export { NodeLinkedField } from './components/NodeLinkedField.tsx'
 export { NodeOutputField } from './components/NodeOutputField.tsx'
-export { GraphContext, GraphProvider } from './context/GraphContext'
+export {
+  GraphContext,
+  GraphProvider,
+  useGraphStore,
+  useGraphApi,
+} from './context/GraphContext'
 export { registerLayoutEngine } from './layout/layout.ts'
