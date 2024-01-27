@@ -26,7 +26,7 @@ export function NodeContainer({
   children,
 }: NodeContainerProps) {
   const config = useGraphStore((store) => store.config)
-  const nodeConfig = config.getNodeConfig(node.type!)
+  const nodeConfig = config.getNodeConfig(node.type!)!
   const nodeGroupConfig = config.getNodeGroupConfig(nodeConfig.group)
   const [collapsed, toggleCollapsed] = useNodeCollapsed()
 
