@@ -2,6 +2,7 @@ import { Connection, Edge, ReactFlowState } from '@xyflow/react'
 import { Graph } from './types'
 import { GraphConfig } from './config.ts'
 import { produce } from 'immer'
+import { nanoid } from 'nanoid'
 
 export function getConnectionEdge(
   state: ReactFlowState,
@@ -10,6 +11,17 @@ export function getConnectionEdge(
   return state.edgeLookup.get(
     `xy-edge__${conn.source}${conn.sourceHandle}-${conn.target}${conn.targetHandle}`,
   )
+}
+
+export function createNode(
+  config: GraphConfig,
+  node: Pick<Graph.Node, 'selected' | 'type' | 'position'>,
+): Graph.Node {
+  return addNodeInternals(config, {
+    id: nanoid(6),
+    data: {},
+    ...node,
+  } as Graph.Node)
 }
 
 export function addNodeInternals(
@@ -21,21 +33,26 @@ export function addNodeInternals(
   }
 
   return produce(node, (draft) => {
-    draft.data.internal = {
-      inputs: (config.getNodeConfig(node.type ?? '').inputs ?? []).map(
-        (input) => ({
+    const nodeConfig = config.getNodeConfig(node.type ?? '')
+    const inputs = nodeConfig
+      ? (nodeConfig.inputs ?? []).map((input) => ({
           id: input.id,
           name: input.name,
           valueType: input.valueType,
-        }),
-      ),
-      outputs: (config.getNodeConfig(node.type ?? '').outputs ?? []).map(
-        (output) => ({
+        }))
+      : []
+
+    const outputs = nodeConfig
+      ? (nodeConfig.outputs ?? []).map((output) => ({
           id: output.id,
           name: output.name,
           valueType: output.valueType,
-        }),
-      ),
+        }))
+      : []
+
+    draft.data.internal = {
+      inputs,
+      outputs,
     }
   })
 }

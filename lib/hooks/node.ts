@@ -53,7 +53,7 @@ function useToggleNodeArrayProperty(
   const data =
     useNodesData<Graph.Node<{ [INPUT_GROUPS_FIELD]: string[] }>>(nodeId)
   const [isEnabled, setIsEnabled] = useState(
-    data![INPUT_GROUPS_FIELD].includes(key),
+    data![INPUT_GROUPS_FIELD]?.includes(key) ?? false,
   )
   const toggleProperty = useCallback(
     (newState) => {

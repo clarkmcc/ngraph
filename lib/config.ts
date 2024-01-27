@@ -210,6 +210,12 @@ export class GraphConfig {
   validate(): GraphConfig {
     const errors: string[] = []
     Object.values(this.nodes).forEach((node) => {
+      const groups = Object.keys(this.nodeGroups)
+      if (!this.nodeGroups[node.group]) {
+        errors.push(
+          `Node '${node.name}' belongs to a node group that does not exist: '${node.group}'. Available groups: ${groups.join(', ')}`,
+        )
+      }
       if (node.inputs) {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {
@@ -291,18 +297,31 @@ export class GraphConfig {
     }))
   }
 
-  getNodeConfig(type: string): NodeConfig {
+  getNodeConfig(type: string): NodeConfig | null {
     return this.nodes[type]
   }
 
-  nodeConfigsByGroup(group: string): NodeConfig[] {
-    return Object.values(this.nodes).filter((n) => n.group === group)
+  nodeConfigsByGroup(group: string): WithType<NodeConfig, string>[] {
+    return Object.entries(this.nodes)
+      .map(([type, n]) => ({ type, ...n }))
+      .filter((n) => n.group === group)
   }
 
   nodeGroupConfigs(): WithType<NodeGroupConfig, string>[] {
     return Object.entries(this.nodeGroups).map(([type, value]) => ({
       ...value,
       type,
+    }))
+  }
+
+  getRegisteredNodeTypes() {
+    return Object.entries(this.nodeGroups).map(([type, group]) => ({
+      type,
+      name: group.name,
+      nodes: this.nodeConfigsByGroup(type).map((node) => ({
+        type: node.type,
+        name: node.name,
+      })),
     }))
   }
 

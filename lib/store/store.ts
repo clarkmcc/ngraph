@@ -23,13 +23,19 @@ export function createGraphStore({
       nodes,
       edges,
 
-      serialize: () => JSON.stringify(get()),
+      serialize: () =>
+        JSON.stringify({
+          nodes: get().nodes,
+          edges: get().edges,
+        }),
       deserialize: (serialized) => set(JSON.parse(serialized)),
 
       onNodesChange: (changes) =>
         set({ nodes: applyNodeChanges(changes, get().nodes) }),
       onEdgesChange: (changes) =>
         set({ edges: applyEdgeChanges(changes, get().edges) }),
+
+      addNode: (node) => set({ nodes: [...get().nodes, node] }),
     })),
     shallow,
   )

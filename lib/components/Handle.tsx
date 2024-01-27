@@ -39,6 +39,14 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
     const sourceNodeConfig = config.getNodeConfig(sourceNodeType!)
     const targetNodeConfig = config.getNodeConfig(targetNodeType!)
 
+    if (!sourceNodeConfig || !targetNodeConfig) {
+      console.warn('Could not find node config for node type', {
+        sourceNodeType,
+        targetNodeType,
+      })
+      return true // allow connections where we can't verify the types
+    }
+
     // safety: should always have an output if there's a source node
     const sourceOutputConfig = sourceNodeConfig.outputs!.find(
       (v) => v.id === connection.sourceHandle,
@@ -50,8 +58,6 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
     if (!sourceOutputConfig || !targetInputConfig) {
       return true // allow connections where we can't verify the types
     }
-
-    console.log({ sourceOutputConfig, sourceNodeConfig })
 
     if (
       targetInputConfig.valueType !== 'any' &&

@@ -14,6 +14,7 @@ export type DeserializeFunc = (serialized: string) => void
 export type GraphStoreActions = {
   onNodesChange: (changes: NodeChange<Graph.Node>[]) => void
   onEdgesChange: (changes: EdgeChange<Graph.Edge>[]) => void
+  addNode: (node: Graph.Node) => void
 
   serialize: SerializeFunc
   deserialize: DeserializeFunc

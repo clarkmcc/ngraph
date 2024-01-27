@@ -1,7 +1,7 @@
 import { Edge as _Edge, Node as _Node } from '@xyflow/react'
 
 export namespace Graph {
-  export type Node<Data = any> = Omit<_Node, 'data'> & {
+  export type Node<Data = unknown> = Omit<_Node, 'data'> & {
     data: NodeData<Data>
   }
 
