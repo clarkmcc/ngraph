@@ -163,18 +163,6 @@ export function useUpdateNodeData<T extends object>(): UpdateNodeData<T> {
   )
 }
 
-// export function useNodesData<T>(nodeId: string): T {
-//   return useStore(
-//     useCallback(
-//       (s) => {
-//         return s.nodeLookup.get(nodeId)?.data || null
-//       },
-//       [nodeId],
-//     ),
-//     shallow,
-//   )
-// }
-
 export function useNodesEdges(nodeId: string): Edge[] {
   return useStore(
     useCallback(
