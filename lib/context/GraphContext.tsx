@@ -10,8 +10,6 @@ type ContextType = ReturnType<typeof createGraphStore> | null
 
 export const GraphContext = createContext<ContextType>(null)
 
-// export const GraphProvider = GraphContext.Provider
-
 type ExtractState = GraphStore
 
 export function useGraphStore<StateSlice = ExtractState>(
