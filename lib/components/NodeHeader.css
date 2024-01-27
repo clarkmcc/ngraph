@@ -1,5 +1,5 @@
 .header-input {
-  width: auto;
+  min-width: 125px;
   background-color: transparent;
   border: none;
   color: #ffffff;
@@ -19,6 +19,7 @@
 }
 
 .header-input-div {
+  min-width: 123px;
   cursor: text;
   font-family: sans-serif;
   font-size: 12px;
