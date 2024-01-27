@@ -24,7 +24,6 @@ import {
   useMemo,
   JSX,
   CSSProperties,
-  useState,
   useEffect,
 } from 'react'
 import { defaultEdgeTypes } from './edge-types'
@@ -32,34 +31,10 @@ import { IGraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
-import { LayoutEngine, getLayoutFunction, useLayoutEngine } from './layout/layout'
-
-const options = {
-  includeHiddenNodes: false,
-};
- 
-export default function useDefaultLayout(layoutFn:((nodes: Node[], edges:Edge[]) => Node[])| undefined) {
-  const { getNodes, getEdges } = useReactFlow();
-  const nodesInitialized = useNodesInitialized(options);
-  const [layoutedNodes, setLayoutedNodes] = useState(getNodes());
-  
-  useEffect(() => {
-    if (nodesInitialized && typeof layoutFn == "function") {
-      const found = !!getNodes().find((node) => node.position == undefined);
-      if (found) {
-        setLayoutedNodes(layoutFn(getNodes(), getEdges()));
-      } else {
-        setLayoutedNodes(getNodes());
-      }
-    }
-  }, [nodesInitialized]);
- 
-  return layoutedNodes;
-}
+import { LayoutEngine, useLayoutEngine } from './layout/layout'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void,
-  defaultLayout?: LayoutEngine,
 }
 
 export const NodeGraphEditor = forwardRef<
@@ -67,7 +42,7 @@ export const NodeGraphEditor = forwardRef<
   NodeGraphEditorProps
 >(
   (
-    { defaultNodes, defaultEdges, defaultLayout, ...props }: NodeGraphEditorProps,
+    { defaultNodes, defaultEdges, layoutEngine, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
     const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
@@ -81,7 +56,6 @@ export const NodeGraphEditor = forwardRef<
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
-          defaultLayout={defaultLayout}
         />
       </ReactFlowProvider>
     )
@@ -110,7 +84,10 @@ export const ExampleNodeGraphEditor = forwardRef<
 
 type FlowProps = ReactFlowProps & {
   backgroundStyles?: CSSProperties,
-  defaultLayout?: LayoutEngine
+  /**
+   * The default layout engine to use when nodes are provided without positions.
+   */
+  layoutEngine?: LayoutEngine
 }
 export type NodeGraphHandle = {
   layout: () => void
@@ -118,7 +95,7 @@ export type NodeGraphHandle = {
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
   (
-    { backgroundStyles, defaultLayout, ...props }: FlowProps,
+    { backgroundStyles, layoutEngine, ...props }: FlowProps,
     ref,
   ) => {
     const nodeTypes = useNodeTypes()
@@ -127,12 +104,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const [config] = useGraphConfig()
     const { getState } = useStoreApi()
     const { setNodes, setEdges } = useReactFlow()
-    const layoutedNodes = useDefaultLayout(getLayoutFunction(defaultLayout))
-    useEffect(() => {
-      if (layoutedNodes && defaultLayout !== undefined) {
-        setNodes(layoutedNodes)
-      }
-    }, [layoutedNodes])
+    
 
     // Handle clipboard events
     useHotkeys(
@@ -145,7 +117,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     )
 
     // Provide methods to parent components
-    const layout = useLayoutEngine(LayoutEngine.Dagre)
+    const layout = useLayoutEngine(layoutEngine ?? LayoutEngine.Dagre)
     useImperativeHandle(
       ref,
       () => ({
@@ -153,6 +125,16 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
       }),
       [],
     )
+
+    const initialized = useNodesInitialized()
+    useEffect(() => {
+      const shouldLayout = !!getState().nodes.find(
+        (node) => node.position == undefined,
+      )
+      if (initialized && shouldLayout) {
+        layout()
+      }
+    }, [initialized])
 
     return (
       <div

@@ -11,7 +11,6 @@ import { useBuildGraphConfig } from './hooks/config.ts'
 import { InputProps } from './config.ts'
 import { Wheel } from '@uiw/react-color'
 import { useNodeFieldValue } from './hooks/node.ts'
-import { LayoutEngine } from './layout/layout.ts'
 
 const meta = {
   title: 'Node Graph Editor',
@@ -202,7 +201,7 @@ const meta = {
     )
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} defaultLayout={LayoutEngine.Dagre}>
+        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
           <Background color="#52525b" variant={BackgroundVariant.Dots} />
         </NodeGraphEditor>
       </GraphConfigProvider>
@@ -237,19 +236,19 @@ export const InputGroups: Story = {
       {
         id: '2',
         type: 'number',
-        // position: { x: 100, y: 100 },
+        position: { x: 100, y: 100 },
         data: {},
       },
       {
         id: '3',
         type: 'number',
-        // position: { x: 100, y: 200 },
+        position: { x: 100, y: 200 },
         data: {},
       },
       {
         id: '4',
         type: 'color',
-        // position: { x: 100, y: 300 },
+        position: { x: 100, y: 300 },
         data: {},
       },
     ] as Node[],
