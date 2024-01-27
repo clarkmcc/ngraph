@@ -228,7 +228,7 @@ export const InputGroups: Story = {
       {
         id: '1',
         type: 'bsdf',
-        position: { x: 350, y: 100 },
+        // position: { x: 350, y: 100 },
         data: {
           __inputGroupsExpanded: ['Specular'],
         },
@@ -251,7 +251,7 @@ export const InputGroups: Story = {
         position: { x: 100, y: 300 },
         data: {},
       },
-    ],
+    ] as Node[],
     edges: [
       {
         id: 'e1',
