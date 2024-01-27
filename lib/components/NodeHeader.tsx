@@ -19,16 +19,29 @@ export const NodeHeader = memo(
   ({ defaultTitle, color, collapsed, toggleCollapsed }: NodeHeaderProps) => {
     const [_name, _setName] = useNodeFieldValue(HEADER_FIELD_NAME, defaultTitle)
     const [name, setName] = useState(_name)
+    const [isEditable, setIsEditable] = useState(false) // New state to manage edit mode
+
     const showCollapsedIndicator = toggleCollapsed != null
 
     function handleBlur(): void {
       if (name) {
         _setName(name)
       }
+      setIsEditable(false) // Exit edit mode on blur
     }
 
     function handleNameChange(event: any): void {
       setName(event.target.value)
+    }
+
+    function handleDoubleClick(): void {
+      setIsEditable(true) // Enter edit mode on double click
+    }
+
+    function handleInputKeyDown(
+      event: React.KeyboardEvent<HTMLInputElement>,
+    ): void {
+      event.key === 'Enter' && handleBlur()
     }
 
     const collapsedElement = useMemo(() => {
@@ -80,12 +93,20 @@ export const NodeHeader = memo(
       >
         {collapsedElement}
 
-        <input
-          className="header-input"
-          value={name}
-          onChange={handleNameChange}
-          onBlur={handleBlur}
-        ></input>
+        {isEditable ? (
+          <input
+            className="header-input"
+            value={name}
+            onChange={handleNameChange}
+            onKeyDown={handleInputKeyDown}
+            onBlur={handleBlur}
+            autoFocus
+          />
+        ) : (
+          <div onDoubleClick={handleDoubleClick} className="header-input-div">
+            {name}
+          </div>
+        )}
       </div>
     )
   },
