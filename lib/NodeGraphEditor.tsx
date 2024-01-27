@@ -133,6 +133,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
       >
         <ReactFlow
           {...props}
+          colorMode={props.colorMode ?? 'dark'}
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
