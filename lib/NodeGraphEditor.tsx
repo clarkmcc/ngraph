@@ -42,7 +42,7 @@ export const NodeGraphEditor = forwardRef<
   NodeGraphEditorProps
 >(
   (
-    { defaultNodes, defaultEdges, layoutEngine, ...props }: NodeGraphEditorProps,
+    { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
     const [nodes, , onNodesChange] = useNodesState(defaultNodes ?? [])
