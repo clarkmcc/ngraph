@@ -141,7 +141,7 @@ export interface NodeOutputConfig {
   name: string
   id: string
   valueType: string
-  array?: boolean
+  isArray?: boolean
 }
 
 function isValueTypeConfigOptions(
