@@ -1,16 +1,20 @@
-import { NodeGraphEditor } from './NodeGraphEditor'
+import { NodeGraphEditor } from '../NodeGraphEditor.tsx'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfigProvider } from './context/GraphConfigContext'
+import { GraphConfigProvider } from '../context/GraphConfigContext.tsx'
 import {
   Background,
   BackgroundVariant,
   Edge,
   Node,
 } from '@xyflow/react'
-import { useBuildGraphConfig } from './hooks/config.ts'
-import { InputProps } from './config.ts'
+import { useBuildGraphConfig } from '../hooks/config.ts'
+import { InputProps } from '../config.ts'
 import { Wheel } from '@uiw/react-color'
-import { useNodeFieldValue } from './hooks/node.ts'
+import { useNodeFieldValue } from '../hooks/node.ts'
+import { registerLayoutEngine } from '../layout/layout.ts'
+import { computeDagreLayout } from '../layout/dagre.ts'
+
+registerLayoutEngine('dagre', computeDagreLayout)
 
 const meta = {
   title: 'Node Graph Editor',
@@ -201,8 +205,8 @@ const meta = {
     )
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
-          <Background color="#52525b" variant={BackgroundVariant.Dots} />
+        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} layoutEngine="dagre">
+          <Background color="#52525b" variant={BackgroundVariant.Dots}/>
         </NodeGraphEditor>
       </GraphConfigProvider>
     )

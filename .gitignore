@@ -130,4 +130,5 @@ dist
 .pnp.*
 
 storybook-static/
-stories/
+
+stats.html

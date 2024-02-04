@@ -1,6 +1,11 @@
-import { ExampleNodeGraphEditor, NodeGraphHandle } from './NodeGraphEditor'
+import { ExampleNodeGraphEditor } from './ExampleNodeGraphEditor'
+import { NodeGraphHandle } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
+import { registerLayoutEngine } from '../layout/layout'
+import { computeDagreLayout } from '../layout/dagre'
+
+registerLayoutEngine('dagre', computeDagreLayout)
 
 const meta = {
   title: 'Node Graph Editor',
@@ -8,12 +13,14 @@ const meta = {
     const ref = useRef<NodeGraphHandle>(null)
     return (
       <div style={{ width: '100%', height: '100%' }}>
-        <button
-          style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000 }}
-          onClick={() => ref.current!.layout()}
-        >
-          Layout
-        </button>
+        <div style={{position: 'absolute', top: 10, left: 10, zIndex: 1000}}>
+          <button
+            style={{  }}
+            onClick={() => ref.current!.layout('dagre')}
+          >
+            Dagre Layout
+          </button>
+        </div>
         <ExampleNodeGraphEditor
           ref={ref}
           config={config}
