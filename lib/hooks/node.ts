@@ -15,13 +15,13 @@ const INPUT_GROUPS_FIELD = '__inputGroupsExpanded'
  * A drop-in replacement for the useState hook that stores whether an input group is expanded
  * or not in the node's data object. It shares the same underlying array of expanded groups
  * with other hooks that use the same node ID.
- * @param group
+ * @param inputGroup
  */
 export function useNodeInputGroupState(
-  group: string,
+  inputGroup: string,
 ): [boolean, (newState: boolean) => void] {
   const nodeId = useNodeId()
-  return useToggleNodeArrayProperty(nodeId!, INPUT_GROUPS_FIELD, group)
+  return useToggleNodeArrayProperty(nodeId!, INPUT_GROUPS_FIELD, inputGroup)
 }
 
 /**
@@ -52,7 +52,7 @@ function useToggleNodeArrayProperty(
     data[INPUT_GROUPS_FIELD].includes(key),
   )
   const toggleProperty = useCallback(
-    (newState) => {
+    (newState: React.SetStateAction<boolean>) => {
       setIsEnabled(newState)
 
       updateNodeData(nodeId, (node) => {

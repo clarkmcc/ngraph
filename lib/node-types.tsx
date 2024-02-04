@@ -69,7 +69,7 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     // Construct memoized input and output components based on the node config
     const inputs = useMemo(() => {
       return getInputElements(
-        inputConfigs.filter((input) => !input.group),
+        inputConfigs.filter((input) => !input.inputGroup),
         edges,
       )
     }, [inputConfigs, config, node, edgeIds])
@@ -83,18 +83,18 @@ export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
     // Input groups are those inputs that should be rendered under a collapsable accordion
     const inputGroups = useMemo(() => {
       const grouped: Record<string, NodeInputConfig[]> = inputConfigs
-        .filter((input) => input.group)
+        .filter((input) => input.inputGroup)
         .reduce((acc: Record<string, NodeInputConfig[]>, input) => {
-          const group = input.group!
-          if (!acc[group]) acc[group] = []
-          acc[group].push(input)
+          const inputGroup = input.inputGroup!
+          if (!acc[inputGroup]) acc[inputGroup] = []
+          acc[inputGroup].push(input)
           return acc
         }, {})
 
-      return Object.entries(grouped).map(([group, inputs]) => (
+      return Object.entries(grouped).map(([inputGroup, inputs]) => (
         <InputGroup
-          label={group}
-          key={group}
+          label={inputGroup}
+          key={inputGroup}
           handles={getHandlesForInputs(inputs)}
         >
           {getInputElements(inputs, edges)}

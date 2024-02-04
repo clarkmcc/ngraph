@@ -134,7 +134,7 @@ export interface NodeInputConfig {
    * any other inputs with this group name will be rendered under a collapsable
    * accordion.
    */
-  group?: string
+  inputGroup?: string
 }
 
 export interface NodeOutputConfig {
@@ -231,14 +231,14 @@ export class GraphConfig {
   registerCustomNode<T>(
     name: string,
     type: string,
-    group: string,
+    theme: string,
     node: JSXElementConstructor<T>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
     this.customNodes[type] = node
     this.nodeTypes[type] = {
-      theme: group,
+      theme: theme,
       name,
       inputs: inputs,
       outputs: outputs,
@@ -288,8 +288,8 @@ export class GraphConfig {
     return this.nodeTypes[type]
   }
 
-  nodeConfigsByGroup(group: string): NodeConfig[] {
-    return Object.values(this.nodeTypes).filter((n) => n.theme === group)
+  nodeConfigsByTheme(theme: string): NodeConfig[] {
+    return Object.values(this.nodeTypes).filter((n) => n.theme === theme)
   }
 
   nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
