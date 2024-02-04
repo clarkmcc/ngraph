@@ -17,7 +17,7 @@ const defaultConfig: IGraphConfig = {
       defaultValue: '',
     },
   },
-  nodeGroups: {
+  nodeThemes: {
     default: {
       name: 'Default',
       color: '#a1a1a1',

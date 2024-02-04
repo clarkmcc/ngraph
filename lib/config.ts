@@ -20,7 +20,7 @@ export interface IGraphConfig {
    * Groups of nodes that can be used to organize the node palette. Also allows styling
    * and configuring the colors of the nodes as a group.
    */
-  nodeGroups: NodeGroupTypes
+  nodeThemes: NodeThemeTypes
 
   /**
    * The nodes types that are registered and can be created in the graph
@@ -39,8 +39,8 @@ export type ValueTypes = {
   [key: string]: ValueTypeConfig
 }
 
-export type NodeGroupTypes = {
-  [key: string]: NodeGroupConfig
+export type NodeThemeTypes = {
+  [name: string]: NodeThemeConfig
 }
 
 export type NodeTypes = {
@@ -100,13 +100,13 @@ export interface Option {
   value: string
 }
 
-export interface NodeGroupConfig {
+export interface NodeThemeConfig {
   name: string
   color: string
 }
 
 export interface NodeConfig {
-  group: keyof IGraphConfig['nodeGroups']
+  group: keyof IGraphConfig['nodeThemes']
   name: string
   inputs?: NodeInputConfig[]
   outputs?: NodeOutputConfig[]
@@ -171,8 +171,8 @@ export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
-  readonly nodeGroups: {
-    [key: string]: NodeGroupConfig
+  readonly nodeThemes: {
+    [key: string]: NodeThemeConfig
   } = {}
   private readonly nodes: {
     [key: string]: NodeConfig
@@ -193,7 +193,7 @@ export class GraphConfig {
       ...props?.keybindings,
     }
     this.valueTypes = props?.valueTypes ?? this.valueTypes
-    this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
+    this.nodeThemes = props?.nodeThemes ?? this.nodeThemes
     this.nodes = props?.nodes ?? this.nodes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
       this.inputs[key] = value
@@ -292,17 +292,17 @@ export class GraphConfig {
     return Object.values(this.nodes).filter((n) => n.group === group)
   }
 
-  nodeGroupConfigs(): WithType<NodeGroupConfig, string>[] {
-    return Object.entries(this.nodeGroups).map(([type, value]) => ({
+  nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
+    return Object.entries(this.nodeThemes).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
-  getNodeGroupConfig<T extends keyof this['nodeGroups']>(
+  getNodeThemeConfig<T extends keyof this['nodeThemes']>(
     nodeType: T,
-  ): NodeGroupConfig {
-    return this.nodeGroups[nodeType as keyof NodeGroupTypes]
+  ): NodeThemeConfig {
+    return this.nodeThemes[nodeType as keyof NodeThemeTypes]
   }
 
   valueType<T extends keyof this['valueTypes']>(type: T): ValueTypeConfig {

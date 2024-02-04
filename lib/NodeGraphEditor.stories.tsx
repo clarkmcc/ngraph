@@ -11,7 +11,7 @@ const simpleConfig: IGraphConfig = {
       defaultValue: '',
     },
   },
-  nodeGroups: {
+  nodeThemes: {
     default: {
       name: 'Default',
       color: '#a1a1a1',
@@ -138,7 +138,7 @@ export const InputFields: Story = {
           defaultValue: 'HTTP',
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         default: {
           name: 'Default',
           color: '#0284c7',
@@ -262,7 +262,7 @@ export const SelectedEdgeHighlighting: Story = {
           inputType: null,
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
@@ -401,7 +401,7 @@ export const ArrayInputs: Story = {
           inputType: null,
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
@@ -489,7 +489,7 @@ export const HandleSymbols: Story = {
           shape: 'diamond',
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         geometry: {
           name: 'Geometry',
           color: '#0284c7',

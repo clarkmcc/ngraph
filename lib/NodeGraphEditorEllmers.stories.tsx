@@ -1,6 +1,6 @@
-import { NodeGraphEditor } from './NodeGraphEditor'
+import { NodeGraphEditor } from './NodeGraphEditor.tsx'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfigProvider } from './context/GraphConfigContext'
+import { GraphConfigProvider } from './context/GraphConfigContext.tsx'
 import {
   Background,
   BackgroundVariant,
@@ -11,6 +11,7 @@ import { useBuildGraphConfig } from './hooks/config.ts'
 import { InputProps } from './config.ts'
 import { Wheel } from '@uiw/react-color'
 import { useNodeFieldValue } from './hooks/node.ts'
+import { LayoutEngine } from './layout/layout.ts'
 
 const meta = {
   title: 'Node Graph Editor',
@@ -40,6 +41,18 @@ const meta = {
       )
     }
 
+    function SubTasks({config, ...props}: any) {
+      console.log('subtasks called with ',{config, props})
+      const fullconfig = useBuildGraphConfig(config)
+      return (
+        <GraphConfigProvider defaultConfig={fullconfig}>
+          <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+            <Background color="#000000" />
+          </NodeGraphEditor>
+        </GraphConfigProvider>
+      )
+    }
+
     const config = useBuildGraphConfig(
       {
         valueTypes: {
@@ -51,7 +64,7 @@ const meta = {
           },
           number: {
             name: 'Number',
-            color: '#a1a1a1',
+            color: '#ff0000',
             inputType: 'value',
             defaultValue: '0.000',
           },
@@ -70,7 +83,7 @@ const meta = {
               { name: 'Beckmann', value: 'beckmann' },
               { name: 'Phong', value: 'phong' },
             ],
-            defaultValue: 'GET',
+            defaultValue: 'phong',
           },
         },
         nodeThemes: {
@@ -125,6 +138,16 @@ const meta = {
               },
             ],
           },
+          outer: {
+            group: 'default',
+            name: 'Need number',
+            inputs: [
+              {
+                name: 'Something',
+                id: 'something',
+                valueType: 'number',
+              }
+            ]},
           bsdf: {
             group: 'default',
             name: 'Principled BSDF',
@@ -190,18 +213,32 @@ const meta = {
               },
             ],
           },
+          strategy: {
+            group: 'default',
+            name: 'Strategy',
+            inputs: [],
+            outputs: [],
+            style: {
+              height: '200px',
+            },
+          },
+          
         },
       },
       (config) => {
         config.registerInput('color', ColorPicker, {
           name: 'Color',
           color: '#C7C728',
+        });
+        config.registerInput('subtasks', SubTasks, {
+          name: 'Task list',
+          color: '#C7C728',
         })
       },
     )
     return (
       <GraphConfigProvider defaultConfig={config}>
-        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges}>
+        <NodeGraphEditor defaultNodes={nodes} defaultEdges={edges} layoutEngine={LayoutEngine.PipelineCentered}>
           <Background color="#52525b" variant={BackgroundVariant.Dots} />
         </NodeGraphEditor>
       </GraphConfigProvider>
@@ -219,68 +256,56 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const InputGroups: Story = {
+export const Ellmers: Story = {
   parameters: {
     layout: 'fullscreen',
   },
   args: {
     nodes: [
       {
-        id: '1',
-        type: 'bsdf',
-        // position: { x: 350, y: 100 },
-        data: {
-          __inputGroupsExpanded: ['Specular'],
-        },
-      },
-      {
         id: '2',
-        type: 'number',
-        position: { x: 100, y: 100 },
+        type: 'group',
         data: {},
+        position: { x: 0, y: 200 },
       },
       {
-        id: '3',
+        id: '2.1',
         type: 'number',
-        position: { x: 100, y: 200 },
         data: {},
+        parentNode: '2',
+        position: { x: 0, y: 50 },
+        connectable: false,
+        deletable: false,
+        // selectable: false,
+        draggable: false,
+        dragHandle: false,
+        extent: 'parent'
       },
       {
-        id: '4',
-        type: 'color',
-        position: { x: 100, y: 300 },
+        id: '2.2',
+        type: 'outer',
         data: {},
+        parentNode: '2',
+        position: { x: 0, y: 160 },
+        connectable: false,
+        deletable: false,
+        // selectable: false,
+        draggable: false,
+        dragHandle: false,
+        extent: 'parent'
       },
     ] as Node[],
     edges: [
       {
         id: 'e1',
-        source: '3',
-        sourceHandle: 'value',
-        target: '1',
-        targetHandle: 'strength',
-      },
-      {
-        id: 'e2',
-        source: '2',
-        sourceHandle: 'value',
-        target: '1',
-        targetHandle: 'anisotropicRotation',
-      },
-      {
-        id: 'e3',
-        source: '3',
-        sourceHandle: 'value',
-        target: '1',
-        targetHandle: 'anisotropic',
-      },
-      {
-        id: 'e4',
-        source: '4',
-        sourceHandle: 'value',
-        target: '1',
-        targetHandle: 'tint',
-      },
-    ],
+        source: '2.1',
+        sourceHandle: 'number',
+        target: '2.2',
+        targetHandle: 'number',
+        // type: 'smoothstep',
+        deletable: false,
+        selectable: false,
+      }
+    ] as Edge[],
   },
 }

@@ -51,7 +51,7 @@ const meta = {
             defaultValue: '',
           },
         },
-        nodeGroups: {
+        nodeThemes: {
           custom: {
             name: 'Custom',
             color: '#f43f5e',

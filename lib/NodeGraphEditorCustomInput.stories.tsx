@@ -35,7 +35,7 @@ const meta = {
     const config = useBuildGraphConfig(
       {
         valueTypes: {},
-        nodeGroups: {
+        nodeThemes: {
           default: {
             name: 'Default',
             color: '#a1a1a1',
