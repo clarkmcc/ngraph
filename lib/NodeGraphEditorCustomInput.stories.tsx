@@ -41,7 +41,7 @@ const meta = {
             color: '#a1a1a1',
           },
         },
-        nodes: {
+        nodeTypes: {
           vector: {
             group: 'default',
             name: 'Vector',

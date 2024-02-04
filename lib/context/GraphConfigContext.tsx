@@ -23,7 +23,7 @@ const defaultConfig: IGraphConfig = {
       color: '#a1a1a1',
     },
   },
-  nodes: {
+  nodeTypes: {
     string: {
       group: 'default',
       name: 'String',

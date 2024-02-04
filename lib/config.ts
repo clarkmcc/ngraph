@@ -17,7 +17,7 @@ export interface IGraphConfig {
   valueTypes: ValueTypes
 
   /**
-   * Groups of nodes that can be used to organize the node palette. Also allows styling
+   * Groups of nodes that can be used to organize the node palette, allowing styling
    * and configuring the colors of the nodes as a group.
    */
   nodeThemes: NodeThemeTypes
@@ -25,7 +25,7 @@ export interface IGraphConfig {
   /**
    * The nodes types that are registered and can be created in the graph
    */
-  nodes: NodeTypes
+  nodeTypes: NodeTypes
 }
 
 export type KeyBindings = {
@@ -174,7 +174,7 @@ export class GraphConfig {
   readonly nodeThemes: {
     [key: string]: NodeThemeConfig
   } = {}
-  private readonly nodes: {
+  private readonly nodeTypes: {
     [key: string]: NodeConfig
   } = {}
   private customNodes: {
@@ -194,7 +194,7 @@ export class GraphConfig {
     }
     this.valueTypes = props?.valueTypes ?? this.valueTypes
     this.nodeThemes = props?.nodeThemes ?? this.nodeThemes
-    this.nodes = props?.nodes ?? this.nodes
+    this.nodeTypes = props?.nodeTypes ?? this.nodeTypes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
       this.inputs[key] = value
     }
@@ -202,7 +202,7 @@ export class GraphConfig {
 
   validate(): GraphConfig {
     const errors: string[] = []
-    Object.values(this.nodes).forEach((node) => {
+    Object.values(this.nodeTypes).forEach((node) => {
       if (node.inputs) {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {
@@ -237,7 +237,7 @@ export class GraphConfig {
     outputs: NodeOutputConfig[],
   ) {
     this.customNodes[type] = node
-    this.nodes[type] = {
+    this.nodeTypes[type] = {
       group,
       name,
       inputs: inputs,
@@ -278,18 +278,18 @@ export class GraphConfig {
   }
 
   nodeConfigs(): WithType<NodeConfig, string>[] {
-    return Object.entries(this.nodes).map(([type, value]) => ({
+    return Object.entries(this.nodeTypes).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
   getNodeConfig(type: string): NodeConfig {
-    return this.nodes[type]
+    return this.nodeTypes[type]
   }
 
   nodeConfigsByGroup(group: string): NodeConfig[] {
-    return Object.values(this.nodes).filter((n) => n.group === group)
+    return Object.values(this.nodeTypes).filter((n) => n.group === group)
   }
 
   nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
@@ -337,7 +337,7 @@ export class GraphConfig {
   getNodeComponents(
     buildNode: (node: NodeConfig) => JSXElementConstructor<any>,
   ): Record<string, JSXElementConstructor<any>> {
-    return Object.entries(this.nodes)
+    return Object.entries(this.nodeTypes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
           return [type, this.customNode(type)]

@@ -83,7 +83,7 @@ const meta = {
             color: '#83324A',
           },
         },
-        nodes: {
+        nodeTypes: {
           number: {
             group: 'default',
             name: 'Number',

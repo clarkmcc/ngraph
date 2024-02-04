@@ -17,7 +17,7 @@ const simpleConfig: IGraphConfig = {
       color: '#a1a1a1',
     },
   },
-  nodes: {
+  nodeTypes: {
     string: {
       group: 'default',
       name: 'String',
@@ -144,7 +144,7 @@ export const InputFields: Story = {
           color: '#0284c7',
         },
       },
-      nodes: {
+      nodeTypes: {
         inputFields: {
           group: 'default',
           name: 'Input Fields',
@@ -268,7 +268,7 @@ export const SelectedEdgeHighlighting: Story = {
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
           group: 'geometry',
           name: 'Combine XYZ',
@@ -407,7 +407,7 @@ export const ArrayInputs: Story = {
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
           group: 'geometry',
           name: 'Combine XYZ',
@@ -495,7 +495,7 @@ export const HandleSymbols: Story = {
           color: '#0284c7',
         },
       },
-      nodes: {
+      nodeTypes: {
         shapes: {
           group: 'geometry',
           name: 'Shapes',
