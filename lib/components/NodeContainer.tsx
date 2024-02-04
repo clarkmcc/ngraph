@@ -27,7 +27,7 @@ export function NodeContainer({
 }: NodeContainerProps) {
   const [config] = useGraphConfig()
   const nodeConfig = config.getNodeConfig(node.type!)
-  const nodeThemeConfig = config.getNodeThemeConfig(nodeConfig.group)
+  const nodeThemeConfig = config.getNodeThemeConfig(nodeConfig.theme)
   const [collapsed, toggleCollapsed] = useNodeCollapsed()
 
   if (collapsed) {

@@ -19,7 +19,7 @@ const simpleConfig: IGraphConfig = {
   },
   nodeTypes: {
     string: {
-      group: 'default',
+      theme: 'default',
       name: 'String',
       inputs: [
         {
@@ -146,7 +146,7 @@ export const InputFields: Story = {
       },
       nodeTypes: {
         inputFields: {
-          group: 'default',
+          theme: 'default',
           name: 'Input Fields',
           inputs: [
             {
@@ -270,7 +270,7 @@ export const SelectedEdgeHighlighting: Story = {
       },
       nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -298,7 +298,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         points: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -326,7 +326,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -409,7 +409,7 @@ export const ArrayInputs: Story = {
       },
       nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -437,7 +437,7 @@ export const ArrayInputs: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -497,7 +497,7 @@ export const HandleSymbols: Story = {
       },
       nodeTypes: {
         shapes: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Shapes',
           outputs: [
             {

@@ -85,7 +85,7 @@ const meta = {
         },
         nodeTypes: {
           number: {
-            group: 'default',
+            theme: 'default',
             name: 'Number',
             inputs: [
               {
@@ -104,7 +104,7 @@ const meta = {
             ],
           },
           color: {
-            group: 'inputs',
+            theme: 'inputs',
             name: 'Color',
             style: {
               width: '100px',
@@ -126,7 +126,7 @@ const meta = {
             ],
           },
           bsdf: {
-            group: 'default',
+            theme: 'default',
             name: 'Principled BSDF',
             inputs: [
               {

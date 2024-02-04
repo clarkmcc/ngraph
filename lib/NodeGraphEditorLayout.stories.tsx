@@ -139,7 +139,7 @@ export const DagreLayout: Story = {
       },
       nodeTypes: {
         string: {
-          group: 'default',
+          theme: 'default',
           name: 'String',
           inputs: [
             {

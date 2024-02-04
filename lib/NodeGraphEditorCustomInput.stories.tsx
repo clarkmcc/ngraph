@@ -43,7 +43,7 @@ const meta = {
         },
         nodeTypes: {
           vector: {
-            group: 'default',
+            theme: 'default',
             name: 'Vector',
             inputs: [
               {

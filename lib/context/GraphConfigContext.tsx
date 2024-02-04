@@ -25,7 +25,7 @@ const defaultConfig: IGraphConfig = {
   },
   nodeTypes: {
     string: {
-      group: 'default',
+      theme: 'default',
       name: 'String',
       inputs: [
         {

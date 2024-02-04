@@ -106,7 +106,7 @@ export interface NodeThemeConfig {
 }
 
 export interface NodeConfig {
-  group: keyof IGraphConfig['nodeThemes']
+  theme: keyof IGraphConfig['nodeThemes']
   name: string
   inputs?: NodeInputConfig[]
   outputs?: NodeOutputConfig[]
@@ -238,7 +238,7 @@ export class GraphConfig {
   ) {
     this.customNodes[type] = node
     this.nodeTypes[type] = {
-      group,
+      theme: group,
       name,
       inputs: inputs,
       outputs: outputs,
@@ -289,7 +289,7 @@ export class GraphConfig {
   }
 
   nodeConfigsByGroup(group: string): NodeConfig[] {
-    return Object.values(this.nodeTypes).filter((n) => n.group === group)
+    return Object.values(this.nodeTypes).filter((n) => n.theme === group)
   }
 
   nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
