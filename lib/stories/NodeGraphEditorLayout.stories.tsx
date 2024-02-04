@@ -4,8 +4,11 @@ import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
 import { registerLayoutEngine } from '../layout/layout'
 import { computeDagreLayout } from '../layout/dagre'
+import { computePipelineLayout, computePipelineCenteredLayout } from '../layout/pipeline'
 
 registerLayoutEngine('dagre', computeDagreLayout)
+registerLayoutEngine('pipeline', computePipelineLayout)
+registerLayoutEngine('pipeline.centered', computePipelineCenteredLayout)
 
 const meta = {
   title: 'Node Graph Editor',
@@ -19,6 +22,18 @@ const meta = {
             onClick={() => ref.current!.layout('dagre')}
           >
             Dagre Layout
+          </button>
+          <button
+            style={{  }}
+            onClick={() => ref.current!.layout('pipeline')}
+          >
+            Pipeline Layout
+          </button>
+          <button
+            style={{  }}
+            onClick={() => ref.current!.layout('pipeline.centered')}
+          >
+            Pipeline Centered Layout
           </button>
         </div>
         <ExampleNodeGraphEditor
@@ -42,7 +57,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DagreLayout: Story = {
+export const Layouts: Story = {
   parameters: {
     layout: 'fullscreen',
   },
