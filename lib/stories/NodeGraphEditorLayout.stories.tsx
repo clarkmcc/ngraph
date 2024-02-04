@@ -138,15 +138,15 @@ export const DagreLayout: Story = {
           defaultValue: '',
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         default: {
           name: 'Default',
           color: '#a1a1a1',
         },
       },
-      nodes: {
+      nodeTypes: {
         string: {
-          group: 'default',
+          theme: 'default',
           name: 'String',
           inputs: [
             {

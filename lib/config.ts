@@ -19,15 +19,15 @@ export interface IGraphConfig {
   valueTypes: ValueTypes
 
   /**
-   * Groups of nodes that can be used to organize the node palette. Also allows styling
+   * Groups of nodes that can be used to organize the node palette, allowing styling
    * and configuring the colors of the nodes as a group.
    */
-  nodeGroups: NodeGroupTypes
+  nodeThemes: NodeThemeTypes
 
   /**
    * The nodes types that are registered and can be created in the graph
    */
-  nodes: NodeTypes
+  nodeTypes: NodeTypes
 }
 
 export type KeyBindings = {
@@ -41,8 +41,8 @@ export type ValueTypes = {
   [key: string]: ValueTypeConfig
 }
 
-export type NodeGroupTypes = {
-  [key: string]: NodeGroupConfig
+export type NodeThemeTypes = {
+  [name: string]: NodeThemeConfig
 }
 
 export type NodeTypes = {
@@ -102,13 +102,13 @@ export interface Option {
   value: string
 }
 
-export interface NodeGroupConfig {
+export interface NodeThemeConfig {
   name: string
   color: string
 }
 
 export interface NodeConfig {
-  group: keyof IGraphConfig['nodeGroups']
+  theme: keyof IGraphConfig['nodeThemes']
   name: string
   inputs?: NodeInputConfig[]
   outputs?: NodeOutputConfig[]
@@ -136,7 +136,7 @@ export interface NodeInputConfig {
    * any other inputs with this group name will be rendered under a collapsable
    * accordion.
    */
-  group?: string
+  inputGroup?: string
 }
 
 export interface NodeOutputConfig {
@@ -173,10 +173,10 @@ export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
-  readonly nodeGroups: {
-    [key: string]: NodeGroupConfig
+  readonly nodeThemes: {
+    [key: string]: NodeThemeConfig
   } = {}
-  private readonly nodes: {
+  private readonly nodeTypes: {
     [key: string]: NodeConfig
   } = {}
   private customNodes: {
@@ -200,8 +200,8 @@ export class GraphConfig {
       color: '#a1a1a1',
       inputType: null,
     }
-    this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
-    this.nodes = props?.nodes ?? this.nodes
+    this.nodeThemes = props?.nodeThemes ?? this.nodeThemes
+    this.nodeTypes = props?.nodeTypes ?? this.nodeTypes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
       this.inputs[key] = value
     }
@@ -209,13 +209,7 @@ export class GraphConfig {
 
   validate(): GraphConfig {
     const errors: string[] = []
-    Object.values(this.nodes).forEach((node) => {
-      const groups = Object.keys(this.nodeGroups)
-      if (!this.nodeGroups[node.group]) {
-        errors.push(
-          `Node '${node.name}' belongs to a node group that does not exist: '${node.group}'. Available groups: ${groups.join(', ')}`,
-        )
-      }
+    Object.values(this.nodeTypes).forEach((node) => {
       if (node.inputs) {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {
@@ -244,14 +238,14 @@ export class GraphConfig {
   registerCustomNode<T>(
     name: string,
     type: string,
-    group: string,
+    theme: string,
     node: JSXElementConstructor<T>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
     this.customNodes[type] = node
-    this.nodes[type] = {
-      group,
+    this.nodeTypes[type] = {
+      theme: theme,
       name,
       inputs: inputs,
       outputs: outputs,
@@ -291,44 +285,44 @@ export class GraphConfig {
   }
 
   nodeConfigs(): WithType<NodeConfig, string>[] {
-    return Object.entries(this.nodes).map(([type, value]) => ({
+    return Object.entries(this.nodeTypes).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
-  getNodeConfig(type: string): NodeConfig | null {
-    return this.nodes[type]
+  getNodeConfig(type: string): NodeConfig {
+    return this.nodeTypes[type]
   }
 
-  nodeConfigsByGroup(group: string): WithType<NodeConfig, string>[] {
-    return Object.entries(this.nodes)
+  nodeConfigsByTheme(theme: string): WithType<NodeConfig, string>[] {
+    return Object.entries(this.nodeTypes)
       .map(([type, n]) => ({ type, ...n }))
-      .filter((n) => n.group === group)
+      .filter((n) => n.theme === theme)
   }
 
-  nodeGroupConfigs(): WithType<NodeGroupConfig, string>[] {
-    return Object.entries(this.nodeGroups).map(([type, value]) => ({
+  nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
+    return Object.entries(this.nodeThemes).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
   getRegisteredNodeTypes() {
-    return Object.entries(this.nodeGroups).map(([type, group]) => ({
+    return Object.entries(this.nodeThemes).map(([type, theme]) => ({
       type,
-      name: group.name,
-      nodes: this.nodeConfigsByGroup(type).map((node) => ({
+      name: theme.name,
+      nodes: this.nodeConfigsByTheme(type).map((node) => ({
         type: node.type,
         name: node.name,
       })),
     }))
   }
 
-  getNodeGroupConfig<T extends keyof this['nodeGroups']>(
+  getNodeThemeConfig<T extends keyof this['nodeThemes']>(
     nodeType: T,
-  ): NodeGroupConfig {
-    return this.nodeGroups[nodeType as keyof NodeGroupTypes]
+  ): NodeThemeConfig {
+    return this.nodeThemes[nodeType as keyof NodeThemeTypes]
   }
 
   valueType<T extends keyof this['valueTypes']>(type: T): ValueTypeConfig {
@@ -370,7 +364,7 @@ export class GraphConfig {
       node: NodeConfig,
     ) => JSXElementConstructor<any>,
   ): Record<string, JSXElementConstructor<any>> {
-    return Object.entries(this.nodes)
+    return Object.entries(this.nodeTypes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
           return [type, this.customNode(type)]

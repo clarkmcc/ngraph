@@ -135,15 +135,15 @@ export const Persist: Story = {
           inputType: null,
         },
       },
-      nodeGroups: {
+      nodeThemes: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -171,7 +171,7 @@ export const Persist: Story = {
           ],
         },
         points: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -199,7 +199,7 @@ export const Persist: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          theme: 'geometry',
           name: 'Viewer',
           inputs: [
             {

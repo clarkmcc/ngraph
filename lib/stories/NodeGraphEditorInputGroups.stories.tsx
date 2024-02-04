@@ -76,7 +76,7 @@ const meta = {
             defaultValue: 'GET',
           },
         },
-        nodeGroups: {
+        nodeThemes: {
           default: {
             name: 'Default',
             color: '#CE4040',
@@ -86,9 +86,9 @@ const meta = {
             color: '#83324A',
           },
         },
-        nodes: {
+        nodeTypes: {
           number: {
-            group: 'default',
+            theme: 'default',
             name: 'Number',
             inputs: [
               {
@@ -107,7 +107,7 @@ const meta = {
             ],
           },
           color: {
-            group: 'inputs',
+            theme: 'inputs',
             name: 'Color',
             style: {
               width: '100px',
@@ -129,7 +129,7 @@ const meta = {
             ],
           },
           bsdf: {
-            group: 'default',
+            theme: 'default',
             name: 'Principled BSDF',
             inputs: [
               {
@@ -158,37 +158,37 @@ const meta = {
               {
                 name: 'Distribution',
                 id: 'distribution',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'specularDistribution',
               },
               {
                 name: 'IOR Level',
                 id: 'iorLevel',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Tint',
                 id: 'tint',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'color',
               },
               {
                 name: 'Anisotropic',
                 id: 'anisotropic',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Anisotropic Rotation',
                 id: 'anisotropicRotation',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Strength',
                 id: 'strength',
-                group: 'Emission',
+                inputGroup: 'Emission',
                 valueType: 'number',
               },
             ],

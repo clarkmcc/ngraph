@@ -45,7 +45,7 @@ const meta = {
             defaultValue: '',
           },
         },
-        nodeGroups: {
+        nodeThemes: {
           custom: {
             name: 'Custom',
             color: '#f43f5e',
@@ -55,10 +55,10 @@ const meta = {
             color: '#a1a1a1',
           },
         },
-        nodes: {
+        nodeTypes: {
           inputs: {
             name: 'Input',
-            group: 'default',
+            theme: 'default',
             inputs: [
               {
                 name: 'String',
