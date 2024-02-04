@@ -1,6 +1,6 @@
-import { ExampleNodeGraphEditor } from './NodeGraphEditor'
+import { ExampleNodeGraphEditor } from './ExampleNodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import { IGraphConfig } from './config'
+import { IGraphConfig } from '../config'
 
 const simpleConfig: IGraphConfig = {
   valueTypes: {

@@ -1,7 +1,7 @@
-import { NodeGraphEditor } from './NodeGraphEditor'
+import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfigProvider } from './context/GraphConfigContext'
-import { GraphConfig } from './config'
+import { GraphConfigProvider } from '../context/GraphConfigContext'
+import { GraphConfig } from '../config'
 import { useMemo } from 'react'
 import {
   Background,
@@ -10,9 +10,9 @@ import {
   Node,
   Position,
 } from '@xyflow/react'
-import { NodeContainer } from './components/NodeContainer'
-import { useFocusBlur } from './hooks/focus'
-import { Handle } from './components/Handle'
+import { NodeContainer } from '../components/NodeContainer'
+import { useFocusBlur } from '../hooks/focus'
+import { Handle } from '../components/Handle'
 
 const meta = {
   title: 'Node Graph Editor',

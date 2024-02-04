@@ -1,8 +1,4 @@
 import {
-  Background,
-  BackgroundVariant,
-  Edge,
-  Node,
   ReactFlow,
   ReactFlowProps,
   ReactFlowProvider,
@@ -12,12 +8,9 @@ import {
   useReactFlow,
   useStoreApi,
 } from '@xyflow/react'
-import {
-  GraphConfigProvider,
-  useGraphConfig,
-} from './context/GraphConfigContext'
+import { useGraphConfig } from './context/GraphConfigContext'
 import '@xyflow/react/dist/style.css'
-import { useBuildGraphConfig, useNodeTypes } from './hooks/config'
+import { useNodeTypes } from './hooks/config'
 import {
   forwardRef,
   useImperativeHandle,
@@ -27,7 +20,6 @@ import {
   useEffect,
 } from 'react'
 import { defaultEdgeTypes } from './edge-types'
-import { IGraphConfig } from './config'
 import { useSocketConnect } from './hooks/connect'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { ClipboardItem } from './clipboard'
@@ -62,26 +54,6 @@ export const NodeGraphEditor = forwardRef<
   },
 )
 
-type ExampleNodeGraphEditorProps = {
-  nodes: Node[]
-  edges: Edge[]
-  config: IGraphConfig
-}
-
-export const ExampleNodeGraphEditor = forwardRef<
-  NodeGraphHandle,
-  ExampleNodeGraphEditorProps
->(({ nodes, edges, config: _config }: ExampleNodeGraphEditorProps, ref) => {
-  const config = useBuildGraphConfig(_config)
-  return (
-    <GraphConfigProvider defaultConfig={config}>
-      <NodeGraphEditor ref={ref} defaultNodes={nodes} defaultEdges={edges}>
-        <Background color="#52525b" variant={BackgroundVariant.Dots} />
-      </NodeGraphEditor>
-    </GraphConfigProvider>
-  )
-})
-
 type FlowProps = ReactFlowProps & {
   backgroundStyles?: CSSProperties,
   /**
@@ -90,7 +62,7 @@ type FlowProps = ReactFlowProps & {
   layoutEngine?: LayoutEngine
 }
 export type NodeGraphHandle = {
-  layout: () => void
+  layout: (engine?: LayoutEngine) => void
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
@@ -117,7 +89,8 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     )
 
     // Provide methods to parent components
-    const layout = useLayoutEngine(layoutEngine ?? LayoutEngine.Dagre)
+    const layout = useLayoutEngine()
+
     useImperativeHandle(
       ref,
       () => ({
@@ -131,10 +104,10 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
       const shouldLayout = !!getState().nodes.find(
         (node) => node.position == undefined,
       )
-      if (initialized && shouldLayout) {
-        layout()
+      if (initialized && shouldLayout && layoutEngine) {
+        layout(layoutEngine)
       }
-    }, [initialized])
+    }, [initialized, layoutEngine])
 
     return (
       <div

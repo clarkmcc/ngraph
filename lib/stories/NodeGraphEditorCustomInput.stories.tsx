@@ -1,15 +1,15 @@
-import { NodeGraphEditor } from './NodeGraphEditor'
+import { NodeGraphEditor } from '../NodeGraphEditor.tsx'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfigProvider } from './context/GraphConfigContext'
+import { GraphConfigProvider } from '../context/GraphConfigContext.tsx'
 import {
   Background,
   BackgroundVariant,
   Edge,
   Node,
 } from '@xyflow/react'
-import { useBuildGraphConfig } from './hooks/config.ts'
-import { NodeInputField } from './components/NodeInputField.tsx'
-import { InputProps } from './config.ts'
+import { useBuildGraphConfig } from '../hooks/config.ts'
+import { NodeInputField } from '../components/NodeInputField.tsx'
+import { InputProps } from '../config.ts'
 
 const meta = {
   title: 'Node Graph Editor',
