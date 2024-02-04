@@ -16,7 +16,6 @@ import {
   NodeOutputConfig,
 } from './config'
 import { NodeLinkedField } from './components/NodeLinkedField'
-import { useGraphConfig } from './context/GraphConfigContext'
 import { NodeOutputField } from './components/NodeOutputField'
 import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
@@ -32,9 +31,11 @@ import { InputGroup } from './components/InputGroup.tsx'
 const isComponentChanged = (a: Node, b: Node) =>
   a.selected === b.selected && JSON.stringify(a.data) === JSON.stringify(b.data) // switched from lodash because bundle size was so large
 
-export function buildNode(nodeConfig: NodeConfig): FunctionComponent<Node> {
+export function buildNode(
+  config: GraphConfig,
+  nodeConfig: NodeConfig,
+): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
-    const [config] = useGraphConfig()
     const [isFocused, onFocus, onBlur] = useFocusBlur()
 
     function getInputElements(

@@ -2,37 +2,27 @@ import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { GraphConfig } from '../config'
 import { useMemo } from 'react'
-import {
-  Background,
-  BackgroundVariant,
-  Edge,
-  Node,
-  Position,
-} from '@xyflow/react'
+import { Background, BackgroundVariant, Edge, Node } from '@xyflow/react'
 import { NodeContainer } from '../components/NodeContainer'
-import { useFocusBlur } from '../hooks/focus'
-import { Handle } from '../components/Handle'
+import { NodeInheritingOutputField } from '../components/NodeInheritingOutputField.tsx'
 
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
     function CustomNode(node: Node) {
-      const [isFocused, onFocus, onBlur] = useFocusBlur()
       return (
-        <NodeContainer node={node} draggable={isFocused}>
-          <div>
-            <textarea
-              defaultValue="This is a text area"
-              style={{ backgroundColor: 'gray' }}
-              onFocus={onFocus}
-              onBlur={onBlur}
-            />
-            <Handle
+        <NodeContainer node={node} draggable>
+          <div
+            style={{
+              padding: '8px 0 12px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <NodeInheritingOutputField
               id="value"
-              position={Position.Right}
-              handleType="source"
-              shape="circle"
-              color="#a1a1a1"
+              name="Value"
+              valueType="any"
             />
           </div>
         </NodeContainer>
@@ -44,8 +34,13 @@ const meta = {
         valueTypes: {
           string: {
             name: 'String',
-            color: '#f43f5e',
-            shape: 'circle',
+            color: '#1895d5',
+            inputType: 'value',
+            defaultValue: '',
+          },
+          number: {
+            name: 'Number',
+            color: '#f4bb3f',
             inputType: 'value',
             defaultValue: '',
           },
@@ -54,6 +49,29 @@ const meta = {
           custom: {
             name: 'Custom',
             color: '#f43f5e',
+          },
+          default: {
+            name: 'Default',
+            color: '#a1a1a1',
+          },
+        },
+        nodes: {
+          inputs: {
+            name: 'Input',
+            group: 'default',
+            inputs: [
+              {
+                name: 'String',
+                id: 'string',
+                valueType: 'string',
+              },
+              {
+                name: 'Number',
+                id: 'number',
+                valueType: 'number',
+              },
+            ],
+            outputs: [],
           },
         },
       })
@@ -89,7 +107,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const CustomNode: Story = {
+export const InheritingOutputField: Story = {
   parameters: {
     layout: 'fullscreen',
   },
@@ -99,6 +117,12 @@ export const CustomNode: Story = {
         id: '1',
         type: 'my-custom-node',
         position: { x: 100, y: 100 },
+        data: {},
+      },
+      {
+        id: '2',
+        type: 'inputs',
+        position: { x: 400, y: 100 },
         data: {},
       },
     ],

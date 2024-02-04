@@ -4,10 +4,13 @@ import {
   isNode,
   Node,
   useNodeId,
+  useNodesData,
   useReactFlow,
   useStore,
 } from '@xyflow/react'
 import { shallow } from 'zustand/shallow'
+import { Draft, produce } from 'immer'
+import { Graph } from '../types'
 
 const INPUT_GROUPS_FIELD = '__inputGroupsExpanded'
 
@@ -47,9 +50,10 @@ function useToggleNodeArrayProperty(
   key: string,
 ): [boolean, (newState: boolean) => void] {
   const updateNodeData = useUpdateNodeData()
-  const data = useNodesData<{ [INPUT_GROUPS_FIELD]: string[] }>(nodeId)
+  const data =
+    useNodesData<Graph.Node<{ [INPUT_GROUPS_FIELD]: string[] }>>(nodeId)
   const [isEnabled, setIsEnabled] = useState(
-    data[INPUT_GROUPS_FIELD].includes(key),
+    data![INPUT_GROUPS_FIELD]?.includes(key) ?? false,
   )
   const toggleProperty = useCallback(
     (newState) => {
@@ -159,18 +163,6 @@ export function useUpdateNodeData<T extends object>(): UpdateNodeData<T> {
   )
 }
 
-export function useNodesData<T>(nodeId: string): T {
-  return useStore(
-    useCallback(
-      (s) => {
-        return s.nodeLookup.get(nodeId)?.data || null
-      },
-      [nodeId],
-    ),
-    shallow,
-  )
-}
-
 export function useNodesEdges(nodeId: string): Edge[] {
   return useStore(
     useCallback(
@@ -195,4 +187,54 @@ export function useNodeCollapsed(): [boolean, () => void] {
     [collapsed, setCollapsed],
   )
   return [collapsed, toggle]
+}
+
+type UseNodeInternals = {
+  inputs: Graph.NodeInternals['inputs']
+  outputs: Graph.NodeInternals['outputs']
+  addOutput: (output: Graph.NodeInputOutput) => void
+}
+
+export function useNodeInternals(nodeId?: string): UseNodeInternals {
+  const currentNodeId = useNodeId()
+  if (!nodeId) {
+    if (!currentNodeId) {
+      throw new Error('useNodeInternals must be used inside a node')
+    }
+    nodeId = currentNodeId
+  }
+
+  const { updateNodeData } = useReactFlow<Graph.Node>()
+
+  // Helper function to accept an immer recipe and update the node data accordingly
+  const updateInternal = useCallback(
+    (
+      recipe: (
+        draft: Draft<Graph.NodeData<unknown>>,
+      ) => void | Graph.NodeData<unknown>,
+    ) => {
+      updateNodeData(nodeId!, produce<Graph.NodeData<unknown>>(recipe))
+    },
+    [nodeId, updateNodeData],
+  )
+
+  const addOutput = useCallback(
+    (output: Graph.NodeInputOutput) => {
+      updateInternal((draft) => {
+        draft.internal.outputs.push(output)
+      })
+    },
+    [updateInternal],
+  )
+
+  const data = useNodesData<Graph.Node>(nodeId)
+
+  return useMemo(
+    () => ({
+      inputs: data!.internal.inputs,
+      outputs: data!.internal.outputs,
+      addOutput,
+    }),
+    [data, addOutput],
+  )
 }

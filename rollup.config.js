@@ -10,6 +10,8 @@ import { extname, relative } from 'path'
 import { visualizer } from 'rollup-plugin-visualizer'
 import postcss from 'rollup-plugin-postcss'
 import css from 'rollup-plugin-css-only'
+import tailwindcss from 'tailwindcss'
+import autoprefixer from 'autoprefixer'
 
 export default [
   {
@@ -43,7 +45,7 @@ export default [
         browser: true,
       }),
       postcss({
-        plugins: [],
+        plugins: [autoprefixer(), tailwindcss()],
       }),
       commonjs(),
       babel({

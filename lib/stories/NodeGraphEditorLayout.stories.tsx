@@ -13,9 +13,9 @@ const meta = {
     const ref = useRef<NodeGraphHandle>(null)
     return (
       <div style={{ width: '100%', height: '100%' }}>
-        <div style={{position: 'absolute', top: 10, left: 10, zIndex: 1000}}>
+        <div className="absolute top-3 left-3 z-10 space-x-3">
           <button
-            style={{  }}
+            className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
             onClick={() => ref.current!.layout('dagre')}
           >
             Dagre Layout

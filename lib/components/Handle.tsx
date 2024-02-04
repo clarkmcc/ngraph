@@ -7,7 +7,7 @@ import {
   Handle as FlowHandle,
   IsValidConnection,
 } from '@xyflow/react'
-import { useGraphConfig } from '../context/GraphConfigContext'
+import { useGraphApi } from '../context/GraphContext.tsx'
 
 type HandleProps = Pick<NodeInputConfig, 'isArray' | 'id'> &
   Pick<ValueTypeConfig, 'shape' | 'color'> & {
@@ -19,7 +19,7 @@ type HandleProps = Pick<NodeInputConfig, 'isArray' | 'id'> &
 const SIZE = 8
 
 export const Handle = memo(({ style, ...props }: HandleProps) => {
-  const [config] = useGraphConfig()
+  const graphApi = useGraphApi()
   const ref = useRef<HTMLDivElement>(null)
 
   const width = SIZE
@@ -34,9 +34,18 @@ export const Handle = memo(({ style, ...props }: HandleProps) => {
     const targetNodeType = api
       .getState()
       .nodeLookup.get(connection.target!)?.type
+    const config = graphApi.getState().config
 
     const sourceNodeConfig = config.getNodeConfig(sourceNodeType!)
     const targetNodeConfig = config.getNodeConfig(targetNodeType!)
+
+    if (!sourceNodeConfig || !targetNodeConfig) {
+      console.warn('Could not find node config for node type', {
+        sourceNodeType,
+        targetNodeType,
+      })
+      return true // allow connections where we can't verify the types
+    }
 
     // safety: should always have an output if there's a source node
     const sourceOutputConfig = sourceNodeConfig.outputs!.find(

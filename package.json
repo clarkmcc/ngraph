@@ -63,6 +63,7 @@
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
     "glob": "^10.3.10",
     "postcss": "^8.4.33",
     "prettier": "^3.1.1",
@@ -80,6 +81,7 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.69.7",
     "storybook": "^7.6.7",
+    "tailwindcss": "^3.4.1",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
@@ -93,8 +95,10 @@
     "@uiw/react-color": "^2.0.6",
     "@xyflow/react": "^12.0.0-next.7",
     "dagre": "^0.8.5",
+    "immer": "^10.0.3",
     "nanoid": "^5.0.4",
     "react-hotkeys-hook": "^4.4.3",
-    "react-icons": "^5.0.1"
+    "react-icons": "^5.0.1",
+    "zustand": "^4.4.7"
   }
 }

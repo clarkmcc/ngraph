@@ -8,8 +8,8 @@ import {
   useStoreApi,
   useViewport,
 } from '@xyflow/react'
-import { useGraphConfig } from '../context/GraphConfigContext'
 import { GraphConfig } from '../config.ts'
+import { useGraphApi } from '../context/GraphContext.tsx'
 
 /**
  * Edges can be highlighted in the graph if they're connected to a node that is selected.
@@ -47,7 +47,7 @@ export function Edge({
   source,
 }: EdgeProps) {
   const [selection, setSelection] = useState(SelectionState.Nothing)
-  const [config] = useGraphConfig()
+  const graphApi = useGraphApi()
   const api = useStoreApi()
   const [edgePath] = getBezierPath({
     sourceX: sourceX - 20,
@@ -93,6 +93,9 @@ export function Edge({
     if (selected) {
       return '#fff'
     }
+
+    const config = graphApi.getState().config
+
     // If nothing is selected, show the default color
     // If something is selected, show the default color if this edge is connected to the something
     // If something is selected, show the default color if this edge is not connected to the something
