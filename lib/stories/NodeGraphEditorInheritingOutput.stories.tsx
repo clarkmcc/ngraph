@@ -32,7 +32,7 @@ const meta = {
     const config = useMemo(() => {
       const config = new GraphConfig({
         valueTypes: {
-          string: {
+          text: {
             name: 'String',
             color: '#1895d5',
             inputEditor: 'value',
@@ -56,14 +56,14 @@ const meta = {
           },
         },
         nodeTypes: {
-          inputs: {
+          example: {
             name: 'Input',
             theme: 'default',
             inputs: [
               {
                 name: 'String',
                 id: 'string',
-                valueType: 'string',
+                valueType: 'text',
               },
               {
                 name: 'Number',
@@ -81,7 +81,7 @@ const meta = {
         'custom',
         CustomNode,
         [],
-        [{ name: 'Value', id: 'value', valueType: 'string' }],
+        [{ name: 'Value', id: 'value', valueType: 'text' }],
       )
       return config.validate()
     }, [])
@@ -121,7 +121,7 @@ export const InheritingOutputField: Story = {
       },
       {
         id: '2',
-        type: 'inputs',
+        type: 'example',
         position: { x: 400, y: 100 },
         data: {},
       },
