@@ -21,4 +21,4 @@ export {
   useGraphStore,
   useGraphApi,
 } from './context/GraphContext'
-export { registerLayoutEngine } from './layout/layout.ts'
+export { LayoutEngine } from './layout/layout.ts'

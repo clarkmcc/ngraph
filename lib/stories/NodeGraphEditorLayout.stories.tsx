@@ -2,10 +2,14 @@ import { ExampleNodeGraphEditor } from './ExampleNodeGraphEditor'
 import { NodeGraphHandle } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
-import { registerLayoutEngine } from '../layout/layout'
-import { computeDagreLayout } from '../layout/dagre'
+import { DagreLayoutEngine } from '../layout/dagre'
+import { PiplineCenteredLayoutEngine, PiplineLayoutEngine } from '../layout/pipeline'
 
-registerLayoutEngine('dagre', computeDagreLayout)
+
+const dagre = new DagreLayoutEngine()
+const pipelineCentered = new PiplineCenteredLayoutEngine()
+const pipeline = new PiplineLayoutEngine()
+
 
 const meta = {
   title: 'Node Graph Editor',
@@ -16,9 +20,21 @@ const meta = {
         <div className="absolute top-3 left-3 z-10 space-x-3">
           <button
             className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
-            onClick={() => ref.current!.layout('dagre')}
+            onClick={() => ref.current!.layout(dagre)}
           >
             Dagre Layout
+          </button>
+          <button
+            className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
+            onClick={() => ref.current!.layout(pipeline)}
+          >
+            Pipeline Layout
+          </button>
+          <button
+            className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
+            onClick={() => ref.current!.layout(pipelineCentered)}
+          >
+            Pipeline Centered Layout
           </button>
         </div>
         <ExampleNodeGraphEditor
@@ -42,7 +58,7 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const DagreLayout: Story = {
+export const Layouts: Story = {
   parameters: {
     layout: 'fullscreen',
   },

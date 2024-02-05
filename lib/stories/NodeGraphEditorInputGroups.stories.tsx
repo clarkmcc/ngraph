@@ -10,10 +10,9 @@ import { useBuildGraphConfig } from '../hooks/config.ts'
 import { InputProps } from '../config.ts'
 import { Wheel } from '@uiw/react-color'
 import { useNodeFieldValue } from '../hooks/node.ts'
-import { registerLayoutEngine } from '../layout/layout.ts'
-import { computeDagreLayout } from '../layout/dagre.ts'
+import { DagreLayoutEngine } from '../layout/dagre.ts'
 
-registerLayoutEngine('dagre', computeDagreLayout)
+const darge = new DagreLayoutEngine()
 
 const meta = {
   title: 'Node Graph Editor',
@@ -207,7 +206,7 @@ const meta = {
         config={config}
         defaultNodes={nodes}
         defaultEdges={edges}
-        layoutEngine="dagre"
+        layoutEngine={darge}
       >
         <Background color="#52525b" variant={BackgroundVariant.Dots} />
       </NodeGraphEditor>
