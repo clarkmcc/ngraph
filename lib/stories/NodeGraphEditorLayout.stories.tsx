@@ -2,13 +2,14 @@ import { ExampleNodeGraphEditor } from './ExampleNodeGraphEditor'
 import { NodeGraphHandle } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
-import { registerLayoutEngine } from '../layout/layout'
-import { computeDagreLayout } from '../layout/dagre'
-import { computePipelineLayout, computePipelineCenteredLayout } from '../layout/pipeline'
+import { DagreLayoutEngine } from '../layout/dagre'
+import { PiplineCenteredLayoutEngine, PiplineLayoutEngine } from '../layout/pipeline'
 
-registerLayoutEngine('dagre', computeDagreLayout)
-registerLayoutEngine('pipeline', computePipelineLayout)
-registerLayoutEngine('pipeline.centered', computePipelineCenteredLayout)
+
+const dagre = new DagreLayoutEngine()
+const pipelineCentered = new PiplineCenteredLayoutEngine()
+const pipeline = new PiplineLayoutEngine()
+
 
 const meta = {
   title: 'Node Graph Editor',
@@ -19,19 +20,19 @@ const meta = {
         <div className="absolute top-3 left-3 z-10 space-x-3">
           <button
             className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
-            onClick={() => ref.current!.layout('dagre')}
+            onClick={() => ref.current!.layout(dagre)}
           >
             Dagre Layout
           </button>
           <button
-            style={{  }}
-            onClick={() => ref.current!.layout('pipeline')}
+            className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
+            onClick={() => ref.current!.layout(pipeline)}
           >
             Pipeline Layout
           </button>
           <button
-            style={{  }}
-            onClick={() => ref.current!.layout('pipeline.centered')}
+            className="bg-neutral-500 text-white px-4 rounded hover:bg-neutral-600"
+            onClick={() => ref.current!.layout(pipelineCentered)}
           >
             Pipeline Centered Layout
           </button>

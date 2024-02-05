@@ -1,5 +1,6 @@
 import { Edge, Node, Position } from '@xyflow/react'
 import { DirectedAcyclicGraph } from '@sroussey/typescript-graph'
+import { LayoutEngine } from './layout'
 
 type PositionXY = {
   x: number
@@ -110,7 +111,7 @@ class GraphPipelineLayout<T extends Node> {
   }
 }
 
-export class GraphPipelineCenteredLayout<
+class GraphPipelineCenteredLayout<
   T extends Node,
 > extends GraphPipelineLayout<T> {
   protected positionNodes() {
@@ -170,13 +171,22 @@ function computeLayout(
   })
 }
 
-export function computePipelineLayout(nodes: Node[], edges: Edge[]): Node[] {
-  return computeLayout(GraphPipelineLayout, nodes, edges)
+export class PiplineLayoutEngine extends LayoutEngine {
+  name() {
+    return 'pipeline'
+  }
+
+  apply(nodes: Node[], edges: Edge[]): Node[] {
+    return computeLayout(GraphPipelineLayout, nodes, edges)
+  }
 }
 
-export function computePipelineCenteredLayout(
-  nodes: Node[],
-  edges: Edge[],
-): Node[] {
-  return computeLayout(GraphPipelineCenteredLayout, nodes, edges)
+export class PiplineCenteredLayoutEngine extends LayoutEngine {
+  name() {
+    return 'pipeline.centered'
+  }
+
+  apply(nodes: Node[], edges: Edge[]): Node[] {
+    return computeLayout(GraphPipelineCenteredLayout, nodes, edges)
+  }
 }
