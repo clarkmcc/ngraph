@@ -121,18 +121,18 @@ export const Persist: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '0',
         },
         vector: {
           name: 'Vector',
           color: '#8b5cf6',
-          inputType: null,
+          inputEditor: null,
         },
         geometry: {
           name: 'Geometry',
           color: '#059669',
-          inputType: null,
+          inputEditor: null,
         },
       },
       nodeThemes: {

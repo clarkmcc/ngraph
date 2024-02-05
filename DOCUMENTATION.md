@@ -8,7 +8,7 @@ erDiagram
     NodeType ||--o{ NodeTheme : has
     NodeInput ||--|| ValueType : uses
     NodeOutput ||--|| ValueType : uses
-    ValueType ||..|| InputType : uses
+    ValueType ||..|| InputEditor : uses
     NodeInput{
         string name
         string id
@@ -39,7 +39,7 @@ erDiagram
     ValueType{
         string name
         string color
-        string inputType
+        string inputEditor
         any defaultValue
     }
 ```

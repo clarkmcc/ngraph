@@ -67,27 +67,27 @@ interface ValueTypeConfigBase {
 }
 
 export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
-  inputType: 'options' | 'buttonGroup'
+  inputEditor: 'options' | 'buttonGroup'
   options: Option[]
   defaultValue: Option['value'] // Ensures defaultValue is one of the option values
 }
 
 interface ValueTypeConfigValue extends ValueTypeConfigBase {
-  inputType: 'value'
+  inputEditor: 'value'
   defaultValue: string // Ensures defaultValue is a string
 }
 
 interface ValueTypeConfigCheckbox extends ValueTypeConfigBase {
-  inputType: 'checkbox'
+  inputEditor: 'checkbox'
   defaultValue: boolean // Ensures defaultValue is a boolean
 }
 
 interface ValueTypeConfigCustom extends ValueTypeConfigBase {
-  inputType: string
+  inputEditor: string
 }
 
 interface ValueTypeConfigNoInput extends ValueTypeConfigBase {
-  inputType: null | undefined
+  inputEditor: null | undefined
 }
 
 export type ValueTypeConfig =
@@ -149,19 +149,21 @@ export interface NodeOutputConfig {
 function isValueTypeConfigOptions(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigOptions {
-  return config.inputType === 'options' || config.inputType === 'buttonGroup'
+  return (
+    config.inputEditor === 'options' || config.inputEditor === 'buttonGroup'
+  )
 }
 
 function isValueTypeConfigValue(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigValue {
-  return config.inputType === 'value'
+  return config.inputEditor === 'value'
 }
 
 function isValueTypeConfigCheckbox(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigCheckbox {
-  return config.inputType === 'checkbox'
+  return config.inputEditor === 'checkbox'
 }
 
 type WithType<T, K> = T & {
@@ -198,7 +200,7 @@ export class GraphConfig {
     this.valueTypes[ANY] = {
       name: 'Any',
       color: '#a1a1a1',
-      inputType: null,
+      inputEditor: null,
     }
     this.nodeThemes = props?.nodeThemes ?? this.nodeThemes
     this.nodeTypes = props?.nodeTypes ?? this.nodeTypes
@@ -257,12 +259,12 @@ export class GraphConfig {
   registerInput(
     type: string,
     input: JSXElementConstructor<InputProps>,
-    valueType: Omit<ValueTypeConfig, 'inputType'>,
+    valueType: Omit<ValueTypeConfig, 'inputEditor'>,
   ) {
     this.inputs[type] = input
     this.valueTypes[type] = {
       ...valueType,
-      inputType: type,
+      inputEditor: type,
     }
     this.validate()
   }
@@ -279,9 +281,9 @@ export class GraphConfig {
   getInputComponent(
     valueType: string,
   ): JSXElementConstructor<InputProps & { slots?: InputSlots }> | null {
-    const inputType = this.valueTypes[valueType]?.inputType
-    if (inputType == null) return null
-    return this.inputs[inputType]
+    const inputEditor = this.valueTypes[valueType]?.inputEditor
+    if (inputEditor == null) return null
+    return this.inputs[inputEditor]
   }
 
   nodeConfigs(): WithType<NodeConfig, string>[] {

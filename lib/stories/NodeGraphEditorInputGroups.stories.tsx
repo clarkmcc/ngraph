@@ -49,25 +49,25 @@ const meta = {
           string: {
             name: 'String',
             color: '#a1a1a1',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#a1a1a1',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '0.000',
           },
           boolean: {
             name: 'Boolean',
             color: '#a1a1a1',
-            inputType: 'checkbox',
+            inputEditor: 'checkbox',
             defaultValue: true,
           },
           specularDistribution: {
             name: 'Specular Distribution',
             color: '#06b6d4',
-            inputType: 'options',
+            inputEditor: 'options',
             options: [
               { name: 'GGX', value: 'ggx' },
               { name: 'Beckmann', value: 'beckmann' },

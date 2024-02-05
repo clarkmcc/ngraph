@@ -35,13 +35,13 @@ const meta = {
           string: {
             name: 'String',
             color: '#1895d5',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#f4bb3f',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '',
           },
         },

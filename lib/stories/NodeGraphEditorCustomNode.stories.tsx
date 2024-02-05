@@ -46,7 +46,7 @@ const meta = {
             name: 'String',
             color: '#f43f5e',
             shape: 'circle',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '',
           },
         },

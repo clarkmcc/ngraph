@@ -134,7 +134,7 @@ export const DagreLayout: Story = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '',
         },
       },
