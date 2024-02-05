@@ -3,11 +3,11 @@ import { NodeGraphHandle } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
 import { DagreLayoutEngine } from '../layout/dagre'
-import { PiplineCenteredLayoutEngine, PipelineLayoutEngine } from '../layout/pipeline'
+import { PipelineCenteredLayoutEngine, PipelineLayoutEngine } from '../layout/pipeline'
 
 
 const dagre = new DagreLayoutEngine()
-const pipelineCentered = new PiplineCenteredLayoutEngine()
+const pipelineCentered = new PipelineCenteredLayoutEngine()
 const pipeline = new PipelineLayoutEngine()
 
 
