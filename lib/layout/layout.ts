@@ -1,9 +1,13 @@
 import { useCallback } from 'react'
 import { Edge, Instance, Node, useReactFlow } from '@xyflow/react'
 
-export type LayoutEngine = string
-
-export type LayoutFunc = (nodes: Node[], edges: Edge[]) => Node[]
+export abstract class LayoutEngine {
+  abstract name(): string
+  abstract apply(nodes: Node[], edges: Edge[]): Node[]
+  constructor() {
+    registerLayoutEngine(this)
+  }
+}
 
 export function useLayoutEngine() {
   const { getNodes, getEdges, setNodes } = useReactFlow()
@@ -18,24 +22,23 @@ function computeLayout(
   getNodes: Instance.GetNodes<any>,
   getEdges: Instance.GetEdges<any>,
 ): Node[] {
-  const layoutFn = getLayoutFunction(engine)
-  if (!layoutFn) throw new Error(`Unknown layout engine ${engine}`)
-  return layoutFn(getNodes(), getEdges())
+  const layoutEngine = getLayoutEngine(engine.name())
+  if (!layoutEngine) throw new Error(`Unknown layout engine ${engine}`)
+  return layoutEngine.apply(getNodes(), getEdges())
 }
 
-const layoutEngines: Record<LayoutEngine, LayoutFunc> = {}
+const layoutEngineRegistry: { [key: string]: LayoutEngine } = {}
 
-export function registerLayoutEngine(
-  engine: LayoutEngine,
-  layoutFn: LayoutFunc,
-) {
-  layoutEngines[engine] = layoutFn
+function registerLayoutEngine(engine: LayoutEngine) {
+  layoutEngineRegistry[engine.name()] = engine
 }
 
-export function getLayoutFunction(
-  engine: LayoutEngine,
-): ((nodes: Node[], edges: Edge[]) => Node[]) | undefined {
-  const layoutFn = layoutEngines[engine]
-  if (!layoutFn) throw new Error(`Unknown layout engine ${engine}`)
-  return layoutFn
+export function getLayoutEngine(
+  name: keyof typeof layoutEngineRegistry,
+): LayoutEngine {
+  const engine = layoutEngineRegistry[name]
+  if (!engine) {
+    throw new Error(`Layout engine '${name}' not found`)
+  }
+  return engine
 }
