@@ -171,7 +171,7 @@ function computeLayout(
   })
 }
 
-export class PiplineLayoutEngine extends LayoutEngine {
+export class PipelineLayoutEngine extends LayoutEngine {
   name() {
     return 'pipeline'
   }
@@ -181,7 +181,7 @@ export class PiplineLayoutEngine extends LayoutEngine {
   }
 }
 
-export class PiplineCenteredLayoutEngine extends LayoutEngine {
+export class PipelineCenteredLayoutEngine extends LayoutEngine {
   name() {
     return 'pipeline.centered'
   }
