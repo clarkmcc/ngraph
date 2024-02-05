@@ -22,3 +22,8 @@ export {
   useGraphApi,
 } from './context/GraphContext'
 export { LayoutEngine } from './layout/layout.ts'
+export { DagreLayoutEngine } from './layout/dagre.ts'
+export {
+  PipelineLayoutEngine,
+  PipelineCenteredLayoutEngine,
+} from './layout/pipeline.ts'
