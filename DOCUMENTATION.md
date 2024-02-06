@@ -5,7 +5,7 @@
 erDiagram
     NodeType ||--o{ NodeInput : has
     NodeType ||--o{ NodeOutput : has
-    NodeType ||--o{ NodeTheme : has
+    NodeType ||--o{ NodeKind : has
     NodeInput ||--|| ValueType : uses
     NodeOutput ||--|| ValueType : uses
     ValueType ||..|| InputEditor : uses
@@ -24,7 +24,7 @@ erDiagram
         ValueType valueType
         boolean isArray
     }
-    NodeTheme{
+    NodeKind{
         string name
         string color
     }
@@ -34,7 +34,7 @@ erDiagram
         string description
         NodeInput[] inputs
         NodeOutput[] outputs
-        NodeTheme theme
+        NodeKind kind
     }
     ValueType{
         string name

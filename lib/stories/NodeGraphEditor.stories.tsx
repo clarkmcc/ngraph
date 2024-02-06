@@ -11,7 +11,7 @@ const simpleConfig: IGraphConfig = {
       defaultValue: '',
     },
   },
-  nodeThemes: {
+  nodeKinds: {
     default: {
       name: 'Default',
       color: '#a1a1a1',
@@ -19,7 +19,7 @@ const simpleConfig: IGraphConfig = {
   },
   nodeTypes: {
     string: {
-      theme: 'default',
+      kind: 'default',
       name: 'String',
       inputs: [
         {
@@ -138,7 +138,7 @@ export const InputFields: Story = {
           defaultValue: 'HTTP',
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         default: {
           name: 'Default',
           color: '#0284c7',
@@ -146,7 +146,7 @@ export const InputFields: Story = {
       },
       nodeTypes: {
         inputFields: {
-          theme: 'default',
+          kind: 'default',
           name: 'Input Fields',
           inputs: [
             {
@@ -262,7 +262,7 @@ export const SelectedEdgeHighlighting: Story = {
           inputEditor: null,
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
@@ -270,7 +270,7 @@ export const SelectedEdgeHighlighting: Story = {
       },
       nodeTypes: {
         combineXYZ: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -298,7 +298,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         points: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -326,7 +326,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         viewer: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -401,7 +401,7 @@ export const ArrayInputs: Story = {
           inputEditor: null,
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
@@ -409,7 +409,7 @@ export const ArrayInputs: Story = {
       },
       nodeTypes: {
         combineXYZ: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -437,7 +437,7 @@ export const ArrayInputs: Story = {
           ],
         },
         viewer: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -489,7 +489,7 @@ export const HandleSymbols: Story = {
           shape: 'diamond',
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#0284c7',
@@ -497,7 +497,7 @@ export const HandleSymbols: Story = {
       },
       nodeTypes: {
         shapes: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Shapes',
           outputs: [
             {

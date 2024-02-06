@@ -154,7 +154,7 @@ export const Layouts: Story = {
           defaultValue: '',
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         default: {
           name: 'Default',
           color: '#a1a1a1',
@@ -162,7 +162,7 @@ export const Layouts: Story = {
       },
       nodeTypes: {
         string: {
-          theme: 'default',
+          kind: 'default',
           name: 'String',
           inputs: [
             {

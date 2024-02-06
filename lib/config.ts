@@ -22,7 +22,7 @@ export interface IGraphConfig {
    * Groups of nodes that can be used to organize the node palette, allowing styling
    * and configuring the colors of the nodes as a group.
    */
-  nodeThemes: NodeThemeTypes
+  nodeKinds: NodeKindTypes
 
   /**
    * The nodes types that are registered and can be created in the graph
@@ -41,8 +41,8 @@ export type ValueTypes = {
   [key: string]: ValueTypeConfig
 }
 
-export type NodeThemeTypes = {
-  [name: string]: NodeThemeConfig
+export type NodeKindTypes = {
+  [name: string]: NodeKindConfig
 }
 
 export type NodeTypes = {
@@ -102,13 +102,13 @@ export interface Option {
   value: string
 }
 
-export interface NodeThemeConfig {
+export interface NodeKindConfig {
   name: string
   color: string
 }
 
 export interface NodeConfig {
-  theme: keyof IGraphConfig['nodeThemes']
+  kind: keyof IGraphConfig['nodeKinds']
   name: string
   inputs?: NodeInputConfig[]
   outputs?: NodeOutputConfig[]
@@ -175,8 +175,8 @@ export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
-  readonly nodeThemes: {
-    [key: string]: NodeThemeConfig
+  readonly nodeKinds: {
+    [key: string]: NodeKindConfig
   } = {}
   private readonly nodeTypes: {
     [key: string]: NodeConfig
@@ -202,7 +202,7 @@ export class GraphConfig {
       color: '#a1a1a1',
       inputEditor: null,
     }
-    this.nodeThemes = props?.nodeThemes ?? this.nodeThemes
+    this.nodeKinds = props?.nodeKinds ?? this.nodeKinds
     this.nodeTypes = props?.nodeTypes ?? this.nodeTypes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
       this.inputs[key] = value
@@ -240,14 +240,14 @@ export class GraphConfig {
   registerCustomNode<T>(
     name: string,
     type: string,
-    theme: string,
+    kind: string,
     node: JSXElementConstructor<T>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
     this.customNodes[type] = node
     this.nodeTypes[type] = {
-      theme: theme,
+      kind,
       name,
       inputs: inputs,
       outputs: outputs,
@@ -297,34 +297,34 @@ export class GraphConfig {
     return this.nodeTypes[type]
   }
 
-  nodeConfigsByTheme(theme: string): WithType<NodeConfig, string>[] {
+  nodeConfigsByKind(kind: string): WithType<NodeConfig, string>[] {
     return Object.entries(this.nodeTypes)
       .map(([type, n]) => ({ type, ...n }))
-      .filter((n) => n.theme === theme)
+      .filter((n) => n.kind === kind)
   }
 
-  nodeThemeConfigs(): WithType<NodeThemeConfig, string>[] {
-    return Object.entries(this.nodeThemes).map(([type, value]) => ({
+  nodeKindConfigs(): WithType<NodeKindConfig, string>[] {
+    return Object.entries(this.nodeKinds).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
   getRegisteredNodeTypes() {
-    return Object.entries(this.nodeThemes).map(([type, theme]) => ({
+    return Object.entries(this.nodeKinds).map(([type, kind]) => ({
       type,
-      name: theme.name,
-      nodes: this.nodeConfigsByTheme(type).map((node) => ({
+      name: kind.name,
+      nodes: this.nodeConfigsByKind(type).map((node) => ({
         type: node.type,
         name: node.name,
       })),
     }))
   }
 
-  getNodeThemeConfig<T extends keyof this['nodeThemes']>(
+  getNodeKindConfig<T extends keyof this['nodeKinds']>(
     nodeType: T,
-  ): NodeThemeConfig {
-    return this.nodeThemes[nodeType as keyof NodeThemeTypes]
+  ): NodeKindConfig {
+    return this.nodeKinds[nodeType as keyof NodeKindTypes]
   }
 
   valueType<T extends keyof this['valueTypes']>(type: T): ValueTypeConfig {

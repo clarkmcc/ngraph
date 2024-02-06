@@ -29,7 +29,7 @@ const meta = {
     const config = useBuildGraphConfig(
       {
         valueTypes: {},
-        nodeThemes: {
+        nodeKinds: {
           default: {
             name: 'Default',
             color: '#a1a1a1',
@@ -37,7 +37,7 @@ const meta = {
         },
         nodeTypes: {
           vector: {
-            theme: 'default',
+            kind: 'default',
             name: 'Vector',
             inputs: [
               {

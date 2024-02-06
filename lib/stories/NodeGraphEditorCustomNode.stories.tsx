@@ -50,7 +50,7 @@ const meta = {
             defaultValue: '',
           },
         },
-        nodeThemes: {
+        nodeKinds: {
           custom: {
             name: 'Custom',
             color: '#f43f5e',

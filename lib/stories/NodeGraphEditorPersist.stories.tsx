@@ -135,7 +135,7 @@ export const Persist: Story = {
           inputEditor: null,
         },
       },
-      nodeThemes: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
@@ -143,7 +143,7 @@ export const Persist: Story = {
       },
       nodeTypes: {
         combineXYZ: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -171,7 +171,7 @@ export const Persist: Story = {
           ],
         },
         points: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -199,7 +199,7 @@ export const Persist: Story = {
           ],
         },
         viewer: {
-          theme: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {

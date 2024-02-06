@@ -75,7 +75,7 @@ const meta = {
             defaultValue: 'GET',
           },
         },
-        nodeThemes: {
+        nodeKinds: {
           default: {
             name: 'Default',
             color: '#CE4040',
@@ -87,7 +87,7 @@ const meta = {
         },
         nodeTypes: {
           number: {
-            theme: 'default',
+            kind: 'default',
             name: 'Number',
             inputs: [
               {
@@ -106,7 +106,7 @@ const meta = {
             ],
           },
           color: {
-            theme: 'inputs',
+            kind: 'inputs',
             name: 'Color',
             style: {
               width: '100px',
@@ -128,7 +128,7 @@ const meta = {
             ],
           },
           bsdf: {
-            theme: 'default',
+            kind: 'default',
             name: 'Principled BSDF',
             inputs: [
               {

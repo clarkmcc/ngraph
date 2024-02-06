@@ -45,7 +45,7 @@ const meta = {
             defaultValue: '',
           },
         },
-        nodeThemes: {
+        nodeKinds: {
           custom: {
             name: 'Custom',
             color: '#f43f5e',
@@ -58,7 +58,7 @@ const meta = {
         nodeTypes: {
           example: {
             name: 'Input',
-            theme: 'default',
+            kind: 'default',
             inputs: [
               {
                 name: 'String',
