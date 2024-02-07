@@ -1,6 +1,6 @@
 import { JSXElementConstructor, useMemo } from 'react'
 import { GraphConfig, IGraphConfig } from '../config.ts'
-import { buildNode } from '../node-types.tsx'
+import { buildNode } from '../node-builder.tsx'
 import { useGraphStore } from '../context/GraphContext.tsx'
 
 export function useNodeTypes(): Record<string, JSXElementConstructor<any>> {

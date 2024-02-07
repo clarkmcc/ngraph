@@ -26,9 +26,20 @@ export function NodeContainer({
   children,
 }: NodeContainerProps) {
   const config = useGraphStore((store) => store.config)
+  const slots = useGraphStore((store) => store.slots)
   const nodeConfig = config.getNodeConfig(node.type!)!
   const nodeKindConfig = config.getNodeKindConfig(nodeConfig.kind)
   const [collapsed, toggleCollapsed] = useNodeCollapsed()
+
+  const headerProps = useMemo(
+    () => ({
+      defaultTitle: nodeConfig.name,
+      color: nodeKindConfig.color,
+      collapsed,
+      toggleCollapsed,
+    }),
+    [nodeConfig, nodeKindConfig, collapsed, toggleCollapsed],
+  )
 
   if (collapsed) {
     return (
@@ -52,12 +63,7 @@ export function NodeContainer({
         }}
         className={draggable ? undefined : 'nodrag'}
       >
-        <NodeHeader
-          defaultTitle={nodeConfig.name}
-          color={nodeKindConfig.color}
-          collapsed={false}
-          toggleCollapsed={toggleCollapsed}
-        />
+        <slots.header {...headerProps} />
         {children}
       </div>
     )

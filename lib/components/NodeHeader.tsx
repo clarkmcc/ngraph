@@ -3,7 +3,7 @@ import { useNodeFieldValue } from '../hooks/node'
 import './NodeHeader.css'
 import { GoTriangleDown, GoTriangleRight } from 'react-icons/go'
 
-type NodeHeaderProps = {
+export type NodeHeaderProps = {
   defaultTitle: string
   color: string
   collapsed?: boolean
