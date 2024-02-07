@@ -19,9 +19,9 @@ const meta = {
           }}
         >
           {Handle && <Handle />}
-          <NodeInputField {...config} valueType="number" name="X" id="x" />
-          <NodeInputField {...config} valueType="number" name="Y" id="y" />
-          <NodeInputField {...config} valueType="number" name="Z" id="z" />
+          <NodeInputField {...config} name="X" id="x" />
+          <NodeInputField {...config} name="Y" id="y" />
+          <NodeInputField {...config} name="Z" id="z" />
         </div>
       )
     }

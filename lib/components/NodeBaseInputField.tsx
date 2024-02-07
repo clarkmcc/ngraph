@@ -1,10 +1,7 @@
 import { CSSProperties, memo, ReactNode, useRef, useState } from 'react'
 import { NodeInputConfig } from '../config'
 
-export type InputHTMLTypes = 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'month' | 'number' | 'password' | 'range' | 'reset' | 'tel' | 'text' | 'time' | 'url' | 'week'
-
-type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
-  valueType: InputHTMLTypes
+type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'valueType' | 'name'> & {
   value: any
   style?: CSSProperties
   inputStyle?: CSSProperties
