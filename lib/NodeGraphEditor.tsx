@@ -25,10 +25,12 @@ import { LayoutEngine, useLayoutEngine } from './layout/layout'
 import { GraphProvider, useGraphStore } from './context/GraphContext.tsx'
 import { DeserializeFunc, SerializeFunc } from './types/store.ts'
 import './tailwind.css'
+import { GraphSlots } from './types/slots.ts'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
   config: GraphConfig
+  slots?: Partial<GraphSlots>
 }
 
 export const NodeGraphEditor = forwardRef<
@@ -36,7 +38,7 @@ export const NodeGraphEditor = forwardRef<
   NodeGraphEditorProps
 >(
   (
-    { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
+    { defaultNodes, defaultEdges, slots, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
     return (
@@ -44,6 +46,7 @@ export const NodeGraphEditor = forwardRef<
         config={props.config}
         initialNodes={defaultNodes}
         initialEdges={defaultEdges}
+        slots={slots}
       >
         <ReactFlowProvider>
           <Flow {...props} ref={ref} />
@@ -54,7 +57,7 @@ export const NodeGraphEditor = forwardRef<
 )
 
 type FlowProps = ReactFlowProps & {
-  backgroundStyles?: CSSProperties,
+  backgroundStyles?: CSSProperties
   /**
    * The default layout engine to use when nodes are provided without positions.
    */
@@ -67,17 +70,13 @@ export type NodeGraphHandle = {
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
-  (
-    { backgroundStyles, layoutEngine, ...props }: FlowProps,
-    ref,
-  ) => {
+  ({ backgroundStyles, layoutEngine, ...props }: FlowProps, ref) => {
     const nodeTypes = useNodeTypes()
     const edgeTypes = useMemo(() => defaultEdgeTypes, [])
     const onConnect = useSocketConnect()
     const config = useGraphStore((store) => store.config)
     const { getState } = useStoreApi()
     const { setNodes, setEdges } = useReactFlow()
-
 
     // Handle clipboard events
     useHotkeys(

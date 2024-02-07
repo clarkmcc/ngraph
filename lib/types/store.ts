@@ -1,11 +1,13 @@
 import { GraphConfig } from '../config.ts'
 import { EdgeChange, NodeChange } from '@xyflow/react'
 import { Graph } from './'
+import { GraphSlots } from './slots.ts'
 
 export type GraphStore = GraphStoreActions & {
   config: GraphConfig
   nodes: Graph.Node[]
   edges: Graph.Edge[]
+  slots: GraphSlots
 }
 
 export type SerializeFunc = () => string
