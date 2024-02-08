@@ -1,5 +1,5 @@
 import { GraphConfig } from '../config.ts'
-import { EdgeChange, NodeChange } from '@xyflow/react'
+import type { Edge, EdgeChange, Node, NodeChange } from '@xyflow/react'
 import { Graph } from './'
 
 export type GraphStore = GraphStoreActions & {
@@ -14,7 +14,11 @@ export type DeserializeFunc = (serialized: string) => void
 export type GraphStoreActions = {
   onNodesChange: (changes: NodeChange<Graph.Node>[]) => void
   onEdgesChange: (changes: EdgeChange<Graph.Edge>[]) => void
-  addNode: (node: Graph.Node) => void
+
+  addNode: (node: Node | Graph.Node) => void
+  removeNode: (node: string | Node | Graph.Node) => void
+  addEdge: (edge: Edge | Graph.Edge) => void
+  removeEdge: (edge: string | Edge | Graph.Edge) => void
 
   serialize: SerializeFunc
   deserialize: DeserializeFunc

@@ -1,4 +1,5 @@
 import {
+  Node,
   ReactFlow,
   ReactFlowProps,
   ReactFlowProvider,
@@ -64,6 +65,7 @@ export type NodeGraphHandle = {
   layout: (engine?: LayoutEngine) => void
   serialize: SerializeFunc
   deserialize: DeserializeFunc
+  addNode: (node: Node) => void
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
@@ -93,12 +95,21 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const layout = useLayoutEngine()
     const serialize = useGraphStore((store) => store.serialize)
     const deserialize = useGraphStore((store) => store.deserialize)
+    const addNode = useGraphStore((store) =>store.addNode)
+    const removeNode = useGraphStore((store) => store.removeNode)
+    const addEdge = useGraphStore((store) => store.addEdge)
+    const removeEdge = useGraphStore((store) => store.removeEdge)
+
     useImperativeHandle(
       ref,
       () => ({
         layout,
         serialize,
         deserialize,
+        addNode,
+        removeNode,
+        addEdge,
+        removeEdge
       }),
       [serialize],
     )
