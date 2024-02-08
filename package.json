@@ -94,7 +94,7 @@
   "dependencies": {
     "@sroussey/typescript-graph": "^0.3.11",
     "@uiw/react-color": "^2.0.6",
-    "@xyflow/react": "^12.0.0-next.7",
+    "@xyflow/react": "^12.0.0-next.8",
     "dagre": "^0.8.5",
     "immer": "^10.0.3",
     "nanoid": "^5.0.4",

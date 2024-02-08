@@ -282,7 +282,7 @@ export const InputGroups: Story = {
       {
         id: 'e4',
         source: '4',
-        sourceHandle: 'value',
+        sourceHandle: 'color',
         target: '1',
         targetHandle: 'tint',
       },
