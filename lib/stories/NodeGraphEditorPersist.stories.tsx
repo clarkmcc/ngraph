@@ -121,29 +121,29 @@ export const Persist: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '0',
         },
         vector: {
           name: 'Vector',
           color: '#8b5cf6',
-          inputType: null,
+          inputEditor: null,
         },
         geometry: {
           name: 'Geometry',
           color: '#059669',
-          inputType: null,
+          inputEditor: null,
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -171,7 +171,7 @@ export const Persist: Story = {
           ],
         },
         points: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -199,7 +199,7 @@ export const Persist: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {

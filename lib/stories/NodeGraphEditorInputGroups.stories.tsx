@@ -48,25 +48,25 @@ const meta = {
           string: {
             name: 'String',
             color: '#a1a1a1',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#a1a1a1',
-            inputType: 'value',
+            inputEditor: 'value',
             defaultValue: '0.000',
           },
           boolean: {
             name: 'Boolean',
             color: '#a1a1a1',
-            inputType: 'checkbox',
+            inputEditor: 'checkbox',
             defaultValue: true,
           },
           specularDistribution: {
             name: 'Specular Distribution',
             color: '#06b6d4',
-            inputType: 'options',
+            inputEditor: 'options',
             options: [
               { name: 'GGX', value: 'ggx' },
               { name: 'Beckmann', value: 'beckmann' },
@@ -75,7 +75,7 @@ const meta = {
             defaultValue: 'GET',
           },
         },
-        nodeGroups: {
+        nodeKinds: {
           default: {
             name: 'Default',
             color: '#CE4040',
@@ -85,9 +85,9 @@ const meta = {
             color: '#83324A',
           },
         },
-        nodes: {
+        nodeTypes: {
           number: {
-            group: 'default',
+            kind: 'default',
             name: 'Number',
             inputs: [
               {
@@ -106,7 +106,7 @@ const meta = {
             ],
           },
           color: {
-            group: 'inputs',
+            kind: 'inputs',
             name: 'Color',
             style: {
               width: '100px',
@@ -128,7 +128,7 @@ const meta = {
             ],
           },
           bsdf: {
-            group: 'default',
+            kind: 'default',
             name: 'Principled BSDF',
             inputs: [
               {
@@ -157,37 +157,37 @@ const meta = {
               {
                 name: 'Distribution',
                 id: 'distribution',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'specularDistribution',
               },
               {
                 name: 'IOR Level',
                 id: 'iorLevel',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Tint',
                 id: 'tint',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'color',
               },
               {
                 name: 'Anisotropic',
                 id: 'anisotropic',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Anisotropic Rotation',
                 id: 'anisotropicRotation',
-                group: 'Specular',
+                inputGroup: 'Specular',
                 valueType: 'number',
               },
               {
                 name: 'Strength',
                 id: 'strength',
-                group: 'Emission',
+                inputGroup: 'Emission',
                 valueType: 'number',
               },
             ],

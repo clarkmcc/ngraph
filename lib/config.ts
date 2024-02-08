@@ -19,15 +19,15 @@ export interface IGraphConfig {
   valueTypes: ValueTypes
 
   /**
-   * Groups of nodes that can be used to organize the node palette. Also allows styling
+   * Groups of nodes that can be used to organize the node palette, allowing styling
    * and configuring the colors of the nodes as a group.
    */
-  nodeGroups: NodeGroupTypes
+  nodeKinds: NodeKindTypes
 
   /**
    * The nodes types that are registered and can be created in the graph
    */
-  nodes: NodeTypes
+  nodeTypes: NodeTypes
 }
 
 export type KeyBindings = {
@@ -41,8 +41,8 @@ export type ValueTypes = {
   [key: string]: ValueTypeConfig
 }
 
-export type NodeGroupTypes = {
-  [key: string]: NodeGroupConfig
+export type NodeKindTypes = {
+  [name: string]: NodeKindConfig
 }
 
 export type NodeTypes = {
@@ -67,27 +67,27 @@ interface ValueTypeConfigBase {
 }
 
 export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
-  inputType: 'options' | 'buttonGroup'
+  inputEditor: 'options' | 'buttonGroup'
   options: Option[]
   defaultValue: Option['value'] // Ensures defaultValue is one of the option values
 }
 
 interface ValueTypeConfigValue extends ValueTypeConfigBase {
-  inputType: 'value'
+  inputEditor: 'value'
   defaultValue: string // Ensures defaultValue is a string
 }
 
 interface ValueTypeConfigCheckbox extends ValueTypeConfigBase {
-  inputType: 'checkbox'
+  inputEditor: 'checkbox'
   defaultValue: boolean // Ensures defaultValue is a boolean
 }
 
 interface ValueTypeConfigCustom extends ValueTypeConfigBase {
-  inputType: string
+  inputEditor: string
 }
 
 interface ValueTypeConfigNoInput extends ValueTypeConfigBase {
-  inputType: null | undefined
+  inputEditor: null | undefined
 }
 
 export type ValueTypeConfig =
@@ -102,13 +102,13 @@ export interface Option {
   value: string
 }
 
-export interface NodeGroupConfig {
+export interface NodeKindConfig {
   name: string
   color: string
 }
 
 export interface NodeConfig {
-  group: keyof IGraphConfig['nodeGroups']
+  kind: keyof IGraphConfig['nodeKinds']
   name: string
   inputs?: NodeInputConfig[]
   outputs?: NodeOutputConfig[]
@@ -136,7 +136,7 @@ export interface NodeInputConfig {
    * any other inputs with this group name will be rendered under a collapsable
    * accordion.
    */
-  group?: string
+  inputGroup?: string
 }
 
 export interface NodeOutputConfig {
@@ -149,19 +149,21 @@ export interface NodeOutputConfig {
 function isValueTypeConfigOptions(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigOptions {
-  return config.inputType === 'options' || config.inputType === 'buttonGroup'
+  return (
+    config.inputEditor === 'options' || config.inputEditor === 'buttonGroup'
+  )
 }
 
 function isValueTypeConfigValue(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigValue {
-  return config.inputType === 'value'
+  return config.inputEditor === 'value'
 }
 
 function isValueTypeConfigCheckbox(
   config: ValueTypeConfig,
 ): config is ValueTypeConfigCheckbox {
-  return config.inputType === 'checkbox'
+  return config.inputEditor === 'checkbox'
 }
 
 type WithType<T, K> = T & {
@@ -173,10 +175,10 @@ export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
   readonly keybindings: KeyBindings
-  readonly nodeGroups: {
-    [key: string]: NodeGroupConfig
+  readonly nodeKinds: {
+    [key: string]: NodeKindConfig
   } = {}
-  private readonly nodes: {
+  private readonly nodeTypes: {
     [key: string]: NodeConfig
   } = {}
   private customNodes: {
@@ -198,10 +200,10 @@ export class GraphConfig {
     this.valueTypes[ANY] = {
       name: 'Any',
       color: '#a1a1a1',
-      inputType: null,
+      inputEditor: null,
     }
-    this.nodeGroups = props?.nodeGroups ?? this.nodeGroups
-    this.nodes = props?.nodes ?? this.nodes
+    this.nodeKinds = props?.nodeKinds ?? this.nodeKinds
+    this.nodeTypes = props?.nodeTypes ?? this.nodeTypes
     for (const [key, value] of Object.entries(getBuiltinInputs())) {
       this.inputs[key] = value
     }
@@ -209,13 +211,7 @@ export class GraphConfig {
 
   validate(): GraphConfig {
     const errors: string[] = []
-    Object.values(this.nodes).forEach((node) => {
-      const groups = Object.keys(this.nodeGroups)
-      if (!this.nodeGroups[node.group]) {
-        errors.push(
-          `Node '${node.name}' belongs to a node group that does not exist: '${node.group}'. Available groups: ${groups.join(', ')}`,
-        )
-      }
+    Object.values(this.nodeTypes).forEach((node) => {
       if (node.inputs) {
         node.inputs.forEach((input) => {
           if (!this.valueTypes[input.valueType]) {
@@ -244,14 +240,14 @@ export class GraphConfig {
   registerCustomNode<T>(
     name: string,
     type: string,
-    group: string,
+    kind: string,
     node: JSXElementConstructor<T>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
     this.customNodes[type] = node
-    this.nodes[type] = {
-      group,
+    this.nodeTypes[type] = {
+      kind,
       name,
       inputs: inputs,
       outputs: outputs,
@@ -263,12 +259,12 @@ export class GraphConfig {
   registerInput(
     type: string,
     input: JSXElementConstructor<InputProps>,
-    valueType: Omit<ValueTypeConfig, 'inputType'>,
+    valueType: Omit<ValueTypeConfig, 'inputEditor'>,
   ) {
     this.inputs[type] = input
     this.valueTypes[type] = {
       ...valueType,
-      inputType: type,
+      inputEditor: type,
     }
     this.validate()
   }
@@ -285,50 +281,50 @@ export class GraphConfig {
   getInputComponent(
     valueType: string,
   ): JSXElementConstructor<InputProps & { slots?: InputSlots }> | null {
-    const inputType = this.valueTypes[valueType]?.inputType
-    if (inputType == null) return null
-    return this.inputs[inputType]
+    const inputEditor = this.valueTypes[valueType]?.inputEditor
+    if (inputEditor == null) return null
+    return this.inputs[inputEditor]
   }
 
   nodeConfigs(): WithType<NodeConfig, string>[] {
-    return Object.entries(this.nodes).map(([type, value]) => ({
+    return Object.entries(this.nodeTypes).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
-  getNodeConfig(type: string): NodeConfig | null {
-    return this.nodes[type]
+  getNodeConfig(type: string): NodeConfig {
+    return this.nodeTypes[type]
   }
 
-  nodeConfigsByGroup(group: string): WithType<NodeConfig, string>[] {
-    return Object.entries(this.nodes)
+  nodeConfigsByKind(kind: string): WithType<NodeConfig, string>[] {
+    return Object.entries(this.nodeTypes)
       .map(([type, n]) => ({ type, ...n }))
-      .filter((n) => n.group === group)
+      .filter((n) => n.kind === kind)
   }
 
-  nodeGroupConfigs(): WithType<NodeGroupConfig, string>[] {
-    return Object.entries(this.nodeGroups).map(([type, value]) => ({
+  nodeKindConfigs(): WithType<NodeKindConfig, string>[] {
+    return Object.entries(this.nodeKinds).map(([type, value]) => ({
       ...value,
       type,
     }))
   }
 
   getRegisteredNodeTypes() {
-    return Object.entries(this.nodeGroups).map(([type, group]) => ({
+    return Object.entries(this.nodeKinds).map(([type, kind]) => ({
       type,
-      name: group.name,
-      nodes: this.nodeConfigsByGroup(type).map((node) => ({
+      name: kind.name,
+      nodes: this.nodeConfigsByKind(type).map((node) => ({
         type: node.type,
         name: node.name,
       })),
     }))
   }
 
-  getNodeGroupConfig<T extends keyof this['nodeGroups']>(
+  getNodeKindConfig<T extends keyof this['nodeKinds']>(
     nodeType: T,
-  ): NodeGroupConfig {
-    return this.nodeGroups[nodeType as keyof NodeGroupTypes]
+  ): NodeKindConfig {
+    return this.nodeKinds[nodeType as keyof NodeKindTypes]
   }
 
   valueType<T extends keyof this['valueTypes']>(type: T): ValueTypeConfig {
@@ -370,7 +366,7 @@ export class GraphConfig {
       node: NodeConfig,
     ) => JSXElementConstructor<any>,
   ): Record<string, JSXElementConstructor<any>> {
-    return Object.entries(this.nodes)
+    return Object.entries(this.nodeTypes)
       .map(([type, node]): [string, JSXElementConstructor<any>] => {
         if (node.custom) {
           return [type, this.customNode(type)]
