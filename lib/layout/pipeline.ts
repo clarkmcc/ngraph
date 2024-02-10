@@ -70,7 +70,6 @@ class GraphPipelineLayout<T extends Node> {
   protected positionNodes() {
     let currentX = this.startLeft
     let nodeWidth = this.nodeWidthMin
-    debugger
     this.layers.forEach((nodes, layer) => {
       let currentY = this.startTop
       nodes.forEach((node) => {
