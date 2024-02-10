@@ -1,4 +1,5 @@
 import {
+  Edge,
   Node,
   ReactFlow,
   ReactFlowProps,
@@ -66,6 +67,9 @@ export type NodeGraphHandle = {
   serialize: SerializeFunc
   deserialize: DeserializeFunc
   addNode: (node: Node) => void
+  removeNode: (node: Node) => void,
+  addEdge: (edge: Edge) => void,
+  removeEdge: (edge: Edge) => void
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
