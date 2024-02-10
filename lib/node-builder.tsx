@@ -71,6 +71,7 @@ const isComponentChanged = (a: Node, b: Node) =>
 export function buildNode(
   config: GraphConfig,
   nodeConfig: NodeConfig,
+  type: string,
 ): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
     const [isFocused, onFocus, onBlur] = useFocusBlur()
@@ -147,6 +148,13 @@ export function buildNode(
       inputs,
       outputs,
       inputGroups,
+    }
+
+    if (nodeConfig.custom) {
+      const CustomNode = config.customNode(type);
+      return (
+        <CustomNode isFocused={isFocused} onFocus={onFocus} onBlur={onBlur} node={node} slots={bodySlots} />
+      )
     }
 
     return (
