@@ -20,19 +20,19 @@ const meta = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '',
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         default: {
           name: 'Default',
           color: '#a1a1a1',
         },
       },
-      nodes: {
+      nodeTypes: {
         customHeaderNode: {
-          group: 'default',
+          kind: 'default',
           name: 'Custom Header Node',
           inputs: [
             {
