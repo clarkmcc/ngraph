@@ -1,4 +1,4 @@
-import {
+import React, {
   FunctionComponent,
   JSX,
   memo,
@@ -21,6 +21,43 @@ import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { Handle } from './components/Handle.tsx'
 import { InputGroup } from './components/InputGroup.tsx'
+import { useGraphStore } from './index.ts'
+
+export interface NodeBodySlots {
+  bodyTop?: React.ComponentType;
+  bodyBottom?: React.ComponentType;
+  inputs: React.JSX.Element[];
+  outputs: React.JSX.Element[];
+  inputGroups: React.JSX.Element[];
+}
+export interface NodeBodyProps {
+  slots: NodeBodySlots;
+}
+export function NodeBody({slots}:NodeBodyProps) {
+  return (
+    <div
+      style={{
+        padding: '8px 0 12px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {slots.bodyTop && <slots.bodyTop />}
+      {slots.outputs}
+      {slots.inputs}
+      {slots.inputGroups}
+      {slots.bodyBottom && <slots.bodyBottom />}
+    </div>
+  )
+}
+
+export function NodeWrapper({ children }: { children: ReactElement | ReactElement[] }) {
+  return (
+    <>
+      {children}
+    </>
+  )
+}
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -37,6 +74,7 @@ export function buildNode(
 ): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
     const [isFocused, onFocus, onBlur] = useFocusBlur()
+    const slots = useGraphStore((store) => store.slots)
 
     function getInputElements(
       inputs: NodeInputConfig[],
@@ -103,20 +141,20 @@ export function buildNode(
       ))
     }, [edgeIds])
 
+    const bodySlots: NodeBodySlots = {
+      bodyTop: slots.bodyTop,
+      bodyBottom: slots.bodyBottom,
+      inputs,
+      outputs,
+      inputGroups,
+    }
+
     return (
-      <NodeContainer draggable={!isFocused} node={node}>
-        <div
-          style={{
-            padding: '8px 0 12px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {outputs}
-          {inputs}
-          {inputGroups}
-        </div>
-      </NodeContainer>
+      <slots.wrapper>
+        <NodeContainer draggable={!isFocused} node={node}>
+          <slots.body slots={bodySlots} />
+        </NodeContainer>
+      </slots.wrapper>
     )
   }
   return memo(component, isComponentChanged)

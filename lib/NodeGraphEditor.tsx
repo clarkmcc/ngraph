@@ -25,8 +25,8 @@ import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
 import { GraphProvider, useGraphStore } from './context/GraphContext.tsx'
 import { DeserializeFunc, SerializeFunc } from './types/store.ts'
-import './tailwind.css'
 import { GraphSlots } from './types/slots.ts'
+import './tailwind.css'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
