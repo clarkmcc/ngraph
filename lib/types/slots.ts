@@ -5,7 +5,7 @@ import { NodeBody, NodeBodyProps, NodeFocusState, NodeWrapper } from '../node-bu
 export type GraphSlots = {
   header: ComponentType<NodeHeaderProps>,
   body: ComponentType<NodeBodyProps>,
-  wrapper: ComponentType<{ children: ReactElement | ReactElement[] }>,
+  wrapper: ComponentType<NodeFocusState & { children: ReactElement | ReactElement[] }>,
   bodyTop?: ComponentType<NodeFocusState>,
   bodyBottom?: ComponentType<NodeFocusState>,
 }
