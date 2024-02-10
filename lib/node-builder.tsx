@@ -23,17 +23,25 @@ import { Handle } from './components/Handle.tsx'
 import { InputGroup } from './components/InputGroup.tsx'
 import { useGraphStore } from './index.ts'
 
+export interface NodeFocusState {
+  isFocused: boolean;
+  onFocus: () => void;
+  onBlur: () => void;
+}
 export interface NodeBodySlots {
-  bodyTop?: React.ComponentType;
-  bodyBottom?: React.ComponentType;
+  bodyTop?: React.ComponentType<NodeFocusState>;
+  bodyBottom?: React.ComponentType<NodeFocusState>;
   inputs: React.JSX.Element[];
   outputs: React.JSX.Element[];
   inputGroups: React.JSX.Element[];
 }
-export interface NodeBodyProps {
+export interface NodeBodyProps extends NodeFocusState {
   slots: NodeBodySlots;
+  isFocused: boolean;
+  onFocus: () => void;
+  onBlur: () => void;
 }
-export function NodeBody({slots}:NodeBodyProps) {
+export function NodeBody({slots, isFocused, onBlur, onFocus}:NodeBodyProps) {
   return (
     <div
       style={{
@@ -42,11 +50,11 @@ export function NodeBody({slots}:NodeBodyProps) {
         flexDirection: 'column',
       }}
     >
-      {slots.bodyTop && <slots.bodyTop />}
+      {slots.bodyTop && <slots.bodyTop isFocused={isFocused} onBlur={onBlur} onFocus={onFocus}/>}
       {slots.outputs}
       {slots.inputs}
       {slots.inputGroups}
-      {slots.bodyBottom && <slots.bodyBottom />}
+      {slots.bodyBottom && <slots.bodyBottom isFocused={isFocused} onBlur={onBlur} onFocus={onFocus}/>}
     </div>
   )
 }
@@ -142,13 +150,15 @@ export function buildNode(
       ))
     }, [edgeIds])
 
-    const bodySlots: NodeBodySlots = {
-      bodyTop: slots.bodyTop,
-      bodyBottom: slots.bodyBottom,
-      inputs,
-      outputs,
-      inputGroups,
-    }
+    const bodySlots: NodeBodySlots = useMemo(() => {
+      return {
+        bodyTop: slots.bodyTop,
+        bodyBottom: slots.bodyBottom,
+        inputs,
+        outputs,
+        inputGroups,
+      }
+    }, [slots, inputs, outputs, inputGroups])
 
     if (nodeConfig.custom) {
       const CustomNode = config.customNode(type);
@@ -160,7 +170,7 @@ export function buildNode(
     return (
       <slots.wrapper>
         <NodeContainer draggable={!isFocused} node={node}>
-          <slots.body slots={bodySlots} />
+          <slots.body slots={bodySlots} isFocused={isFocused} onFocus={onFocus} onBlur={onBlur} />
         </NodeContainer>
       </slots.wrapper>
     )

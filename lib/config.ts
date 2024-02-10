@@ -4,7 +4,7 @@ import {
   getBuiltinInputs,
   InputSlots,
 } from './components/inputs.ts'
-import { NodeBodySlots } from './node-builder.tsx'
+import { NodeBodySlots, NodeFocusState } from './node-builder.tsx'
 import { Node } from '@xyflow/react'
 
 export const ANY = '__any'
@@ -174,12 +174,9 @@ type WithType<T, K> = T & {
 
 export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
 
-export interface CustomNodeProps {
+export interface CustomNodeProps extends NodeFocusState{
   node: Node
   slots: NodeBodySlots
-  isFocused: boolean
-  onFocus: () => void
-  onBlur: () => void
 }
 
 export class GraphConfig {
