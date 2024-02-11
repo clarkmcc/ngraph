@@ -121,8 +121,8 @@ export const Persist: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputEditor: 'value',
-          defaultValue: '0',
+          inputEditor: 'number',
+          defaultValue: 0,
         },
         vector: {
           name: 'Vector',

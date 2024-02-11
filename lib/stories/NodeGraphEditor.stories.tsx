@@ -7,7 +7,7 @@ const simpleConfig: IGraphConfig = {
     string: {
       name: 'String',
       color: '#a1a1a1',
-      inputEditor: 'value',
+      inputEditor: 'text',
       defaultValue: '',
     },
   },
@@ -96,7 +96,7 @@ export const InputFields: Story = {
         id: '1',
         type: 'inputFields',
         position: { x: 100, y: 100 },
-        data: { label: 'Input Node' },
+        data: { },
       },
     ],
     edges: [],
@@ -105,7 +105,7 @@ export const InputFields: Story = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputEditor: 'value',
+          inputEditor: 'text',
           defaultValue: '',
         },
         boolean: {
@@ -248,8 +248,8 @@ export const SelectedEdgeHighlighting: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputEditor: 'value',
-          defaultValue: '0',
+          inputEditor: 'number',
+          defaultValue: 0,
         },
         vector: {
           name: 'Vector',
@@ -387,8 +387,8 @@ export const ArrayInputs: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputEditor: 'value',
-          defaultValue: '0',
+          inputEditor: 'number',
+          defaultValue: 0,
         },
         vector: {
           name: 'Vector',
@@ -472,8 +472,8 @@ export const HandleSymbols: Story = {
         circle: {
           name: 'Circle',
           color: '#38bdf8',
-          inputEditor: 'value',
-          defaultValue: '0',
+          inputEditor: 'decimal',
+          defaultValue: 0.0,
           shape: 'circle',
         },
         diamondDot: {

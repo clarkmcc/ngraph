@@ -48,14 +48,14 @@ const meta = {
           string: {
             name: 'String',
             color: '#a1a1a1',
-            inputEditor: 'value',
+            inputEditor: 'text',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#a1a1a1',
-            inputEditor: 'value',
-            defaultValue: '0.000',
+            inputEditor: 'decimal',
+            defaultValue: 0.0,
           },
           boolean: {
             name: 'Boolean',
@@ -140,19 +140,19 @@ const meta = {
                 name: 'Roughness',
                 id: 'roughness',
                 valueType: 'number',
-                defaultValue: '0.550',
+                defaultValue: 0.550,
               },
               {
                 name: 'IOR',
                 id: 'ior',
                 valueType: 'number',
-                defaultValue: '1.450',
+                defaultValue: 1.450,
               },
               {
                 name: 'Alpha',
                 id: 'alpha',
                 valueType: 'number',
-                defaultValue: '1.000',
+                defaultValue: 1.000,
               },
               {
                 name: 'Distribution',
@@ -233,7 +233,7 @@ export const InputGroups: Story = {
       {
         id: '1',
         type: 'bsdf',
-        // position: { x: 350, y: 100 },
+        position: { x: 350, y: 100 },
         data: {
           __inputGroupsExpanded: ['Specular'],
         },
@@ -247,13 +247,13 @@ export const InputGroups: Story = {
       {
         id: '3',
         type: 'number',
-        position: { x: 100, y: 200 },
+        position: { x: 100, y: 220 },
         data: {},
       },
       {
         id: '4',
         type: 'color',
-        position: { x: 100, y: 300 },
+        position: { x: 100, y: 340 },
         data: {},
       },
     ] as Node[],

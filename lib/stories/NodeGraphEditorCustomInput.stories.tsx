@@ -2,7 +2,7 @@ import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { Background, BackgroundVariant, Edge, Node } from '@xyflow/react'
 import { useBuildGraphConfig } from '../hooks/config.ts'
-import { NodeInputField } from '../components/NodeInputField.tsx'
+import { NodeInputDecimalField } from '../components/NodeInputField.tsx'
 import { InputProps } from '../config.ts'
 
 const meta = {
@@ -19,9 +19,9 @@ const meta = {
           }}
         >
           {Handle && <Handle />}
-          <NodeInputField {...config} valueType="number" name="X" id="x" />
-          <NodeInputField {...config} valueType="number" name="Y" id="y" />
-          <NodeInputField {...config} valueType="number" name="Z" id="z" />
+          <NodeInputDecimalField {...config} name="X" id="x" />
+          <NodeInputDecimalField {...config} name="Y" id="y" />
+          <NodeInputDecimalField {...config} name="Z" id="z" />
         </div>
       )
     }

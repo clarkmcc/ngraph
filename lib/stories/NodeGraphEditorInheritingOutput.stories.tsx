@@ -35,14 +35,14 @@ const meta = {
           text: {
             name: 'String',
             color: '#1895d5',
-            inputEditor: 'value',
+            inputEditor: 'text',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#f4bb3f',
-            inputEditor: 'value',
-            defaultValue: '',
+            inputEditor: 'number',
+            defaultValue: 0,
           },
         },
         nodeKinds: {

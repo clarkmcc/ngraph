@@ -1,10 +1,10 @@
-import { CSSProperties, memo, ReactNode, useRef, useState } from 'react'
+import { CSSProperties, ReactNode, useRef, useState } from 'react'
 import { NodeInputConfig } from '../config'
 
-export type InputHTMLTypes = 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'month' | 'number' | 'password' | 'range' | 'reset' | 'tel' | 'text' | 'time' | 'url' | 'week'
+export type InputHTMLTypes = 'checkbox' | 'color' | 'date' | 'datetime-local' | 'email' | 'month' | 'number' | 'password' | 'range' | 'tel' | 'text' | 'time' | 'url' | 'week'
 
 type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
-  valueType: InputHTMLTypes
+  type: InputHTMLTypes
   value: any
   style?: CSSProperties
   inputStyle?: CSSProperties
@@ -12,18 +12,33 @@ type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
   onPointerDown?: (e: React.PointerEvent) => void
   onPointerLeave?: (e: React.PointerEvent) => void
   children?: ReactNode
+  inputMode?: "email" | "tel" | "text" | "url" | "search" | "none" | "decimal" | "numeric" | undefined
+  pattern?: string
+  maxlength?: number
+  minlength?: number
+  max?: number | string
+  min?: number | string
+  step?: number
+  placeholder?: string
 }
 
-export const NodeBaseInputField = memo(
-  ({
+export const NodeBaseInputField = ({
     name,
-    valueType,
+    type,
     value,
     style,
     inputStyle,
     onChange,
     onPointerDown,
     onPointerLeave,
+    inputMode,
+    pattern,
+    maxlength,
+    minlength,
+    max,
+    min,
+    step,
+    placeholder,
     children,
   }: NodeBaseInputFieldProps) => {
     const [_value, setValue] = useState(value)
@@ -31,7 +46,7 @@ export const NodeBaseInputField = memo(
     const ref = useRef<HTMLInputElement>(null)
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      setValue(e.target.value.trim())
+      setValue(e.target.value)
     }
 
     function handleBlur() {
@@ -52,7 +67,7 @@ export const NodeBaseInputField = memo(
         {children}
         <input
           ref={ref}
-          type={valueType as string}
+          type={type}
           style={{
             background: '#545555',
             border: 'none',
@@ -77,6 +92,14 @@ export const NodeBaseInputField = memo(
           onPointerDown={onPointerDown}
           onPointerLeave={onPointerLeave}
           value={_value}
+          inputMode={inputMode? inputMode : type === 'number' ? 'decimal' : undefined}
+          pattern={pattern ? pattern :type === 'number' ? '[0-9\.]*' : undefined}
+          maxLength={maxlength}
+          minLength={minlength}
+          max={max}
+          min={min}
+          step={step}
+          placeholder={placeholder}
         />
         {labelVisible ? (
           <div
@@ -100,5 +123,5 @@ export const NodeBaseInputField = memo(
         ) : null}
       </div>
     )
-  },
-)
+  }
+

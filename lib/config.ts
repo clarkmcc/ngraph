@@ -72,9 +72,14 @@ export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
   defaultValue: Option['value'] // Ensures defaultValue is one of the option values
 }
 
-interface ValueTypeConfigValue extends ValueTypeConfigBase {
-  inputEditor: 'value'
+interface ValueTypeConfigText extends ValueTypeConfigBase {
+  inputEditor: 'text' | 'date' | 'time' | 'datetime-local' | 'month' | 'week' | 'url' | 'email' | 'tel' | 'password' | 'search' | 'color' | 'email'
   defaultValue: string // Ensures defaultValue is a string
+}
+
+interface ValueTypeConfigNumber extends ValueTypeConfigBase {
+  inputEditor: 'number' | 'range' | 'decimal'
+  defaultValue: number
 }
 
 interface ValueTypeConfigCheckbox extends ValueTypeConfigBase {
@@ -92,7 +97,8 @@ interface ValueTypeConfigNoInput extends ValueTypeConfigBase {
 
 export type ValueTypeConfig =
   | ValueTypeConfigOptions
-  | ValueTypeConfigValue
+  | ValueTypeConfigText
+  | ValueTypeConfigNumber
   | ValueTypeConfigCheckbox
   | ValueTypeConfigNoInput
   | ValueTypeConfigCustom
@@ -152,18 +158,6 @@ function isValueTypeConfigOptions(
   return (
     config.inputEditor === 'options' || config.inputEditor === 'buttonGroup'
   )
-}
-
-function isValueTypeConfigValue(
-  config: ValueTypeConfig,
-): config is ValueTypeConfigValue {
-  return config.inputEditor === 'value'
-}
-
-function isValueTypeConfigCheckbox(
-  config: ValueTypeConfig,
-): config is ValueTypeConfigCheckbox {
-  return config.inputEditor === 'checkbox'
 }
 
 type WithType<T, K> = T & {
@@ -335,11 +329,7 @@ export class GraphConfig {
         this.valueTypes,
       )
     if (isValueTypeConfigOptions(config)) {
-      return config as ValueTypeConfigOptions
-    } else if (isValueTypeConfigValue(config)) {
-      return config as ValueTypeConfigValue
-    } else if (isValueTypeConfigCheckbox(config)) {
-      return config as ValueTypeConfigCheckbox
+      return config as ValueTypeConfig
     }
     return config
   }

@@ -150,7 +150,7 @@ export const Layouts: Story = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputEditor: 'value',
+          inputEditor: 'text',
           defaultValue: '',
         },
       },
