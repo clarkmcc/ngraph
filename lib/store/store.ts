@@ -50,6 +50,7 @@ export function createGraphStore({
       updateNodeData: (nodeId: string, data: Record<string, any>) => {
         set({ nodes: get().nodes.map(item => item.id === nodeId ? { ...item, data: { ...item.data, ...data } } : item) })
       },
+      getNode:(nodeId: string) => get().nodes.find(item => item.id === nodeId),
 
       addEdge: (edge: Edge | Graph.Edge) => set({ edges: [...get().edges, edge] }),
       removeEdge: (edge: string | Edge | Graph.Edge) => {
@@ -62,6 +63,7 @@ export function createGraphStore({
       updateEdge: (edge: Partial<Edge | Graph.Edge> & {id: string}) => {
         set({ edges: get().edges.map(item => item.id === edge.id ? {...item, ...edge} : item) })
       },
+      getEdge: (edgeId: string) => get().edges.find(item => item.id === edgeId),
     })),
     shallow,
   )
