@@ -1,4 +1,5 @@
 import {
+  Edge,
   Node,
   ReactFlow,
   ReactFlowProps,
@@ -66,6 +67,14 @@ export type NodeGraphHandle = {
   serialize: SerializeFunc
   deserialize: DeserializeFunc
   addNode: (node: Node) => void
+  removeNode: (node: Node) => void
+  updateNode: (node: Partial<Node> & {id: string}) => void
+  updateNodeData: (nodeId: string, data: Record<string, any>) => void
+  replaceNode: (node: Node) => void
+  addEdge: (edge: Edge) => void
+  removeEdge: (edge: Edge) => void
+  updateEdge: (edge: Partial<Edge> & {id: string}) => void
+  replaceEdge: (edge: Edge) => void
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
@@ -99,6 +108,11 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const removeNode = useGraphStore((store) => store.removeNode)
     const addEdge = useGraphStore((store) => store.addEdge)
     const removeEdge = useGraphStore((store) => store.removeEdge)
+    const updateNode = useGraphStore((store) => store.updateNode)
+    const updateEdge = useGraphStore((store) => store.updateEdge)
+    const replaceNode = useGraphStore((store) => store.replaceNode)
+    const replaceEdge = useGraphStore((store) => store.replaceEdge)
+    const updateNodeData = useGraphStore((store) => store.updateNodeData)
 
     useImperativeHandle(
       ref,
@@ -108,8 +122,13 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
         deserialize,
         addNode,
         removeNode,
+        updateNode,
+        updateNodeData,
+        replaceNode,
         addEdge,
-        removeEdge
+        removeEdge,
+        updateEdge,
+        replaceEdge,
       }),
       [serialize],
     )
