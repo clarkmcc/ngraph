@@ -7,19 +7,19 @@ const simpleConfig: IGraphConfig = {
     string: {
       name: 'String',
       color: '#a1a1a1',
-      inputType: 'value',
+      inputEditor: 'value',
       defaultValue: '',
     },
   },
-  nodeGroups: {
+  nodeKinds: {
     default: {
       name: 'Default',
       color: '#a1a1a1',
     },
   },
-  nodes: {
+  nodeTypes: {
     string: {
-      group: 'default',
+      kind: 'default',
       name: 'String',
       inputs: [
         {
@@ -105,19 +105,19 @@ export const InputFields: Story = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '',
         },
         boolean: {
           name: 'Boolean',
           color: '#a1a1a1',
-          inputType: 'checkbox',
+          inputEditor: 'checkbox',
           defaultValue: true,
         },
         httpMethod: {
           name: 'HTTP Method',
           color: '#06b6d4',
-          inputType: 'options',
+          inputEditor: 'options',
           options: [
             { name: 'GET', value: 'GET' },
             { name: 'POST', value: 'POST' },
@@ -130,7 +130,7 @@ export const InputFields: Story = {
         httpProtocol: {
           name: 'HTTP Method',
           color: '#0284c7',
-          inputType: 'buttonGroup',
+          inputEditor: 'buttonGroup',
           options: [
             { name: 'HTTP', value: 'HTTP' },
             { name: 'HTTPS', value: 'HTTPS' },
@@ -138,15 +138,15 @@ export const InputFields: Story = {
           defaultValue: 'HTTP',
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         default: {
           name: 'Default',
           color: '#0284c7',
         },
       },
-      nodes: {
+      nodeTypes: {
         inputFields: {
-          group: 'default',
+          kind: 'default',
           name: 'Input Fields',
           inputs: [
             {
@@ -248,29 +248,29 @@ export const SelectedEdgeHighlighting: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '0',
         },
         vector: {
           name: 'Vector',
           color: '#8b5cf6',
-          inputType: null,
+          inputEditor: null,
         },
         geometry: {
           name: 'Geometry',
           color: '#059669',
-          inputType: null,
+          inputEditor: null,
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -298,7 +298,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         points: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Points',
           inputs: [
             {
@@ -326,7 +326,7 @@ export const SelectedEdgeHighlighting: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -387,29 +387,29 @@ export const ArrayInputs: Story = {
         number: {
           name: 'Number',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '0',
         },
         vector: {
           name: 'Vector',
           color: '#8b5cf6',
-          inputType: null,
+          inputEditor: null,
         },
         geometry: {
           name: 'Geometry',
           color: '#059669',
-          inputType: null,
+          inputEditor: null,
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#059669',
         },
       },
-      nodes: {
+      nodeTypes: {
         combineXYZ: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Combine XYZ',
           inputs: [
             {
@@ -437,7 +437,7 @@ export const ArrayInputs: Story = {
           ],
         },
         viewer: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Viewer',
           inputs: [
             {
@@ -472,32 +472,32 @@ export const HandleSymbols: Story = {
         circle: {
           name: 'Circle',
           color: '#38bdf8',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '0',
           shape: 'circle',
         },
         diamondDot: {
           name: 'Diamond Dot',
           color: '#38bdf8',
-          inputType: null,
+          inputEditor: null,
           shape: 'diamondDot',
         },
         diamond: {
           name: 'Diamond',
           color: '#38bdf8',
-          inputType: null,
+          inputEditor: null,
           shape: 'diamond',
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         geometry: {
           name: 'Geometry',
           color: '#0284c7',
         },
       },
-      nodes: {
+      nodeTypes: {
         shapes: {
-          group: 'geometry',
+          kind: 'geometry',
           name: 'Shapes',
           outputs: [
             {

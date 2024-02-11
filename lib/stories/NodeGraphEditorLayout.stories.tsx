@@ -150,19 +150,19 @@ export const Layouts: Story = {
         string: {
           name: 'String',
           color: '#a1a1a1',
-          inputType: 'value',
+          inputEditor: 'value',
           defaultValue: '',
         },
       },
-      nodeGroups: {
+      nodeKinds: {
         default: {
           name: 'Default',
           color: '#a1a1a1',
         },
       },
-      nodes: {
+      nodeTypes: {
         string: {
-          group: 'default',
+          kind: 'default',
           name: 'String',
           inputs: [
             {

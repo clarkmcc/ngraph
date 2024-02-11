@@ -4,7 +4,7 @@ import { NodeHeader } from './NodeHeader'
 import {
   GraphConfig,
   NodeConfig,
-  NodeGroupConfig,
+  NodeKindConfig,
   NodeInputConfig,
   NodeOutputConfig,
 } from '../config'
@@ -27,7 +27,7 @@ export function NodeContainer({
 }: NodeContainerProps) {
   const config = useGraphStore((store) => store.config)
   const nodeConfig = config.getNodeConfig(node.type!)!
-  const nodeGroupConfig = config.getNodeGroupConfig(nodeConfig.group)
+  const nodeKindConfig = config.getNodeKindConfig(nodeConfig.kind)
   const [collapsed, toggleCollapsed] = useNodeCollapsed()
 
   if (collapsed) {
@@ -35,7 +35,7 @@ export function NodeContainer({
       <CollapsedNodeContainer
         node={node}
         nodeConfig={nodeConfig}
-        nodeGroupConfig={nodeGroupConfig}
+        nodeKindConfig={nodeKindConfig}
         toggleCollapsed={toggleCollapsed}
       />
     )
@@ -54,7 +54,7 @@ export function NodeContainer({
       >
         <NodeHeader
           defaultTitle={nodeConfig.name}
-          color={nodeGroupConfig.color}
+          color={nodeKindConfig.color}
           collapsed={false}
           toggleCollapsed={toggleCollapsed}
         />
@@ -67,14 +67,14 @@ export function NodeContainer({
 type CollapsedNodeContainerProps = {
   node: Node
   nodeConfig: NodeConfig
-  nodeGroupConfig: NodeGroupConfig
+  nodeKindConfig: NodeKindConfig
   toggleCollapsed?: () => void
 }
 
 function CollapsedNodeContainer({
   node,
   nodeConfig,
-  nodeGroupConfig,
+  nodeKindConfig,
   toggleCollapsed,
 }: CollapsedNodeContainerProps) {
   const config = useGraphStore((store) => store.config)
@@ -100,7 +100,7 @@ function CollapsedNodeContainer({
     >
       <NodeHeader
         defaultTitle={nodeConfig.name}
-        color={nodeGroupConfig.color}
+        color={nodeKindConfig.color}
         collapsed={true}
         toggleCollapsed={toggleCollapsed}
       />
