@@ -96,7 +96,7 @@ export const InputFields: Story = {
         id: '1',
         type: 'inputFields',
         position: { x: 100, y: 100 },
-        data: { },
+        data: {},
       },
     ],
     edges: [],

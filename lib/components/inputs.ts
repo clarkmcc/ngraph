@@ -1,19 +1,19 @@
 import { JSXElementConstructor } from 'react'
-import { 
-  NodeInputColorField, 
-  NodeInputDateField, 
-  NodeInputDateTimeLocalField, 
-  NodeInputDecimalField, 
-  NodeInputEmailField, 
-  NodeInputMonthField, 
-  NodeInputNumberField, 
-  NodeInputPasswordField, 
-  NodeInputRangeField, 
-  NodeInputTelField, 
-  NodeInputTextField, 
-  NodeInputTimeField, 
-  NodeInputUrlField, 
-  NodeInputWeekField 
+import {
+  NodeInputColorField,
+  NodeInputDateField,
+  NodeInputDateTimeLocalField,
+  NodeInputDecimalField,
+  NodeInputEmailField,
+  NodeInputMonthField,
+  NodeInputNumberField,
+  NodeInputPasswordField,
+  NodeInputRangeField,
+  NodeInputTelField,
+  NodeInputTextField,
+  NodeInputTimeField,
+  NodeInputUrlField,
+  NodeInputWeekField,
 } from './NodeInputField.tsx'
 import { NodeCheckboxField } from './NodeCheckboxField.tsx'
 import { NodeSelectField } from './NodeSelectField.tsx'

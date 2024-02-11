@@ -1,11 +1,6 @@
 import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import {
-  Background,
-  BackgroundVariant,
-  Edge,
-  Node,
-} from '@xyflow/react'
+import { Background, BackgroundVariant, Edge, Node } from '@xyflow/react'
 import { useBuildGraphConfig } from '../hooks/config.ts'
 import { InputProps } from '../config.ts'
 import { Wheel } from '@uiw/react-color'
@@ -140,19 +135,19 @@ const meta = {
                 name: 'Roughness',
                 id: 'roughness',
                 valueType: 'number',
-                defaultValue: 0.550,
+                defaultValue: 0.55,
               },
               {
                 name: 'IOR',
                 id: 'ior',
                 valueType: 'number',
-                defaultValue: 1.450,
+                defaultValue: 1.45,
               },
               {
                 name: 'Alpha',
                 id: 'alpha',
                 valueType: 'number',
-                defaultValue: 1.000,
+                defaultValue: 1.0,
               },
               {
                 name: 'Distribution',

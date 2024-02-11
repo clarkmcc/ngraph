@@ -3,13 +3,14 @@ import { NodeGraphHandle } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
 import { useRef } from 'react'
 import { DagreLayoutEngine } from '../layout/dagre'
-import { PipelineCenteredLayoutEngine, PipelineLayoutEngine } from '../layout/pipeline'
-
+import {
+  PipelineCenteredLayoutEngine,
+  PipelineLayoutEngine,
+} from '../layout/pipeline'
 
 const dagre = new DagreLayoutEngine()
 const pipelineCentered = new PipelineCenteredLayoutEngine()
 const pipeline = new PipelineLayoutEngine()
-
 
 const meta = {
   title: 'Node Graph Editor',

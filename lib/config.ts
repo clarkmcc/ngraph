@@ -73,7 +73,20 @@ export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
 }
 
 interface ValueTypeConfigText extends ValueTypeConfigBase {
-  inputEditor: 'text' | 'date' | 'time' | 'datetime-local' | 'month' | 'week' | 'url' | 'email' | 'tel' | 'password' | 'search' | 'color' | 'email'
+  inputEditor:
+    | 'text'
+    | 'date'
+    | 'time'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'url'
+    | 'email'
+    | 'tel'
+    | 'password'
+    | 'search'
+    | 'color'
+    | 'email'
   defaultValue: string // Ensures defaultValue is a string
 }
 
