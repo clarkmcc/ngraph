@@ -36,28 +36,48 @@ export function createGraphStore({
       onEdgesChange: (changes) =>
         set({ edges: applyEdgeChanges(changes, get().edges) }),
 
-      addNode: (node: Node | Graph.Node) => set({ nodes: [...get().nodes, addNodeInternals(config, node)] }),
+      addNode: (node: Node | Graph.Node) =>
+        set({ nodes: [...get().nodes, addNodeInternals(config, node)] }),
       removeNode: (node: string | Node | Graph.Node) => {
-        const id = typeof node === 'string' ? node : node.id;
-        set({ nodes: get().nodes.filter(item => item.id !== id) })
+        const id = typeof node === 'string' ? node : node.id
+        set({ nodes: get().nodes.filter((item) => item.id !== id) })
       },
-      updateNode: (node: Partial<Node | Graph.Node> & {id: string}) => {
-        set({ nodes: get().nodes.map(item => item.id === node.id ? {...item, ...node, data: { ...item.data, ...node.data }} : item) })
+      updateNode: (node: Partial<Node | Graph.Node> & { id: string }) => {
+        set({
+          nodes: get().nodes.map((item) =>
+            item.id === node.id
+              ? { ...item, ...node, data: { ...item.data, ...node.data } }
+              : item,
+          ),
+        })
       },
       updateNodeData: (nodeId: string, data: Record<string, any>) => {
-        set({ nodes: get().nodes.map(item => item.id === nodeId ? { ...item, data: { ...item.data, ...data } } : item) })
+        set({
+          nodes: get().nodes.map((item) =>
+            item.id === nodeId
+              ? { ...item, data: { ...item.data, ...data } }
+              : item,
+          ),
+        })
       },
-      getNode:(nodeId: string) => get().nodes.find(item => item.id === nodeId),
+      getNode: (nodeId: string) =>
+        get().nodes.find((item) => item.id === nodeId),
 
-      addEdge: (edge: Edge | Graph.Edge) => set({ edges: [...get().edges, edge] }),
+      addEdge: (edge: Edge | Graph.Edge) =>
+        set({ edges: [...get().edges, edge] }),
       removeEdge: (edge: string | Edge | Graph.Edge) => {
-        const id = typeof edge === 'string' ? edge : edge.id;
-        set({ edges: get().edges.filter(item => item.id !== id) })
+        const id = typeof edge === 'string' ? edge : edge.id
+        set({ edges: get().edges.filter((item) => item.id !== id) })
       },
-      updateEdge: (edge: Partial<Edge | Graph.Edge> & {id: string}) => {
-        set({ edges: get().edges.map(item => item.id === edge.id ? {...item, ...edge} : item) })
+      updateEdge: (edge: Partial<Edge | Graph.Edge> & { id: string }) => {
+        set({
+          edges: get().edges.map((item) =>
+            item.id === edge.id ? { ...item, ...edge } : item,
+          ),
+        })
       },
-      getEdge: (edgeId: string) => get().edges.find(item => item.id === edgeId),
+      getEdge: (edgeId: string) =>
+        get().edges.find((item) => item.id === edgeId),
     })),
     shallow,
   )

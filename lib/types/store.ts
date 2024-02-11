@@ -17,13 +17,13 @@ export type GraphStoreActions = {
 
   addNode: (node: Node | Graph.Node) => void
   removeNode: (node: string | Node | Graph.Node) => void
-  updateNode: (node: Partial<Node | Graph.Node> & {id: string}) => void
+  updateNode: (node: Partial<Node | Graph.Node> & { id: string }) => void
   updateNodeData: (nodeId: string, data: Record<string, any>) => void
   getNode: (nodeId: string) => Graph.Node | undefined
 
   addEdge: (edge: Edge | Graph.Edge) => void
   removeEdge: (edge: string | Edge | Graph.Edge) => void
-  updateEdge: (edge: Partial<Edge | Graph.Edge> & {id:string}) => void
+  updateEdge: (edge: Partial<Edge | Graph.Edge> & { id: string }) => void
   // updateEdgeData: (data: Record<string, any>) => void
   getEdge: (edgeId: string) => Graph.Edge | undefined
 
