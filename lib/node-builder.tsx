@@ -42,7 +42,13 @@ export interface NodeBodyProps extends NodeFocusState {
   onFocus: () => void
   onBlur: () => void
 }
-export function NodeBody({node, slots, isFocused, onBlur, onFocus}:NodeBodyProps) {
+export function NodeBody({
+  node,
+  slots,
+  isFocused,
+  onBlur,
+  onFocus,
+}: NodeBodyProps) {
   return (
     <div
       style={{
@@ -51,21 +57,33 @@ export function NodeBody({node, slots, isFocused, onBlur, onFocus}:NodeBodyProps
         flexDirection: 'column',
       }}
     >
-      {slots.bodyTop && <slots.bodyTop isFocused={isFocused} onBlur={onBlur} onFocus={onFocus} node={node}/>}
+      {slots.bodyTop && (
+        <slots.bodyTop
+          isFocused={isFocused}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          node={node}
+        />
+      )}
       {slots.outputs}
       {slots.inputs}
       {slots.inputGroups}
-      {slots.bodyBottom && <slots.bodyBottom isFocused={isFocused} onBlur={onBlur} onFocus={onFocus} node={node}/>}
+      {slots.bodyBottom && (
+        <slots.bodyBottom
+          isFocused={isFocused}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          node={node}
+        />
+      )}
     </div>
   )
 }
 
-export function NodeWrapper({ children }: NodeFocusState & { children: ReactNode }) {
-  return (
-    <>
-      {children}
-    </>
-  )
+export function NodeWrapper({
+  children,
+}: NodeFocusState & { children: ReactNode }) {
+  return <>{children}</>
 }
 
 /**
@@ -162,16 +180,33 @@ export function buildNode(
     }, [slots, inputs, outputs, inputGroups])
 
     if (nodeConfig.custom) {
-      const CustomNode = config.customNode(type);
+      const CustomNode = config.customNode(type)
       return (
-        <CustomNode isFocused={isFocused} onFocus={onFocus} onBlur={onBlur} node={node} slots={bodySlots} />
+        <CustomNode
+          isFocused={isFocused}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          node={node}
+          slots={bodySlots}
+        />
       )
     }
 
     return (
-      <slots.wrapper isFocused={isFocused} onFocus={onFocus} onBlur={onBlur} node={node}>
+      <slots.wrapper
+        isFocused={isFocused}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        node={node}
+      >
         <NodeContainer draggable={!isFocused} node={node}>
-          <slots.body slots={bodySlots} isFocused={isFocused} onFocus={onFocus} onBlur={onBlur} node={node}/>
+          <slots.body
+            slots={bodySlots}
+            isFocused={isFocused}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            node={node}
+          />
         </NodeContainer>
       </slots.wrapper>
     )

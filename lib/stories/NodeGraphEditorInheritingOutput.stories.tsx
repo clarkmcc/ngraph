@@ -9,7 +9,7 @@ import { NodeInheritingOutputField } from '../components/NodeInheritingOutputFie
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
-    function CustomNode({node}: CustomNodeProps) {
+    function CustomNode({ node }: CustomNodeProps) {
       return (
         <NodeContainer node={node} draggable>
           <div

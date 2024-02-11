@@ -15,7 +15,13 @@ import { Handle } from '../components/Handle'
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
-    function CustomNode({node, slots, isFocused, onFocus, onBlur}: CustomNodeProps) {
+    function CustomNode({
+      node,
+      slots,
+      isFocused,
+      onFocus,
+      onBlur,
+    }: CustomNodeProps) {
       return (
         <NodeContainer node={node} draggable={!isFocused}>
           <div>

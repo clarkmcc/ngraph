@@ -94,7 +94,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const layout = useLayoutEngine()
     const serialize = useGraphStore((store) => store.serialize)
     const deserialize = useGraphStore((store) => store.deserialize)
-    const addNode = useGraphStore((store) =>store.addNode)
+    const addNode = useGraphStore((store) => store.addNode)
     const removeNode = useGraphStore((store) => store.removeNode)
     const addEdge = useGraphStore((store) => store.addEdge)
     const removeEdge = useGraphStore((store) => store.removeEdge)
@@ -108,7 +108,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
         addNode,
         removeNode,
         addEdge,
-        removeEdge
+        removeEdge,
       }),
       [serialize],
     )
