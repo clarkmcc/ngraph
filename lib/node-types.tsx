@@ -97,6 +97,7 @@ export function buildNode(
           label={inputGroup}
           key={inputGroup}
           handles={getHandlesForInputs(inputs)}
+          onPointerDown={onFocus}
         >
           {getInputElements(inputs, edges)}
         </InputGroup>

@@ -8,6 +8,7 @@ type InputGroupProps = {
   style?: CSSProperties
   labelStyle?: CSSProperties
   handles: ReactNode
+  onPointerDown?: (e: React.PointerEvent) => void
 }
 
 export const InputGroup = ({
@@ -15,6 +16,7 @@ export const InputGroup = ({
   children,
   labelStyle,
   handles,
+  onPointerDown,
 }: InputGroupProps) => {
   const [isOpen, setIsOpen] = useNodeInputGroupState(label)
 
@@ -65,6 +67,7 @@ export const InputGroup = ({
       <div style={{ position: 'relative' }}>
         <div
           onClick={toggleAccordion}
+          onPointerDown={onPointerDown}
           style={{ ...defaultStyles.label, ...labelStyle }}
         >
           <div style={{ position: 'relative', display: 'flex' }}>
