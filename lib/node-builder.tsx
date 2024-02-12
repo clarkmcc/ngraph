@@ -34,7 +34,6 @@ export interface NodeBodySlots {
   bodyBottom?: React.ComponentType<NodeFocusState>
   inputs: React.JSX.Element[]
   outputs: React.JSX.Element[]
-  inputGroups: React.JSX.Element[]
 }
 export interface NodeBodyProps extends NodeFocusState {
   slots: NodeBodySlots
@@ -67,7 +66,6 @@ export function NodeBody({
       )}
       {slots.outputs}
       {slots.inputs}
-      {slots.inputGroups}
       {slots.bodyBottom && (
         <slots.bodyBottom
           isFocused={isFocused}
@@ -173,9 +171,8 @@ export function buildNode(
       return {
         bodyTop: slots.bodyTop,
         bodyBottom: slots.bodyBottom,
-        inputs,
+        inputs: inputs.concat(inputGroups),
         outputs,
-        inputGroups,
       }
     }, [slots, inputs, outputs, inputGroups])
 
