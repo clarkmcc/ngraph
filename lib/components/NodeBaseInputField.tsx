@@ -11,16 +11,7 @@ type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
   onPointerDown?: (e: React.PointerEvent) => void
   onPointerLeave?: (e: React.PointerEvent) => void
   children?: ReactNode
-  inputMode?:
-    | 'email'
-    | 'tel'
-    | 'text'
-    | 'url'
-    | 'search'
-    | 'none'
-    | 'decimal'
-    | 'numeric'
-    | undefined
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
   pattern?: string
   maxlength?: number
   minlength?: number
