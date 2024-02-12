@@ -1,24 +1,8 @@
 import { CSSProperties, ReactNode, useRef, useState } from 'react'
 import { NodeInputConfig } from '../config'
 
-export type InputHTMLTypes =
-  | 'checkbox'
-  | 'color'
-  | 'date'
-  | 'datetime-local'
-  | 'email'
-  | 'month'
-  | 'number'
-  | 'password'
-  | 'range'
-  | 'tel'
-  | 'text'
-  | 'time'
-  | 'url'
-  | 'week'
-
 type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
-  type: InputHTMLTypes
+  type: React.HTMLInputTypeAttribute
   value: any
   setValue: (value: any) => void
   style?: CSSProperties
@@ -48,7 +32,6 @@ type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
 
 export const NodeBaseInputField = ({
   name,
-  type,
   value,
   setValue,
   style,
@@ -56,15 +39,8 @@ export const NodeBaseInputField = ({
   onChange,
   onPointerDown,
   onPointerLeave,
-  inputMode,
-  pattern,
-  maxlength,
-  minlength,
-  max,
-  min,
-  step,
-  placeholder,
   children,
+  ...props
 }: NodeBaseInputFieldProps) => {
   const [labelVisible, setLabelVisible] = useState(true)
   const ref = useRef<HTMLInputElement>(null)
@@ -90,8 +66,8 @@ export const NodeBaseInputField = ({
     >
       {children}
       <input
+        {...props}
         ref={ref}
-        type={type}
         style={{
           background: '#545555',
           border: 'none',
@@ -105,6 +81,7 @@ export const NodeBaseInputField = ({
           width: '100%',
           ...inputStyle,
         }}
+        value={value}
         onChange={handleChange}
         onFocus={() => setLabelVisible(false)}
         onBlur={handleBlur}
@@ -115,15 +92,6 @@ export const NodeBaseInputField = ({
         }}
         onPointerDown={onPointerDown}
         onPointerLeave={onPointerLeave}
-        value={value}
-        inputMode={inputMode}
-        pattern={pattern}
-        maxLength={maxlength}
-        minLength={minlength}
-        max={max}
-        min={min}
-        step={step}
-        placeholder={placeholder}
       />
       {labelVisible ? (
         <div

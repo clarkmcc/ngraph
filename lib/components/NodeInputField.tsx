@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { InputHTMLTypes, NodeBaseInputField } from './NodeBaseInputField'
+import { NodeBaseInputField } from './NodeBaseInputField'
 import { useNodeFieldValue } from '../hooks/node'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
 import { BaseInputProps } from './inputs.ts'
@@ -8,7 +8,7 @@ import './NodeInputField.css'
 type NodeInputFieldProps = BaseInputProps &
   Omit<NodeInputConfig, 'valueType'> &
   ValueTypeConfig & {
-    type: InputHTMLTypes
+    type: React.HTMLInputTypeAttribute
     placeholder?: string
     inputMode?:
       | 'email'
