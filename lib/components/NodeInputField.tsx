@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react'
 import { InputHTMLTypes, NodeBaseInputField } from './NodeBaseInputField'
 import { useNodeFieldValue } from '../hooks/node'
 import { NodeInputConfig, ValueTypeConfig } from '../config'
@@ -41,10 +42,67 @@ export const NodeInputField = ({
   return (
     <NodeBaseInputField
       value={value}
+      setValue={setValue}
       type={type}
       onChange={setValue}
       onPointerDown={onFocus}
       onPointerLeave={onBlur}
+      {...props}
+    >
+      {isConstant || !Handle ? null : <Handle />}
+    </NodeBaseInputField>
+  )
+}
+
+type NodeInputDecimalFieldProps = NodeInputFieldProps & {
+  precision?: number
+}
+export const NodeInputDecimalField = ({
+  precision = 3,
+  onFocus,
+  onBlur,
+  type,
+  isConstant,
+  slots,
+  ...props
+}: NodeInputDecimalFieldProps) => {
+  const Handle = slots?.Handle
+  const [value, setValue] = useNodeFieldValue<number>(
+    props.id,
+    props.defaultValue,
+  )
+  const [displayValue, setDisplayValue] = useState<string>('')
+
+  useEffect(() => {
+    setDisplayValue(convertToDecimal(value))
+  }, [value, precision])
+
+  function convertToDecimal(val: string | number) {
+    if (typeof val === 'string') {
+      val = parseFloat(val)
+      if (isNaN(val)) return Number(0).toFixed(precision)
+    }
+    return val.toFixed(precision)
+  }
+
+  const handleChange = useCallback(
+    (val: any) => {
+      // Allow only numeric input
+      setValue(Number(convertToDecimal(val))) // Update global state
+      setDisplayValue(convertToDecimal(val)) // Update local state
+    },
+    [value],
+  )
+
+  return (
+    <NodeBaseInputField
+      type="text"
+      value={displayValue}
+      setValue={setDisplayValue}
+      inputMode="decimal"
+      onChange={handleChange}
+      pattern="\d+\\.\d\d\d"
+      step={0.001}
       {...props}
     >
       {isConstant || !Handle ? null : <Handle />}
@@ -62,20 +120,6 @@ export const NodeInputTextField = (
   props: NodeInputTypedFieldProps & { maxlength?: number; minlength?: number },
 ) => {
   return <NodeInputField type="text" {...props} />
-}
-
-export const NodeInputDecimalField = (
-  props: NodeInputTypedFieldProps & { maxlength?: number; minlength?: number },
-) => {
-  return (
-    <NodeInputField
-      type="number"
-      inputMode="decimal"
-      pattern="\d+\\.\d\d\d"
-      step={0.001}
-      {...props}
-    />
-  )
 }
 
 export const NodeInputNumberField = (

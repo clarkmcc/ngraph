@@ -20,6 +20,7 @@ export type InputHTMLTypes =
 type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
   type: InputHTMLTypes
   value: any
+  setValue: (value: any) => void
   style?: CSSProperties
   inputStyle?: CSSProperties
   onChange?: (value: any) => void
@@ -49,6 +50,7 @@ export const NodeBaseInputField = ({
   name,
   type,
   value,
+  setValue,
   style,
   inputStyle,
   onChange,
@@ -64,7 +66,6 @@ export const NodeBaseInputField = ({
   placeholder,
   children,
 }: NodeBaseInputFieldProps) => {
-  const [_value, setValue] = useState(value)
   const [labelVisible, setLabelVisible] = useState(true)
   const ref = useRef<HTMLInputElement>(null)
 
@@ -74,7 +75,7 @@ export const NodeBaseInputField = ({
 
   function handleBlur() {
     setLabelVisible(true)
-    if (onChange) onChange(_value)
+    if (onChange) onChange(value)
   }
 
   return (
@@ -114,11 +115,9 @@ export const NodeBaseInputField = ({
         }}
         onPointerDown={onPointerDown}
         onPointerLeave={onPointerLeave}
-        value={_value}
-        inputMode={
-          inputMode ? inputMode : type === 'number' ? 'decimal' : undefined
-        }
-        pattern={pattern ? pattern : type === 'number' ? '[0-9.]*' : undefined}
+        value={value}
+        inputMode={inputMode}
+        pattern={pattern}
         maxLength={maxlength}
         minLength={minlength}
         max={max}
