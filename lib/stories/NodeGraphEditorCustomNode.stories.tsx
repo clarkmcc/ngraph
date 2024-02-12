@@ -1,6 +1,6 @@
 import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfig } from '../config'
+import { CustomNodeProps, GraphConfig } from '../config'
 import { useMemo } from 'react'
 import {
   Background,
@@ -10,17 +10,22 @@ import {
   Position,
 } from '@xyflow/react'
 import { NodeContainer } from '../components/NodeContainer'
-import { useFocusBlur } from '../hooks/focus'
 import { Handle } from '../components/Handle'
 
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
-    function CustomNode(node: Node) {
-      const [isFocused, onFocus, onBlur] = useFocusBlur()
+    function CustomNode({
+      node,
+      slots,
+      isFocused,
+      onFocus,
+      onBlur,
+    }: CustomNodeProps) {
       return (
-        <NodeContainer node={node} draggable={isFocused}>
+        <NodeContainer node={node} draggable={!isFocused}>
           <div>
+            {slots.outputs}
             <textarea
               defaultValue="This is a text area"
               style={{ backgroundColor: 'gray' }}
@@ -29,7 +34,7 @@ const meta = {
             />
             <Handle
               id="value"
-              position={Position.Right}
+              position={Position.Left}
               handleType="source"
               shape="circle"
               color="#a1a1a1"

@@ -26,11 +26,13 @@ import { ClipboardItem } from './clipboard'
 import { LayoutEngine, useLayoutEngine } from './layout/layout'
 import { GraphProvider, useGraphStore } from './context/GraphContext.tsx'
 import { DeserializeFunc, SerializeFunc } from './types/store.ts'
+import { GraphSlots } from './types/slots.ts'
 import './tailwind.css'
 
 type NodeGraphEditorProps = Omit<FlowProps, 'edges' | 'nodes'> & {
   onSave?: (data: any) => void
   config: GraphConfig
+  slots?: Partial<GraphSlots>
 }
 
 export const NodeGraphEditor = forwardRef<
@@ -38,7 +40,7 @@ export const NodeGraphEditor = forwardRef<
   NodeGraphEditorProps
 >(
   (
-    { defaultNodes, defaultEdges, ...props }: NodeGraphEditorProps,
+    { defaultNodes, defaultEdges, slots, ...props }: NodeGraphEditorProps,
     ref,
   ): JSX.Element => {
     return (
@@ -46,6 +48,7 @@ export const NodeGraphEditor = forwardRef<
         config={props.config}
         initialNodes={defaultNodes}
         initialEdges={defaultEdges}
+        slots={slots}
       >
         <ReactFlowProvider>
           <Flow {...props} ref={ref} />
@@ -56,7 +59,7 @@ export const NodeGraphEditor = forwardRef<
 )
 
 type FlowProps = ReactFlowProps & {
-  backgroundStyles?: CSSProperties,
+  backgroundStyles?: CSSProperties
   /**
    * The default layout engine to use when nodes are provided without positions.
    */
@@ -73,17 +76,13 @@ export type NodeGraphHandle = {
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
-  (
-    { backgroundStyles, layoutEngine, ...props }: FlowProps,
-    ref,
-  ) => {
+  ({ backgroundStyles, layoutEngine, ...props }: FlowProps, ref) => {
     const nodeTypes = useNodeTypes()
     const edgeTypes = useMemo(() => defaultEdgeTypes, [])
     const onConnect = useSocketConnect()
     const config = useGraphStore((store) => store.config)
     const { getState } = useStoreApi()
     const { setNodes, setEdges } = useReactFlow()
-
 
     // Handle clipboard events
     useHotkeys(
@@ -99,7 +98,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const layout = useLayoutEngine()
     const serialize = useGraphStore((store) => store.serialize)
     const deserialize = useGraphStore((store) => store.deserialize)
-    const addNode = useGraphStore((store) =>store.addNode)
+    const addNode = useGraphStore((store) => store.addNode)
     const removeNode = useGraphStore((store) => store.removeNode)
     const addEdge = useGraphStore((store) => store.addEdge)
     const removeEdge = useGraphStore((store) => store.removeEdge)
@@ -113,7 +112,7 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
         addNode,
         removeNode,
         addEdge,
-        removeEdge
+        removeEdge,
       }),
       [serialize],
     )

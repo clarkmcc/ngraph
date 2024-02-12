@@ -5,6 +5,7 @@ import { GraphConfig } from '../config.ts'
 import { useStoreWithEqualityFn } from 'zustand/traditional'
 import { GraphStore } from '../types/store.ts'
 import { addNodeInternals } from '../utilities.ts'
+import { GraphSlots } from '../types/slots.ts'
 
 type ContextType = ReturnType<typeof createGraphStore> | null
 
@@ -31,17 +32,21 @@ export function useGraphApi(): NonNullable<ContextType> {
   return store
 }
 
+type GraphProviderProps = {
+  children: ReactNode
+  config: GraphConfig
+  initialNodes?: Graph.Node[]
+  initialEdges?: Graph.Edge[]
+  slots?: Partial<GraphSlots>
+}
+
 export function GraphProvider({
   children,
   config,
   initialNodes,
   initialEdges,
-}: {
-  children: ReactNode
-  config: GraphConfig
-  initialNodes?: Graph.Node[]
-  initialEdges?: Graph.Edge[]
-}) {
+  slots,
+}: GraphProviderProps) {
   const storeRef = useRef<ContextType | null>(null)
   if (!storeRef.current) {
     const nodes = initialNodes
@@ -50,6 +55,7 @@ export function GraphProvider({
 
     storeRef.current = createGraphStore({
       config,
+      slots,
       nodes,
       edges: initialEdges ?? [],
     })
