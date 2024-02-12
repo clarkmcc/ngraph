@@ -80,8 +80,8 @@ export const NodeInputDecimalField = ({
   function convertToDecimal(val: string | number) {
     if (typeof val === 'string') {
       val = parseFloat(val)
-      if (isNaN(val)) return Number(0).toFixed(precision)
     }
+    if (isNaN(val)) return Number(0).toFixed(precision)
     return val.toFixed(precision)
   }
 
