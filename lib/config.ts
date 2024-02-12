@@ -4,6 +4,8 @@ import {
   getBuiltinInputs,
   InputSlots,
 } from './components/inputs.ts'
+import { NodeBodySlots, NodeFocusState } from './node-builder.tsx'
+import { Node } from '@xyflow/react'
 
 export const ANY = '__any'
 
@@ -72,9 +74,27 @@ export interface ValueTypeConfigOptions extends ValueTypeConfigBase {
   defaultValue: Option['value'] // Ensures defaultValue is one of the option values
 }
 
-interface ValueTypeConfigValue extends ValueTypeConfigBase {
-  inputEditor: 'value'
+interface ValueTypeConfigText extends ValueTypeConfigBase {
+  inputEditor:
+    | 'text'
+    | 'date'
+    | 'time'
+    | 'datetime-local'
+    | 'month'
+    | 'week'
+    | 'url'
+    | 'email'
+    | 'tel'
+    | 'password'
+    | 'search'
+    | 'color'
+    | 'email'
   defaultValue: string // Ensures defaultValue is a string
+}
+
+interface ValueTypeConfigNumber extends ValueTypeConfigBase {
+  inputEditor: 'number' | 'range' | 'decimal'
+  defaultValue: number
 }
 
 interface ValueTypeConfigCheckbox extends ValueTypeConfigBase {
@@ -92,7 +112,8 @@ interface ValueTypeConfigNoInput extends ValueTypeConfigBase {
 
 export type ValueTypeConfig =
   | ValueTypeConfigOptions
-  | ValueTypeConfigValue
+  | ValueTypeConfigText
+  | ValueTypeConfigNumber
   | ValueTypeConfigCheckbox
   | ValueTypeConfigNoInput
   | ValueTypeConfigCustom
@@ -154,23 +175,16 @@ function isValueTypeConfigOptions(
   )
 }
 
-function isValueTypeConfigValue(
-  config: ValueTypeConfig,
-): config is ValueTypeConfigValue {
-  return config.inputEditor === 'value'
-}
-
-function isValueTypeConfigCheckbox(
-  config: ValueTypeConfig,
-): config is ValueTypeConfigCheckbox {
-  return config.inputEditor === 'checkbox'
-}
-
 type WithType<T, K> = T & {
   type: K
 }
 
 export type InputProps = BaseInputProps & NodeInputConfig & ValueTypeConfig
+
+export interface CustomNodeProps extends NodeFocusState{
+  node: Node
+  slots: NodeBodySlots
+}
 
 export class GraphConfig {
   readonly valueTypes: ValueTypes = {}
@@ -182,7 +196,7 @@ export class GraphConfig {
     [key: string]: NodeConfig
   } = {}
   private customNodes: {
-    [key: string]: JSXElementConstructor<any>
+    [key: string]: JSXElementConstructor<CustomNodeProps>
   } = {}
   private inputs: {
     [key: string]: JSXElementConstructor<any>
@@ -237,11 +251,11 @@ export class GraphConfig {
     return this
   }
 
-  registerCustomNode<T>(
+  registerCustomNode(
     name: string,
     type: string,
     kind: string,
-    node: JSXElementConstructor<T>,
+    node: JSXElementConstructor<CustomNodeProps>,
     inputs: NodeInputConfig[],
     outputs: NodeOutputConfig[],
   ) {
@@ -269,7 +283,7 @@ export class GraphConfig {
     this.validate()
   }
 
-  customNode<T>(type: string): JSXElementConstructor<T> {
+  customNode(type: string): JSXElementConstructor<CustomNodeProps> {
     return this.customNodes[type]
   }
 
@@ -335,11 +349,7 @@ export class GraphConfig {
         this.valueTypes,
       )
     if (isValueTypeConfigOptions(config)) {
-      return config as ValueTypeConfigOptions
-    } else if (isValueTypeConfigValue(config)) {
-      return config as ValueTypeConfigValue
-    } else if (isValueTypeConfigCheckbox(config)) {
-      return config as ValueTypeConfigCheckbox
+      return config as ValueTypeConfig
     }
     return config
   }
@@ -364,16 +374,11 @@ export class GraphConfig {
     buildNode: (
       config: GraphConfig,
       node: NodeConfig,
+      type: string,
     ) => JSXElementConstructor<any>,
   ): Record<string, JSXElementConstructor<any>> {
     return Object.entries(this.nodeTypes)
-      .map(([type, node]): [string, JSXElementConstructor<any>] => {
-        if (node.custom) {
-          return [type, this.customNode(type)]
-        } else {
-          return [type, buildNode(this, node)]
-        }
-      })
+      .map(([type, node]): [string, JSXElementConstructor<any>] => [type, buildNode(this, node, type)])
       .reduce(
         (acc: Record<string, JSXElementConstructor<any>>, [type, node]) => {
           acc[type] = node

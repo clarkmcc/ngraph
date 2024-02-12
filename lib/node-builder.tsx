@@ -1,4 +1,4 @@
-import {
+import React, {
   FunctionComponent,
   JSX,
   memo,
@@ -21,6 +21,68 @@ import { NodeContainer } from './components/NodeContainer'
 import { useFocusBlur } from './hooks/focus'
 import { Handle } from './components/Handle.tsx'
 import { InputGroup } from './components/InputGroup.tsx'
+import { useGraphStore } from './index.ts'
+
+export interface NodeFocusState {
+  node: Node
+  isFocused: boolean
+  onFocus: () => void
+  onBlur: () => void
+}
+export interface NodeBodySlots {
+  bodyTop?: React.ComponentType<NodeFocusState>
+  bodyBottom?: React.ComponentType<NodeFocusState>
+  inputs: React.JSX.Element[]
+  outputs: React.JSX.Element[]
+}
+export interface NodeBodyProps extends NodeFocusState {
+  slots: NodeBodySlots
+  isFocused: boolean
+  onFocus: () => void
+  onBlur: () => void
+}
+export function NodeBody({
+  node,
+  slots,
+  isFocused,
+  onBlur,
+  onFocus,
+}: NodeBodyProps) {
+  return (
+    <div
+      style={{
+        padding: '8px 0 12px',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {slots.bodyTop && (
+        <slots.bodyTop
+          isFocused={isFocused}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          node={node}
+        />
+      )}
+      {slots.outputs}
+      {slots.inputs}
+      {slots.bodyBottom && (
+        <slots.bodyBottom
+          isFocused={isFocused}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          node={node}
+        />
+      )}
+    </div>
+  )
+}
+
+export function NodeWrapper({
+  children,
+}: NodeFocusState & { children: ReactNode }) {
+  return <>{children}</>
+}
 
 /**
  * Determines whether a node component should be re-rendered based
@@ -34,9 +96,11 @@ const isComponentChanged = (a: Node, b: Node) =>
 export function buildNode(
   config: GraphConfig,
   nodeConfig: NodeConfig,
+  type: string,
 ): FunctionComponent<Node> {
   function component(node: Node): ReactElement {
     const [isFocused, onFocus, onBlur] = useFocusBlur()
+    const slots = useGraphStore((store) => store.slots)
 
     function getInputElements(
       inputs: NodeInputConfig[],
@@ -103,20 +167,45 @@ export function buildNode(
       ))
     }, [edgeIds])
 
+    const bodySlots: NodeBodySlots = useMemo(() => {
+      return {
+        bodyTop: slots.bodyTop,
+        bodyBottom: slots.bodyBottom,
+        inputs: inputs.concat(inputGroups),
+        outputs,
+      }
+    }, [slots, inputs, outputs, inputGroups])
+
+    if (nodeConfig.custom) {
+      const CustomNode = config.customNode(type)
+      return (
+        <CustomNode
+          isFocused={isFocused}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          node={node}
+          slots={bodySlots}
+        />
+      )
+    }
+
     return (
-      <NodeContainer draggable={!isFocused} node={node}>
-        <div
-          style={{
-            padding: '8px 0 12px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {outputs}
-          {inputs}
-          {inputGroups}
-        </div>
-      </NodeContainer>
+      <slots.wrapper
+        isFocused={isFocused}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        node={node}
+      >
+        <NodeContainer draggable={!isFocused} node={node}>
+          <slots.body
+            slots={bodySlots}
+            isFocused={isFocused}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            node={node}
+          />
+        </NodeContainer>
+      </slots.wrapper>
     )
   }
   return memo(component, isComponentChanged)

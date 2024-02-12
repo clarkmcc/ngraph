@@ -6,23 +6,27 @@ import { Graph } from '../types'
 import { Edge, Node, applyEdgeChanges, applyNodeChanges } from '@xyflow/react'
 import { devtools } from 'zustand/middleware'
 import { addNodeInternals } from '../utilities.ts'
+import { getDefaultSlots, GraphSlots } from '../types/slots.ts'
 
 type CreateGraphStoreProps = {
   config: GraphConfig
   nodes: Graph.Node[]
   edges: Graph.Edge[]
+  slots?: Partial<GraphSlots>
 }
 
 export function createGraphStore({
   config,
   nodes,
   edges,
+  slots,
 }: CreateGraphStoreProps) {
   return createWithEqualityFn(
     devtools<GraphStore>((set, get) => ({
       config,
       nodes,
       edges,
+      slots: getDefaultSlots(slots),
 
       serialize: () =>
         JSON.stringify({

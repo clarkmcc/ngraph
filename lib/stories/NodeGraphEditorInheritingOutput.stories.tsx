@@ -1,6 +1,6 @@
 import { NodeGraphEditor } from '../NodeGraphEditor'
 import { Meta, StoryObj } from '@storybook/react'
-import { GraphConfig } from '../config'
+import { CustomNodeProps, GraphConfig } from '../config'
 import { useMemo } from 'react'
 import { Background, BackgroundVariant, Edge, Node } from '@xyflow/react'
 import { NodeContainer } from '../components/NodeContainer'
@@ -9,7 +9,7 @@ import { NodeInheritingOutputField } from '../components/NodeInheritingOutputFie
 const meta = {
   title: 'Node Graph Editor',
   component: ({ nodes, edges }) => {
-    function CustomNode(node: Node) {
+    function CustomNode({ node }: CustomNodeProps) {
       return (
         <NodeContainer node={node} draggable>
           <div
@@ -35,14 +35,14 @@ const meta = {
           text: {
             name: 'String',
             color: '#1895d5',
-            inputEditor: 'value',
+            inputEditor: 'text',
             defaultValue: '',
           },
           number: {
             name: 'Number',
             color: '#f4bb3f',
-            inputEditor: 'value',
-            defaultValue: '',
+            inputEditor: 'number',
+            defaultValue: 0,
           },
         },
         nodeKinds: {
