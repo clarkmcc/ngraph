@@ -7,26 +7,8 @@ import './NodeInputField.css'
 
 type NodeInputFieldProps = BaseInputProps &
   Omit<NodeInputConfig, 'valueType'> &
-  ValueTypeConfig & {
-    type: React.HTMLInputTypeAttribute
-    placeholder?: string
-    inputMode?:
-      | 'email'
-      | 'tel'
-      | 'text'
-      | 'url'
-      | 'search'
-      | 'none'
-      | 'decimal'
-      | 'numeric'
-      | undefined
-    pattern?: string
-    maxlength?: number
-    minlength?: number
-    max?: number | string
-    min?: number | string
-    step?: number
-  }
+  ValueTypeConfig &
+  React.InputHTMLAttributes<any>
 
 export const NodeInputField = ({
   onFocus,
@@ -110,11 +92,7 @@ export const NodeInputDecimalField = ({
   )
 }
 
-type NodeInputTypedFieldProps = BaseInputProps &
-  Omit<NodeInputConfig, 'valueType'> &
-  ValueTypeConfig & {
-    placeholder?: string
-  }
+type NodeInputTypedFieldProps = Omit<NodeInputFieldProps, 'type'>
 
 export const NodeInputTextField = (
   props: NodeInputTypedFieldProps & { maxlength?: number; minlength?: number },

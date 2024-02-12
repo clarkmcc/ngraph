@@ -1,25 +1,13 @@
 import { CSSProperties, ReactNode, useRef, useState } from 'react'
 import { NodeInputConfig } from '../config'
 
-type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> & {
-  type: React.HTMLInputTypeAttribute
-  value: any
-  setValue: (value: any) => void
-  style?: CSSProperties
-  inputStyle?: CSSProperties
-  onChange?: (value: any) => void
-  onPointerDown?: (e: React.PointerEvent) => void
-  onPointerLeave?: (e: React.PointerEvent) => void
-  children?: ReactNode
-  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']
-  pattern?: string
-  maxlength?: number
-  minlength?: number
-  max?: number | string
-  min?: number | string
-  step?: number
-  placeholder?: string
-}
+type NodeBaseInputFieldProps = Pick<NodeInputConfig, 'name'> &
+  React.InputHTMLAttributes<any> & {
+    setValue: (value: any) => void
+    inputStyle?: CSSProperties
+    onChange?: (value: any) => void
+    children?: ReactNode
+  }
 
 export const NodeBaseInputField = ({
   name,
