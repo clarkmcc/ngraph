@@ -12,13 +12,13 @@
   "main": "dist/cjs/main.jsx",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/es/index.js",
       "require": "./dist/cjs/index.js",
       "default": "./dist/es/index.js"
     }
   },
-  "types": "dist/es/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "sideEffects": [
     "**/*.css"
   ],
