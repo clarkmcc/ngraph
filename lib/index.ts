@@ -1,5 +1,5 @@
 export { GraphConfig, type InputProps } from './config'
-export { NodeGraphEditor } from './NodeGraphEditor'
+export { NodeGraphEditor, type NodeGraphHandle } from './NodeGraphEditor'
 export { useBuildGraphConfig } from './hooks/config.ts'
 export {
   useNodeCollapsed,
