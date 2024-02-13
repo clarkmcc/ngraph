@@ -19,7 +19,14 @@ export const NodeBaseInputField = ({
   onPointerDown,
   onPointerLeave,
   children,
-  ...props
+  inputMode,
+  pattern,
+  maxLength,
+  minLength,
+  max,
+  min,
+  step,
+  placeholder,
 }: NodeBaseInputFieldProps) => {
   const [labelVisible, setLabelVisible] = useState(true)
   const ref = useRef<HTMLInputElement>(null)
@@ -45,7 +52,6 @@ export const NodeBaseInputField = ({
     >
       {children}
       <input
-        {...props}
         ref={ref}
         style={{
           background: '#545555',
@@ -71,6 +77,14 @@ export const NodeBaseInputField = ({
         }}
         onPointerDown={onPointerDown}
         onPointerLeave={onPointerLeave}
+        inputMode={inputMode}
+        pattern={pattern}
+        maxLength={maxLength}
+        minLength={minLength}
+        max={max}
+        min={min}
+        step={step}
+        placeholder={placeholder}
       />
       {labelVisible ? (
         <div
