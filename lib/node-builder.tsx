@@ -81,7 +81,7 @@ export function NodeBody({
 export function NodeWrapper({
   children,
 }: NodeFocusState & { children: ReactNode }) {
-  return <>{children}</>
+  return <>{children!}</>
 }
 
 /**
