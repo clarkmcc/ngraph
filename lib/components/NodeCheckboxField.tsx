@@ -11,7 +11,7 @@ export const NodeCheckboxField = memo(
     const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
 
     const handleChange = useCallback(
-      (e) => setValue(e.target.checked),
+      (e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.checked),
       [setValue],
     )
 
