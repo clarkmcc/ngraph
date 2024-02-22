@@ -1,4 +1,4 @@
-import { ComponentType, ReactElement } from 'react'
+import { ComponentType, ReactNode } from 'react'
 import { NodeHeader, NodeHeaderProps } from '../components/NodeHeader.tsx'
 import {
   NodeBody,
@@ -10,9 +10,7 @@ import {
 export type GraphSlots = {
   header: ComponentType<NodeHeaderProps>
   body: ComponentType<NodeBodyProps>
-  wrapper: ComponentType<
-    NodeFocusState & { children: ReactElement | ReactElement[] }
-  >
+  wrapper: ComponentType<NodeFocusState & { children: ReactNode }>
   bodyTop?: ComponentType<NodeFocusState>
   bodyBottom?: ComponentType<NodeFocusState>
 }

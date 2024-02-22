@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NodeBaseInputField } from './NodeBaseInputField'
 import { useNodeFieldValue } from '../hooks/node'
-import { NodeInputConfig, ValueTypeConfig } from '../config'
+import { NodeInputConfig } from '../config'
 import { BaseInputProps } from './inputs.ts'
 import './NodeInputField.css'
 
 type NodeInputFieldProps = BaseInputProps &
-  Omit<NodeInputConfig, 'valueType'> &
-  ValueTypeConfig &
+  Pick<NodeInputConfig, 'isConstant' | 'id' | 'defaultValue' | 'name'> &
   React.InputHTMLAttributes<any>
 
 export const NodeInputField = ({
@@ -16,10 +15,12 @@ export const NodeInputField = ({
   type,
   isConstant,
   slots,
+  id,
+  defaultValue,
   ...props
 }: NodeInputFieldProps) => {
   const Handle = slots?.Handle
-  const [value, setValue] = useNodeFieldValue(props.id, props.defaultValue)
+  const [value, setValue] = useNodeFieldValue(id, defaultValue)
 
   return (
     <NodeBaseInputField
@@ -95,7 +96,7 @@ export const NodeInputDecimalField = ({
 type NodeInputTypedFieldProps = Omit<NodeInputFieldProps, 'type'>
 
 export const NodeInputTextField = (
-  props: NodeInputTypedFieldProps & { maxlength?: number; minlength?: number },
+  props: NodeInputTypedFieldProps & { maxLength?: number; minLength?: number },
 ) => {
   return <NodeInputField type="text" {...props} />
 }
@@ -107,7 +108,7 @@ export const NodeInputNumberField = (
 }
 
 export const NodeInputPasswordField = (
-  props: NodeInputTypedFieldProps & { maxlength?: number; minlength?: number },
+  props: NodeInputTypedFieldProps & { maxLength?: number; minLength?: number },
 ) => {
   return <NodeInputField type="password" {...props} />
 }
