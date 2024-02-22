@@ -26,7 +26,6 @@ export type GraphStoreActions = {
   addEdge: (edge: Edge | Graph.Edge) => void
   removeEdge: (edge: string | Edge | Graph.Edge) => void
   updateEdge: (edge: Partial<Edge | Graph.Edge> & { id: string }) => void
-  // updateEdgeData: (data: Record<string, any>) => void
   getEdge: (edgeId: string) => Graph.Edge | undefined
 
   serialize: SerializeFunc
