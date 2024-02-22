@@ -44,14 +44,44 @@ export function createGraphStore({
         set({ nodes: [...get().nodes, addNodeInternals(config, node)] }),
       removeNode: (node: string | Node | Graph.Node) => {
         const id = typeof node === 'string' ? node : node.id
-        set({ nodes: nodes.filter((item) => item.id !== id) })
+        set({ nodes: get().nodes.filter((item) => item.id !== id) })
       },
+      updateNode: (node: Partial<Node | Graph.Node> & { id: string }) => {
+        set({
+          nodes: get().nodes.map((item) =>
+            item.id === node.id
+              ? { ...item, ...node, data: { ...item.data, ...node.data } }
+              : item,
+          ),
+        })
+      },
+      updateNodeData: (nodeId: string, data: Record<string, any>) => {
+        set({
+          nodes: get().nodes.map((item) =>
+            item.id === nodeId
+              ? { ...item, data: { ...item.data, ...data } }
+              : item,
+          ),
+        })
+      },
+      getNode: (nodeId: string) =>
+        get().nodes.find((item) => item.id === nodeId),
+
       addEdge: (edge: Edge | Graph.Edge) =>
         set({ edges: [...get().edges, edge] }),
       removeEdge: (edge: string | Edge | Graph.Edge) => {
         const id = typeof edge === 'string' ? edge : edge.id
-        set({ edges: edges.filter((item) => item.id !== id) })
+        set({ edges: get().edges.filter((item) => item.id !== id) })
       },
+      updateEdge: (edge: Partial<Edge | Graph.Edge> & { id: string }) => {
+        set({
+          edges: get().edges.map((item) =>
+            item.id === edge.id ? { ...item, ...edge } : item,
+          ),
+        })
+      },
+      getEdge: (edgeId: string) =>
+        get().edges.find((item) => item.id === edgeId),
     })),
     shallow,
   )

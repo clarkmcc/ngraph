@@ -70,9 +70,14 @@ export type NodeGraphHandle = {
   serialize: SerializeFunc
   deserialize: DeserializeFunc
   addNode: (node: Node) => void
-  removeNode: (node: Node) => void,
-  addEdge: (edge: Edge) => void,
+  removeNode: (node: Node) => void
+  updateNode: (node: Partial<Node> & {id: string}) => void
+  updateNodeData: (nodeId: string, data: Record<string, any>) => void
+  getNode: (nodeId: string) => Node | undefined
+  addEdge: (edge: Edge) => void
   removeEdge: (edge: Edge) => void
+  updateEdge: (edge: Partial<Edge> & {id: string}) => void
+  getEdge: (edgeId: string) => Edge | undefined
 }
 
 const Flow = forwardRef<NodeGraphHandle, FlowProps>(
@@ -102,6 +107,11 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
     const removeNode = useGraphStore((store) => store.removeNode)
     const addEdge = useGraphStore((store) => store.addEdge)
     const removeEdge = useGraphStore((store) => store.removeEdge)
+    const updateNode = useGraphStore((store) => store.updateNode)
+    const updateEdge = useGraphStore((store) => store.updateEdge)
+    const updateNodeData = useGraphStore((store) => store.updateNodeData)
+    const getNode = useGraphStore((store) => store.getNode)
+    const getEdge = useGraphStore((store) => store.getEdge)
 
     useImperativeHandle(
       ref,
@@ -111,8 +121,13 @@ const Flow = forwardRef<NodeGraphHandle, FlowProps>(
         deserialize,
         addNode,
         removeNode,
+        getNode,
+        updateNode,
+        updateNodeData,
         addEdge,
         removeEdge,
+        updateEdge,
+        getEdge,
       }),
       [serialize],
     )
